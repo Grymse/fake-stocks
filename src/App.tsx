@@ -7,6 +7,7 @@ import ControlPanel from "./controls/ControlPanel";
 import { Toaster } from "@/components/ui/toaster";
 import Graph from "./Graph";
 import AddFakeData from "./AddFakeData";
+import KeepScreenAwake from "./KeepScreenAwake";
 
 function App() {
   useEffect(() => {
@@ -17,6 +18,7 @@ function App() {
   return (
     <>
       <Toaster />
+      <KeepScreenAwake />
       <LedgerProvider>
         <LedgerUpdater />
         <div
