@@ -6,6 +6,7 @@ import StockOverview from "./StockOverview";
 import ControlPanel from "./controls/ControlPanel";
 import { Toaster } from "@/components/ui/toaster";
 import Graph from "./Graph";
+import AddFakeData from "./AddFakeData";
 
 function App() {
   useEffect(() => {
@@ -48,6 +49,7 @@ function App() {
             <Ledger />
           </div>
         </div>
+        <AddFakeData />
       </LedgerProvider>
     </>
   );

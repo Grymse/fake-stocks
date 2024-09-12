@@ -40,7 +40,10 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const addAccount = (name: string) => {
-    setAccounts([...accounts, { name, owns: [] }]);
+    setAccounts((accounts) => {
+      if (accounts.find((account) => account.name === name)) return accounts;
+      return [...accounts, { name, owns: [] }];
+    });
   };
 
   const addTransactions = (
@@ -49,19 +52,22 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     amount: number,
     type: "BUY" | "SELL"
   ) => {
-    const newTransactions = [
-      ...transactions,
-      {
-        account,
-        stock,
-        amount,
-        price: stock.value,
-        total: Math.floor(stock.value * amount),
-        time: Date.now(),
-        type,
-      },
-    ];
-    setTransactions(newTransactions.sort((a, b) => b.time - a.time));
+    setTransactions((transactions) => {
+      const newTransactions = [
+        ...transactions,
+        {
+          account,
+          stock,
+          amount,
+          price: stock.value,
+          total: Math.floor(stock.value * amount),
+          time: Date.now(),
+          type,
+        },
+      ];
+
+      return newTransactions.sort((a, b) => b.time - a.time);
+    });
   };
 
   const buyStock = (account: Account, stock: Stock, amount: number) => {
@@ -69,21 +75,23 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
 
     addTransactions(account, stock, amount, "BUY");
 
-    const newAccount = {
-      ...account,
-      owns: [
-        ...account.owns,
-        {
-          stockId: stock.id,
-          amount,
-          initialValue: stock.value,
-          time: Date.now(),
-        },
-      ],
-    };
-    setAccounts(
-      accounts.map((a) => (a.name === account.name ? newAccount : a))
-    );
+    setAccounts((accounts) => {
+      const newOwnerCertificate = {
+        stockId: stock.id,
+        amount,
+        initialValue: stock.value,
+        time: Date.now(),
+      };
+
+      const acc = accounts.find((a) => a.name === account.name);
+      if (!acc) return accounts;
+
+      const newAccount = {
+        ...acc,
+        owns: [...acc.owns, newOwnerCertificate],
+      };
+      return accounts.map((a) => (a.name === acc.name ? newAccount : a));
+    });
   };
 
   const sellStock = (
@@ -98,23 +106,24 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     const stock = stocks.find((s) => s.id === certificate.stockId);
     if (stock) addTransactions(account, stock, amount, "SELL");
 
-    const newAccount = {
-      ...account,
-      owns: account.owns
-        .map((c) => {
-          if (c.stockId === certificate.stockId) {
-            return {
-              ...c,
-              amount: c.amount - amount,
-            };
-          }
-          return c;
-        })
-        .filter((c) => c.amount > 0),
-    };
-    setAccounts(
-      accounts.map((a) => (a.name === account.name ? newAccount : a))
-    );
+    setAccounts((accounts) => {
+      const newAccount = {
+        ...account,
+        owns: account.owns
+          .map((c) => {
+            if (c.stockId === certificate.stockId) {
+              return {
+                ...c,
+                amount: c.amount - amount,
+              };
+            }
+            return c;
+          })
+          .filter((c) => c.amount > 0),
+      };
+
+      return accounts.map((a) => (a.name === account.name ? newAccount : a));
+    });
   };
 
   const ledger = {

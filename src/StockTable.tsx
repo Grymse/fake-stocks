@@ -17,11 +17,16 @@ type Props = {
 };
 
 const MAX_STOCKS = 17;
-const STOCK_SHOW_CHANGE_TIME = 6000;
+const STOCK_SHOW_CHANGE_TIME = 5000;
 
 export default function StockTable({ stocks, onSelect }: Props) {
   const [selected, setSelected] = useState<TableEntry | null>(null);
   const [index, setIndex] = useState(0);
+  const [stockLength, setStockLength] = useState(stocks.length);
+
+  useEffect(() => {
+    setStockLength(stocks.length);
+  }, [stocks]);
 
   const onClick = (stock: TableEntry) => {
     if (!onSelect) return;
@@ -39,13 +44,15 @@ export default function StockTable({ stocks, onSelect }: Props) {
       setIndex((index) => {
         if (Number.isNaN(index) || index === undefined) return 0;
 
-        const lim = Math.ceil(stocks.length / MAX_STOCKS);
+        const lim = Math.ceil(stockLength / MAX_STOCKS);
+        const newPage = (index + 1) % lim;
+        console.log("lim", lim, "newPage", newPage);
         return (index + 1) % lim;
       });
     }, STOCK_SHOW_CHANGE_TIME);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [stockLength]);
 
   const stockSection = stocks.slice(
     index * MAX_STOCKS,

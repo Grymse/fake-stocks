@@ -65,6 +65,7 @@ export default function SeeTransactions({ children }: Props) {
             <Table>
               <TableHeader>
                 <TableRow>
+                  <TableHead>Time</TableHead>
                   <TableHead>Act</TableHead>
                   <TableHead>Account</TableHead>
                   <TableHead>Stock</TableHead>
@@ -82,6 +83,9 @@ export default function SeeTransactions({ children }: Props) {
                         stock.type === "BUY" ? "bg-red-950" : "bg-green-950"
                       }
                     >
+                      <TableCell>
+                        {new Date(stock.time).toLocaleTimeString()}
+                      </TableCell>
                       <TableCell>{stock.type}</TableCell>
                       <TableCell>{stock.account.name.slice(0, 10)}</TableCell>
                       <TableCell>
