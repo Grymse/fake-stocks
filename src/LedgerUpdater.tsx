@@ -3,7 +3,7 @@ import { LedgerContext } from "./LedgerProvider";
 import "./index.css";
 import { Stock, StockTendency } from "./types";
 
-const durationInterval = 1000;
+const durationInterval = 10;
 const tendencyLength = 60 * 3 * durationInterval;
 
 export default function LedgerUpdater() {
@@ -31,7 +31,7 @@ export default function LedgerUpdater() {
           stock.historical.push(stock.value);
 
           const overallTendency =
-            ((tendency + stock.mood + 0.2) / 18) * stock.volatile;
+            ((tendency * 0.6 + stock.mood + 0.15) / 18) * stock.volatile;
 
           const newValue =
             stock.value *

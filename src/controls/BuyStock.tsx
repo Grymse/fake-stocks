@@ -129,11 +129,18 @@ export default function BuyStock({ children }: Props) {
           </div>
         </div>
         <DialogFooter>
-          <DialogClose>
-            <Button type="submit" onClick={onSubmit}>
-              Buy
-            </Button>
-          </DialogClose>
+          <div className="w-full flex justify-between">
+            <AddAccount>
+              <Button variant="secondary">
+                <span className="sr-only sm:not-sr-only">Add Account</span>
+              </Button>
+            </AddAccount>
+            <DialogClose>
+              <Button type="submit" onClick={onSubmit}>
+                Buy
+              </Button>
+            </DialogClose>
+          </div>
         </DialogFooter>
       </DialogContent>
     </Dialog>
@@ -151,6 +158,7 @@ import { Account, Stock } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import AddAccount from "./AddAccount";
 
 type SelectAccountProps = {
   account: Account | null;
