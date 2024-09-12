@@ -64,6 +64,13 @@ export default function Graph() {
 
   const chartConfig = useMemo(() => getChartConfig(stocks), []);
 
+  const minStockValue = Math.floor(
+    Math.min(...stocks.map((stock) => Math.min(...stock.historical)))
+  );
+  const maxStockValue = Math.ceil(
+    Math.max(...stocks.map((stock) => Math.max(...stock.historical)))
+  );
+
   return (
     <Card>
       <CardContent>
@@ -72,19 +79,23 @@ export default function Graph() {
             accessibilityLayer
             data={chartData}
             margin={{
-              left: 12,
+              left: -12,
               right: 12,
             }}
           >
             <YAxis
               dataKey={stocks[0]?.shortName}
               tickLine={true}
+              type="number"
+              domain={[minStockValue - 5, maxStockValue + 5]}
               tickMargin={5}
+              tickCount={12}
               tickFormatter={(value) => value + "$"}
             />
             <CartesianGrid vertical={false} />
             {stocks.map((stock) => (
               <Line
+                isAnimationActive={false}
                 key={stock.shortName}
                 dataKey={stock.shortName}
                 type="monotone"

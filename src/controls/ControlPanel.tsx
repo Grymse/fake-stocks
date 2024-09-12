@@ -12,17 +12,20 @@ export default function ControlPanel() {
     <div className="ml-auto flex justify-between w-full">
       <div className="flex gap-2">
         <BuyStock>
-          <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+          <Button
+            variant="secondary"
+            className="h-7 bg-green-600 gap-1 text-sm"
+          >
             <span className="sr-only sm:not-sr-only">Buy</span>
           </Button>
         </BuyStock>
         <SellStock>
-          <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+          <Button variant="destructive" className="h-7 gap-1 text-sm">
             <span className="sr-only sm:not-sr-only">Sell</span>
           </Button>
         </SellStock>
         <AddAccount>
-          <Button size="sm" variant="outline" className="h-7 gap-1 text-sm">
+          <Button variant="secondary" className="bg-blue-800 h-7 gap-1 text-sm">
             <span className="sr-only sm:not-sr-only">Add Account</span>
           </Button>
         </AddAccount>

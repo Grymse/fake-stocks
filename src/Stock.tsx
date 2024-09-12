@@ -78,6 +78,7 @@ export default function StockComponent({ stock }: Props) {
               </linearGradient>
             </defs>
             <Area
+              isAnimationActive={false}
               dataKey="time"
               type="natural"
               fill={`url(#${stock.shortName + "-filler"})`}

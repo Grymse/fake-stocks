@@ -1,77 +1,21 @@
 import { useContext, useEffect, useState } from "react";
 import { LedgerContext } from "./LedgerProvider";
 import "./index.css";
-import { StockTendency } from "./types";
+import { Stock, StockTendency } from "./types";
 
 const durationInterval = 1000;
+const tendencyLength = 60 * 3 * durationInterval;
 
 export default function LedgerUpdater() {
   const { updateStockValues, active } = useContext(LedgerContext);
-  const [tendency, setTendency] = useState<StockTendency>(0);
+  const [tendency, setTendency] = useState<StockTendency>(generateTendency());
 
   useEffect(() => {
-    updateStockValues([
-      {
-        id: 0,
-        name: "Olie Baronen",
-        shortName: "OLIE",
-        value: 50,
-        min: 15,
-        max: 300,
-        volatile: 0.01,
-        historical: [],
-        color: "hsl(var(--chart-5))",
-        mood: 0,
-      },
-      {
-        id: 1,
-        name: "Amager Airlines",
-        shortName: "SKRT",
-        value: 20,
-        min: 10,
-        max: 200,
-        volatile: 0.01,
-        historical: [],
-        color: "hsl(var(--chart-2))",
-        mood: 0,
-      },
-      {
-        id: 2,
-        name: "Hundekrone",
-        shortName: "DOGE",
-        value: 20,
-        min: 1,
-        max: 1000,
-        volatile: 0.015,
-        historical: [],
-        color: "hsl(var(--chart-3))",
-        mood: 0,
-      },
-      {
-        id: 3,
-        name: "Nuclear Power",
-        shortName: "BOOM",
-        value: 35,
-        min: 10,
-        max: 300,
-        volatile: 0.01,
-        historical: [],
-        color: "hsl(var(--chart-4))",
-        mood: 0,
-      },
-      {
-        id: 4,
-        name: "Faxe Kondi",
-        shortName: "FAXE",
-        value: 10,
-        min: 3,
-        max: 140,
-        volatile: 0.012,
-        historical: [],
-        color: "hsl(var(--chart-1))",
-        mood: 0,
-      },
-    ]);
+    updateStockValues(defaultStocks);
+    console.log("General tendency", tendency);
+    console.log(
+      defaultStocks.map((stock) => stock.name + " " + stock.mood).join("\n")
+    );
 
     return () => {
       updateStockValues([]);
@@ -87,12 +31,13 @@ export default function LedgerUpdater() {
           stock.historical.push(stock.value);
 
           const overallTendency =
-            ((tendency + stock.mood + 1) / 16) * stock.volatile;
+            ((tendency + stock.mood + 0.2) / 18) * stock.volatile;
 
           const newValue =
             stock.value *
-              (1 - stock.volatile + Math.random() * (stock.volatile * 2)) +
-            overallTendency;
+            (1 -
+              stock.volatile +
+              Math.random() * (stock.volatile * 2 + overallTendency));
 
           if (newValue < stock.min) {
             return {
@@ -113,16 +58,20 @@ export default function LedgerUpdater() {
     }, durationInterval);
 
     const tendencyInterval = setInterval(() => {
-      setTendency(generateTendency());
+      const tendency = generateTendency();
+      setTendency(tendency);
+      console.log("General tendency", tendency);
       updateStockValues((stocks) =>
         stocks.map((stock) => {
+          const mood = generateTendency();
+          console.log(stock.shortName, mood);
           return {
             ...stock,
-            mood: generateTendency(),
+            mood,
           };
         })
       );
-    }, durationInterval * 100);
+    }, tendencyLength);
 
     return () => {
       clearInterval(interval);
@@ -145,3 +94,66 @@ function generateTendency(): StockTendency {
   // @ts-expect-error - This is a random number generator
   return Math.floor(Math.random() * 7) - 3;
 }
+
+const defaultStocks: Stock[] = [
+  {
+    id: 0,
+    name: "Olie Baronen",
+    shortName: "OLIE",
+    value: 50,
+    min: 15,
+    max: 500,
+    volatile: 0.012,
+    historical: [],
+    color: "hsl(var(--chart-5))",
+    mood: generateTendency(),
+  },
+  {
+    id: 1,
+    name: "Amager Airlines",
+    shortName: "SKRT",
+    value: 20,
+    min: 10,
+    max: 300,
+    volatile: 0.012,
+    historical: [],
+    color: "hsl(var(--chart-2))",
+    mood: generateTendency(),
+  },
+  {
+    id: 2,
+    name: "Hundekrone",
+    shortName: "DOGE",
+    value: 20,
+    min: 1,
+    max: 100,
+    volatile: 0.017,
+    historical: [],
+    color: "hsl(var(--chart-3))",
+    mood: generateTendency(),
+  },
+  {
+    id: 3,
+    name: "Nuclear Power",
+    shortName: "BOOM",
+    value: 35,
+    min: 10,
+    max: 800,
+    volatile: 0.012,
+    historical: [],
+    color: "hsl(var(--chart-4))",
+    mood: generateTendency(),
+  },
+  {
+    id: 4,
+    name: "Faxe Kondi",
+    shortName: "FAXE",
+    value: 10,
+    min: 3,
+    max: 140,
+    volatile: 0.014,
+    historical: [],
+    color: "hsl(var(--chart-1))",
+    mood: generateTendency(),
+  },
+];
