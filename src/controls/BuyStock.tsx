@@ -150,25 +150,28 @@ import {
 import { Account, Stock } from "@/types";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
 type SelectAccountProps = {
   account: Account | null;
   setAccount: (account: Account | null) => void;
   accounts: Account[];
+  className?: string;
 };
 
 export function SelectAccount({
   account,
   setAccount,
   accounts,
+  className,
 }: SelectAccountProps) {
   function onValueChange(value: string) {
     setAccount(accounts.find((acc) => acc.name === value) ?? null);
   }
 
   return (
-    <Select onValueChange={onValueChange} value={account?.name}>
-      <SelectTrigger className="w-[280px]">
+    <Select onValueChange={onValueChange} value={account?.name ?? "none"}>
+      <SelectTrigger className={cn("w-[280px]", className)}>
         <SelectValue placeholder="Select an account" />
       </SelectTrigger>
       <SelectContent>

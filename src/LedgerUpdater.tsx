@@ -20,7 +20,7 @@ export default function LedgerUpdater() {
         max: 300,
         volatile: 0.01,
         historical: [],
-        color: "red",
+        color: "hsl(var(--chart-5))",
         mood: 0,
       },
       {
@@ -131,7 +131,11 @@ export default function LedgerUpdater() {
   }, [updateStockValues, active]);
 
   return (
-    <div className={`w-full h-1 overflow-hidden ${active ? "" : "hidden"}`}>
+    <div
+      className={`w-full h-1 absolute overflow-hidden ${
+        active ? "" : "hidden"
+      }`}
+    >
       <div className="w-full h-1 bg-gradient-to-r from-green-400 to-blue-500 animate-ping duration-1000" />
     </div>
   );

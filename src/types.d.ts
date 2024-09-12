@@ -10,6 +10,16 @@ export type OwnerCertificate = {
   time: number;
 };
 
+export type Transaction = {
+  account: Account;
+  stock: Stock;
+  amount: number;
+  price: number;
+  total: number;
+  time: number;
+  type: "BUY" | "SELL";
+};
+
 export type Stock = {
   id: number;
   name: string;

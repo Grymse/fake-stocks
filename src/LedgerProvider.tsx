@@ -1,11 +1,12 @@
 import { createContext, ReactNode, useState } from "react";
-import { Account, OwnerCertificate, Stock } from "./types";
+import { Account, OwnerCertificate, Stock, Transaction } from "./types";
 
 export type Ledger = {
   active: boolean;
   setActive: (active: boolean) => void;
   accounts: Account[];
   stocks: Stock[];
+  transactions: Transaction[];
   addAccount: (name: string) => void;
   buyStock: (account: Account, stock: Stock, amount: number) => void;
   sellStock: (
@@ -24,6 +25,7 @@ export const LedgerContext = createContext<Ledger>({
   setActive: () => {},
   accounts: [],
   stocks: [],
+  transactions: [],
   addAccount: () => {},
   buyStock: () => {},
   sellStock: () => {},
@@ -35,22 +37,37 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [active, setActive] = useState<boolean>(false);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const addAccount = (name: string) => {
     setAccounts([...accounts, { name, owns: [] }]);
   };
 
+  const addTransactions = (
+    account: Account,
+    stock: Stock,
+    amount: number,
+    type: "BUY" | "SELL"
+  ) => {
+    const newTransactions = [
+      ...transactions,
+      {
+        account,
+        stock,
+        amount,
+        price: stock.value,
+        total: Math.floor(stock.value * amount),
+        time: Date.now(),
+        type,
+      },
+    ];
+    setTransactions(newTransactions.sort((a, b) => b.time - a.time));
+  };
+
   const buyStock = (account: Account, stock: Stock, amount: number) => {
     if (!stock) return;
 
-    console.log(
-      "BUY",
-      amount,
-      "of",
-      stock?.name,
-      "TOTAL:",
-      Math.floor(stock.value * amount)
-    );
+    addTransactions(account, stock, amount, "BUY");
 
     const newAccount = {
       ...account,
@@ -79,14 +96,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const stock = stocks.find((s) => s.id === certificate.stockId);
-    console.log(
-      "SALE",
-      amount,
-      "of",
-      stock?.name,
-      "TOTAL:",
-      Math.floor((stock?.value ?? 0) * amount)
-    );
+    if (stock) addTransactions(account, stock, amount, "SELL");
 
     const newAccount = {
       ...account,
@@ -110,6 +120,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const ledger = {
     accounts,
     stocks,
+    transactions,
     addAccount,
     buyStock,
     sellStock,

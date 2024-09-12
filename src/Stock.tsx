@@ -25,14 +25,16 @@ export default function StockComponent({ stock }: Props) {
         <CardDescription style={{ color: stock.color }}>
           {stock.name} ({stock.shortName})
         </CardDescription>
-        <CardTitle className="flex items-baseline gap-1 text-4xl tabular-nums">
-          {stock.value.toFixed(0)}
-          <span className="font-sans text-sm font-normal tracking-normal text-muted-foreground">
-            $
-          </span>{" "}
+        <CardTitle className="flex justify-between items-baseline text-4xl tabular-nums">
+          <div className="flex gap-1 items-baseline">
+            {stock.value.toFixed(0)}
+            <span className="font-sans text-sm font-normal tracking-normal text-muted-foreground">
+              $
+            </span>{" "}
+          </div>
           <span
             className={`font-sans text-lg font-normal tracking-normal text-muted-foreground
-            ${percentage < 0 ? "text-red-400" : "text-green-400"}`}
+            ${percentage < 0 ? "text-red-400" : "text-green-500"}`}
           >
             {percentage > 0 ? "+" : ""}
             {percentage.toFixed(1)}%
