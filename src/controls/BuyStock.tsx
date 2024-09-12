@@ -75,17 +75,23 @@ export default function BuyStock({ children }: Props) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
+          <div className="flex items-center gap-4">
+            <Label htmlFor="name" className="text-right pl-7">
               Account
             </Label>
             <SelectAccount
+              className="w-[220px]"
               accounts={accounts}
               account={purchase.account}
               setAccount={(acc: Account | null) =>
                 setPurchase({ ...purchase, account: acc })
               }
             />
+            <AddAccount>
+              <Button variant="secondary">
+                <PlusIcon />
+              </Button>
+            </AddAccount>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Label htmlFor="name" className="text-right">
@@ -159,6 +165,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import AddAccount from "./AddAccount";
+import { PlusIcon } from "@radix-ui/react-icons";
 
 type SelectAccountProps = {
   account: Account | null;
