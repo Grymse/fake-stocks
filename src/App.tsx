@@ -6,7 +6,6 @@ import StockOverview from "./StockOverview";
 import ControlPanel from "./controls/ControlPanel";
 import { Toaster } from "@/components/ui/toaster";
 import Graph from "./Graph";
-import AddFakeData from "./AddFakeData";
 import KeepScreenAwake from "./KeepScreenAwake";
 
 function App() {
@@ -36,7 +35,7 @@ function App() {
             style={{
               gridArea: "main",
             }}
-            className="flex gap-4 flex-col col-span-3"
+            className="flex gap-4 flex-col max-h-full h-full"
           >
             <StockOverview />
             <Graph />
@@ -51,7 +50,7 @@ function App() {
             <Ledger />
           </div>
         </div>
-        <AddFakeData />
+        {/* <AddFakeData /> */}
       </LedgerProvider>
     </>
   );

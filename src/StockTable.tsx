@@ -16,8 +16,8 @@ type Props = {
   onSelect?: (stock: TableEntry | null) => void;
 };
 
-const MAX_STOCKS = 17;
-const STOCK_SHOW_CHANGE_TIME = 5000;
+const MAX_STOCKS = 25;
+const STOCK_SHOW_CHANGE_TIME = 10000;
 
 export default function StockTable({ stocks, onSelect }: Props) {
   const [selected, setSelected] = useState<TableEntry | null>(null);

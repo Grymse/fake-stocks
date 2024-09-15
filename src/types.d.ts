@@ -33,4 +33,4 @@ export type Stock = {
   mood: StockTendency;
 };
 
-export type StockTendency = 3 | 2 | 1 | 0 | -1 | -2 | -3;
+export type StockTendency = number;

@@ -68,7 +68,8 @@ export default function SellStock({ children }: Props) {
       sellStock(sale.account, sale.certificate, sale.amount);
       setSale({ account: null, certificate: null, amount: 1 });
       toast({
-        title: "PAY UP! - " + Math.floor(sale.amount * stockToBuy.value) + " $",
+        title:
+          "YOU GET! - " + Math.floor(sale.amount * stockToBuy.value) + " $",
       });
     } catch (err) {
       e.stopPropagation();

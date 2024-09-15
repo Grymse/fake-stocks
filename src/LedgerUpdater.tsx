@@ -3,7 +3,7 @@ import { LedgerContext } from "./LedgerProvider";
 import "./index.css";
 import { Stock, StockTendency } from "./types";
 
-const durationInterval = 10;
+const durationInterval = 1000;
 const tendencyLength = 60 * 3 * durationInterval;
 
 export default function LedgerUpdater() {
@@ -31,7 +31,7 @@ export default function LedgerUpdater() {
           stock.historical.push(stock.value);
 
           const overallTendency =
-            ((tendency * 0.6 + stock.mood + 0.15) / 18) * stock.volatile;
+            ((tendency * 0.3 + stock.mood + 0.2) / 18) * stock.volatile;
 
           const newValue =
             stock.value *
@@ -42,11 +42,13 @@ export default function LedgerUpdater() {
           if (newValue < stock.min) {
             return {
               ...stock,
+              mood: 20,
             };
           }
           if (newValue > stock.max) {
             return {
               ...stock,
+              mood: -20,
             };
           }
           return {
@@ -105,31 +107,31 @@ const defaultStocks: Stock[] = [
     max: 500,
     volatile: 0.012,
     historical: [],
-    color: "hsl(var(--chart-5))",
+    color: "#e23670",
     mood: generateTendency(),
   },
   {
     id: 1,
     name: "Amager Airlines",
     shortName: "SKRT",
-    value: 20,
+    value: 30,
     min: 10,
     max: 300,
     volatile: 0.012,
     historical: [],
-    color: "hsl(var(--chart-2))",
+    color: "#2eb88a",
     mood: generateTendency(),
   },
   {
     id: 2,
     name: "Hundekrone",
     shortName: "DOGE",
-    value: 20,
+    value: 10,
     min: 1,
     max: 100,
     volatile: 0.017,
     historical: [],
-    color: "hsl(var(--chart-3))",
+    color: "#e88c30",
     mood: generateTendency(),
   },
   {
@@ -141,19 +143,19 @@ const defaultStocks: Stock[] = [
     max: 800,
     volatile: 0.012,
     historical: [],
-    color: "hsl(var(--chart-4))",
+    color: "#af57db",
     mood: generateTendency(),
   },
   {
     id: 4,
     name: "Faxe Kondi",
     shortName: "FAXE",
-    value: 10,
+    value: 20,
     min: 3,
     max: 140,
     volatile: 0.014,
     historical: [],
-    color: "hsl(var(--chart-1))",
+    color: "#2662d9",
     mood: generateTendency(),
   },
 ];
