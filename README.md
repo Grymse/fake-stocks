@@ -1,51 +1,26 @@
-# React + TypeScript + Vite
+# FAKE STOCKS
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- This interface allows you to simulate a fake stock market over an evening
+- People buy/sell stocks using an external currency
+- The interface will display the stock changes
 
-Currently, two official plugins are available:
+# Technologies
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- ReactJS
+- Shadcn UI + Tailwind
+- ReChart
+- Plotly.js
 
-## Expanding the ESLint configuration
+# HOW TO START
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- Ensure you have node 16+
+- Download repo
+- In fake-stock-market run
+  - `npm install`
+  - `npm run dev`
+- Open the link `http://localhost:????/` displayed :D
+- Click start on the interface, and start buying/selling stocks using the button
 
-- Configure the top-level `parserOptions` property like this:
+# Credits
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
-# fake-stocks
+Created solely by Busta Grymes
