@@ -4,6 +4,10 @@
 - People buy/sell stocks using an external currency
 - The interface will display the stock changes
 
+### The app after running 1h45m
+
+![A preview of the app](public/app-preview.png)
+
 # Technologies
 
 - ReactJS

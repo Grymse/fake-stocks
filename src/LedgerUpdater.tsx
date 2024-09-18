@@ -3,7 +3,7 @@ import { LedgerContext } from "./LedgerProvider";
 import "./index.css";
 import { Stock, StockTendency } from "./types";
 
-const durationInterval = 1000;
+const durationInterval = 50;
 const tendencyLength = 60 * 3 * durationInterval;
 
 export default function LedgerUpdater() {
