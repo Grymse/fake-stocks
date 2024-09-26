@@ -80,18 +80,22 @@ export default function SellStock({ children }: Props) {
     }
   }
 
-  const currentAccountOwns = useMemo(
-    () =>
-      sale.account?.owns?.map((c) => {
-        return {
-          ...c,
-          owner: sale.account?.name ?? "NO NAME",
-          ...stocks.find((stock) => stock.id === c.stockId),
-          id: c.id,
-        };
-      }),
-    [sale.account, stocks]
-  );
+  const currentAccountOwns = useMemo(() => {
+    if (!sale.account) return undefined;
+    // Find newest version of the account object, as the user may have selected
+    // the specific account on previous renders, and the account object may have
+    // changed since then.
+    const account = accounts.find((acc) => acc.id === sale.account?.id);
+
+    return account?.owns?.map((c) => {
+      return {
+        ...c,
+        owner: sale.account?.name ?? "NO NAME",
+        ...stocks.find((stock) => stock.id === c.stockId),
+        id: c.id,
+      };
+    });
+  }, [sale.account, stocks, accounts]);
 
   function onEntrySelect(entry: OwnerCertificate | null) {
     setSale({ ...sale, certificate: entry });
