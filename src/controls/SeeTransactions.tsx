@@ -78,7 +78,7 @@ export default function SeeTransactions({ children }: Props) {
                 {selectedTransactions.map((stock) => {
                   return (
                     <TableRow
-                      key={stock.time}
+                      key={stock.id}
                       className={
                         stock.type === "BUY" ? "bg-red-950" : "bg-green-950"
                       }

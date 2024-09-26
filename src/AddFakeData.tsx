@@ -21,7 +21,6 @@ export default function AddFakeData() {
     if (accounts.length >= fakeAccounts.length) return;
     async function x() {
       for (const name of fakeAccounts) {
-        await delay(5);
         addAccount(name);
       }
       return Promise.resolve();
@@ -41,10 +40,10 @@ export default function AddFakeData() {
     async function x() {
       for (const name of fakeAccounts) {
         const acc = accounts.find((account) => account.name === name);
-        console.log(acc);
         for (const stock of stocks) {
-          await delay(10);
-          buyStock(acc, stock, Math.floor(Math.random() * 10) * 5);
+          const price = Math.floor(Math.random() * 10) * 5;
+          if (!acc || price === 0) continue;
+          buyStock(acc, stock, price);
         }
       }
       console.log("Added all");
@@ -55,8 +54,4 @@ export default function AddFakeData() {
     setFakePurchases(true);
   }, [stocks, buyStock]);
   return null;
-}
-
-function delay(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }

@@ -45,7 +45,6 @@ export default function StockTable({ stocks, onSelect }: Props) {
         if (Number.isNaN(index) || index === undefined) return 0;
 
         const lim = Math.ceil(stockLength / MAX_STOCKS);
-        const newPage = (index + 1) % lim;
         return (index + 1) % lim;
       });
     }, STOCK_SHOW_CHANGE_TIME);
@@ -83,7 +82,7 @@ export default function StockTable({ stocks, onSelect }: Props) {
                       ? "bg-blue-800 hover:bg-blue-700"
                       : ""
                   }
-                  key={stock.time}
+                  key={stock.id}
                   onClick={() => onClick?.(stock)}
                 >
                   <TableCell>{stock.owner.slice(0, 10)}</TableCell>

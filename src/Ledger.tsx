@@ -11,7 +11,7 @@ function Ledger() {
 
   const allStocks = accounts.flatMap((account) =>
     account.owns.map((c) => {
-      return { ...c, owner: account.name, ...getStock(c.stockId) };
+      return { ...c, owner: account.name, ...getStock(c.stockId), id: c.id };
     })
   );
   return <StockTable stocks={allStocks} />;

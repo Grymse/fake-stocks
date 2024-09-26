@@ -93,7 +93,6 @@ export default function LedgerUpdater() {
 }
 
 function generateTendency(): StockTendency {
-  // @ts-expect-error - This is a random number generator
   return Math.floor(Math.random() * 7) - 3;
 }
 

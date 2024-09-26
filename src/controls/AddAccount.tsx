@@ -66,7 +66,7 @@ export default function AddAccount({ children }: Props) {
           </div>
         </div>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button type="submit" onClick={onSubmit}>
               Add User
             </Button>

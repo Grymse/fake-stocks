@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Ledger from "./Ledger";
 import LedgerProvider from "./LedgerProvider";
 import LedgerUpdater from "./LedgerUpdater";
@@ -15,12 +15,17 @@ function App() {
 
     root.classList.add("dark");
   }, []);
+
+  const debug = useRef(window.location.search.includes("debug=true")).current;
+  console.log(window.location);
+
   return (
     <>
       <Toaster />
       <KeepScreenAwake />
       <LedgerProvider>
         <LedgerUpdater />
+        {debug && <AddFakeData />}
         <div
           className="w-screen gap-4 p-4 h-screen overflow-hidden"
           style={{
@@ -51,7 +56,6 @@ function App() {
             <Ledger />
           </div>
         </div>
-        <AddFakeData />
       </LedgerProvider>
     </>
   );

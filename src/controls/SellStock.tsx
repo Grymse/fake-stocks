@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -80,13 +80,17 @@ export default function SellStock({ children }: Props) {
     }
   }
 
-  const currentAccountOwns = sale.account?.owns?.map((c) => {
-    return {
-      ...c,
-      owner: sale.account?.name,
-      ...stocks.find((stock) => stock.id === c.stockId),
-    };
-  });
+  const currentAccountOwns = useMemo(
+    () =>
+      sale.account?.owns?.map((c) => {
+        return {
+          ...c,
+          owner: sale.account?.name ?? "NO NAME",
+          ...stocks.find((stock) => stock.id === c.stockId),
+        };
+      }),
+    [sale.account, stocks]
+  );
 
   function onEntrySelect(entry: OwnerCertificate | null) {
     setSale({ ...sale, certificate: entry });
@@ -155,7 +159,7 @@ export default function SellStock({ children }: Props) {
           )}
         </div>
         <DialogFooter>
-          <DialogClose>
+          <DialogClose asChild>
             <Button type="submit" onClick={onSubmit}>
               Sell
             </Button>

@@ -9,7 +9,6 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { LedgerContext } from "@/LedgerProvider";
@@ -141,7 +140,7 @@ export default function BuyStock({ children }: Props) {
                 <span className="sr-only sm:not-sr-only">Add Account</span>
               </Button>
             </AddAccount>
-            <DialogClose>
+            <DialogClose asChild>
               <Button type="submit" onClick={onSubmit}>
                 Buy
               </Button>
@@ -166,6 +165,7 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import AddAccount from "./AddAccount";
 import { PlusIcon } from "@radix-ui/react-icons";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 type SelectAccountProps = {
   account: Account | null;
@@ -193,7 +193,9 @@ export function SelectAccount({
         {accounts
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((acc) => (
-            <SelectItem value={acc.name}>{acc.name}</SelectItem>
+            <SelectItem value={acc.name} key={acc.name}>
+              {acc.name}
+            </SelectItem>
           ))}
       </SelectContent>
     </Select>
@@ -220,7 +222,7 @@ function SelectStock({ stock, setStock, stocks }: SelectStockProps) {
         {stocks
           .sort((a, b) => a.name.localeCompare(b.name))
           .map((acc) => (
-            <SelectItem value={acc.shortName}>
+            <SelectItem value={acc.shortName} key={acc.id}>
               <span style={{ color: acc.color }}>
                 ({acc.shortName}) {acc.name} - ${acc.value.toFixed(0)}
               </span>

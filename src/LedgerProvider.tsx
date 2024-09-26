@@ -42,7 +42,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const addAccount = (name: string) => {
     setAccounts((accounts) => {
       if (accounts.find((account) => account.name === name)) return accounts;
-      return [...accounts, { name, owns: [] }];
+      return [...accounts, { name, owns: [], id: generateId() }];
     });
   };
 
@@ -56,6 +56,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
       const newTransactions = [
         ...transactions,
         {
+          id: generateId(),
           account,
           stock,
           amount,
@@ -77,6 +78,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
 
     setAccounts((accounts) => {
       const newOwnerCertificate = {
+        id: generateId(),
         stockId: stock.id,
         amount,
         initialValue: stock.value,
@@ -142,5 +144,9 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     <LedgerContext.Provider value={ledger}>{children}</LedgerContext.Provider>
   );
 };
+
+function generateId() {
+  return Math.floor(Math.random() * 2147483647);
+}
 
 export default LedgerProvider;

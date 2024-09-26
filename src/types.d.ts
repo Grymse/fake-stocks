@@ -1,16 +1,19 @@
 export type Account = {
+  id: number;
   name: string;
   owns: OwnerCertificate[];
 };
 
 export type OwnerCertificate = {
+  id: number;
   stockId: number;
   amount: number;
   initialValue: number;
-  time: number;
+  // time: number;
 };
 
 export type Transaction = {
+  id: number;
   account: Account;
   stock: Stock;
   amount: number;
