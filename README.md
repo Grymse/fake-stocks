@@ -19,7 +19,7 @@
 
 - Ensure you have node 16+
 - Download repo
-- In fake-stock-market run
+- In fake-stock-market folder run
   - `npm install`
   - `npm run dev`
 - Open the link `http://localhost:????/` displayed :D
