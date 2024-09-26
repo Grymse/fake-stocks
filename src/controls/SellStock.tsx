@@ -87,6 +87,7 @@ export default function SellStock({ children }: Props) {
           ...c,
           owner: sale.account?.name ?? "NO NAME",
           ...stocks.find((stock) => stock.id === c.stockId),
+          id: c.id,
         };
       }),
     [sale.account, stocks]

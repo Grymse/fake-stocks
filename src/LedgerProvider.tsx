@@ -113,7 +113,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
         ...account,
         owns: account.owns
           .map((c) => {
-            if (c.stockId === certificate.stockId) {
+            if (c.id === certificate.id) {
               return {
                 ...c,
                 amount: c.amount - amount,
