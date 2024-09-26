@@ -18,6 +18,8 @@ import { Account, OwnerCertificate } from "@/types";
 import StockTable from "@/StockTable";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
+import StockAmountToggleGroup from "./StockAmountToggleGroup";
+import { getRandomAnimation, useAnimations } from "@/AnimationsProvider";
 
 type Props = { children: React.ReactNode };
 
@@ -30,6 +32,7 @@ type Sale = {
 export default function SellStock({ children }: Props) {
   const { toast } = useToast();
   const { sellStock, stocks, accounts } = useContext(LedgerContext);
+  const { animate } = useAnimations();
   const [sale, setSale] = useState<Sale>({
     account: null,
     certificate: null,
@@ -71,6 +74,8 @@ export default function SellStock({ children }: Props) {
         title:
           "YOU GET! - " + Math.floor(sale.amount * stockToBuy.value) + " $",
       });
+
+      animate(getRandomAnimation());
     } catch (err) {
       e.stopPropagation();
       toast({
@@ -109,6 +114,19 @@ export default function SellStock({ children }: Props) {
     setSale({ account: acc, certificate: null, amount: 1 });
   }
 
+  function setAmount(amount: number) {
+    const safeAmount = Math.min(amount, sale.certificate?.amount ?? 0);
+
+    setSale((sale) => {
+      return {
+        ...sale,
+        amount: safeAmount,
+      };
+    });
+  }
+
+  const total = Math.floor((sale?.amount ?? 0) * (stockToBeSold?.value ?? 0));
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -144,20 +162,27 @@ export default function SellStock({ children }: Props) {
                 <Input
                   id="amount"
                   type="number"
-                  value={sale.amount}
-                  onChange={(e) =>
-                    setSale({ ...sale, amount: +e.target.value })
-                  }
+                  value={isNaN(sale.amount ?? 0) ? "" : sale.amount}
+                  onChange={(e) => setAmount(parseInt(e.target.value))}
                 />
+                <div className="w-[170px]">
+                  <StockAmountToggleGroup
+                    maxAmount={sale.certificate.amount}
+                    amount={sale.amount ?? 0}
+                    setAmount={(amount) =>
+                      setSale((sale) => {
+                        return {
+                          ...sale,
+                          amount,
+                        };
+                      })
+                    }
+                  />
+                </div>
               </div>
               <div className="w-full justify-end flex">
                 <p>
-                  Total:{" "}
-                  <span>
-                    {Math.floor(
-                      (sale?.amount ?? 0) * (stockToBeSold?.value ?? 0)
-                    )}
-                  </span>
+                  Total: <span>{Number.isNaN(total) ? "---" : total}</span>
                 </p>
               </div>
             </>

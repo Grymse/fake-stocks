@@ -63,6 +63,10 @@ export default function BuyStock({ children }: Props) {
     }
   }
 
+  const total = Math.floor(
+    (purchase?.amount ?? 0) * (purchase?.stock?.value ?? 0)
+  );
+
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
@@ -111,7 +115,7 @@ export default function BuyStock({ children }: Props) {
             <Input
               type="number"
               className="w-[280px]"
-              value={purchase.amount}
+              value={isNaN(purchase.amount ?? 0) ? "" : purchase.amount}
               onChange={(e) => {
                 let amount = parseInt(e.target.value);
                 if (amount < 1) {
@@ -124,12 +128,7 @@ export default function BuyStock({ children }: Props) {
           </div>
           <div className="w-full justify-end flex">
             <p>
-              Total:{" "}
-              <span>
-                {Math.floor(
-                  (purchase?.amount ?? 0) * (purchase?.stock?.value ?? 0)
-                )}
-              </span>
+              Total: <span>{Number.isNaN(total) ? "---" : total}</span>
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/toaster";
 import Graph from "./Graph";
 import KeepScreenAwake from "./KeepScreenAwake";
 import AddFakeData from "./AddFakeData";
+import { AnimationsProvider } from "./AnimationsProvider";
 
 function App() {
   useEffect(() => {
@@ -23,40 +24,42 @@ function App() {
     <>
       <Toaster />
       <KeepScreenAwake />
-      <LedgerProvider>
-        <LedgerUpdater />
-        {debug && <AddFakeData />}
-        <div
-          className="w-screen gap-4 p-4 h-screen overflow-hidden"
-          style={{
-            display: "grid",
-            gridTemplateColumns: "1fr 450px",
-            gridTemplateRows: "1fr",
-            gridTemplateAreas: `
+      <AnimationsProvider>
+        <LedgerProvider>
+          <LedgerUpdater />
+          {debug && <AddFakeData />}
+          <div
+            className="w-screen gap-4 p-4 h-screen overflow-hidden"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 450px",
+              gridTemplateRows: "1fr",
+              gridTemplateAreas: `
             "main side"
           `,
-          }}
-        >
-          <div
-            style={{
-              gridArea: "main",
             }}
-            className="flex gap-4 flex-col max-h-full h-full"
           >
-            <StockOverview />
-            <Graph />
+            <div
+              style={{
+                gridArea: "main",
+              }}
+              className="flex gap-4 flex-col max-h-full h-full"
+            >
+              <StockOverview />
+              <Graph />
+            </div>
+            <div
+              style={{
+                gridArea: "side",
+              }}
+              className="flex gap-4 flex-col"
+            >
+              <ControlPanel />
+              <Ledger />
+            </div>
           </div>
-          <div
-            style={{
-              gridArea: "side",
-            }}
-            className="flex gap-4 flex-col"
-          >
-            <ControlPanel />
-            <Ledger />
-          </div>
-        </div>
-      </LedgerProvider>
+        </LedgerProvider>
+      </AnimationsProvider>
     </>
   );
 }
