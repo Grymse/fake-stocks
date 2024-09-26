@@ -7,7 +7,7 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { OwnerCertificate, Stock } from "./types";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 type TableEntry = { owner: string } & OwnerCertificate & Partial<Stock>;
 
@@ -40,21 +40,23 @@ export default function StockTable({ stocks, onSelect }: Props) {
   };
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const func = () => {
       setIndex((index) => {
         if (Number.isNaN(index) || index === undefined) return 0;
 
         const lim = Math.ceil(stockLength / MAX_STOCKS);
         return (index + 1) % lim;
       });
-    }, STOCK_SHOW_CHANGE_TIME);
+    };
+    const interval = setInterval(func, STOCK_SHOW_CHANGE_TIME);
+    func();
 
     return () => clearInterval(interval);
   }, [stockLength]);
 
-  const stockSection = stocks.slice(
-    index * MAX_STOCKS,
-    index * MAX_STOCKS + MAX_STOCKS
+  const stockSection = useMemo(
+    () => stocks.slice(index * MAX_STOCKS, index * MAX_STOCKS + MAX_STOCKS),
+    [stocks, index]
   );
 
   return (

@@ -14,6 +14,7 @@ function Ledger() {
       return { ...c, owner: account.name, ...getStock(c.stockId), id: c.id };
     })
   );
+
   return <StockTable stocks={allStocks} />;
 }
 
