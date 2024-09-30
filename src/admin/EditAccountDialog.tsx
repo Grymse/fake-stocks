@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -7,6 +6,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
@@ -71,9 +71,9 @@ export default function EditAccountDialog({ account, children }: Props) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" onClick={onSubmit}>
+            <EnterTriggeredButton type="submit" onClick={onSubmit}>
               Update name
-            </Button>
+            </EnterTriggeredButton>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

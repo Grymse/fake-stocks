@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import StockAmountToggleGroup from "./StockAmountToggleGroup";
 import { getRandomAnimation, useAnimations } from "@/AnimationsProvider";
 import { useLedger } from "@/ledger/ledgerHook";
+import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 
 type Props = { children: React.ReactNode };
 
@@ -190,9 +190,9 @@ export default function SellStock({ children }: Props) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" onClick={onSubmit}>
+            <EnterTriggeredButton type="submit" onClick={onSubmit}>
               Sell
-            </Button>
+            </EnterTriggeredButton>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
