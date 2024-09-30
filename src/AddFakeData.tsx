@@ -1,5 +1,6 @@
-import { useContext, useEffect, useState } from "react";
-import { LedgerContext } from "./LedgerProvider";
+import { useEffect, useState } from "react";
+import { useLedger } from "./ledger/ledgerHook";
+import { LOG } from "./admin/Log";
 
 const fakeAccounts = [
   "Nicolai",
@@ -14,7 +15,7 @@ const fakeAccounts = [
 ];
 
 export default function AddFakeData() {
-  const { addAccount, accounts, stocks, buyStock } = useContext(LedgerContext);
+  const { addAccount, accounts, stocks, buyStock } = useLedger();
   const [fakePurchases, setFakePurchases] = useState(false);
 
   useEffect(() => {
@@ -38,6 +39,7 @@ export default function AddFakeData() {
       return;
 
     async function x() {
+      LOG("Start adding fake data", "update");
       for (const name of fakeAccounts) {
         const acc = accounts.find((account) => account.name === name);
         for (const stock of stocks) {
@@ -46,7 +48,7 @@ export default function AddFakeData() {
           buyStock(acc, stock, price);
         }
       }
-      console.log("Added all");
+      LOG("Finished adding fake data", "update");
       return Promise.resolve();
     }
     x();

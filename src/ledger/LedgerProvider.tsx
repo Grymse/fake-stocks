@@ -1,5 +1,7 @@
 import { createContext, ReactNode, useState } from "react";
-import { Account, OwnerCertificate, Stock, Transaction } from "./types";
+import { Account, OwnerCertificate, Stock, Transaction } from "../types";
+import { parseLedger, serializeLedger } from "./ledgerSerializer";
+import { LOG } from "@/admin/Log";
 
 export type Ledger = {
   active: boolean;
@@ -15,14 +17,17 @@ export type Ledger = {
     amount: number
   ) => void;
   updateStockValues: React.Dispatch<React.SetStateAction<Stock[]>>;
+  getSerialized: () => string;
+  parse: (data: string) => void;
+  clear: () => void;
+  renameAccount: (account: Account, newName: string) => void;
 };
-
-// This components needs to make a context available to all its children.
 
 // The context should be the Ledger type.
 export const LedgerContext = createContext<Ledger>({
   active: false,
   setActive: () => {},
+  clear: () => {},
   accounts: [],
   stocks: [],
   transactions: [],
@@ -30,6 +35,9 @@ export const LedgerContext = createContext<Ledger>({
   buyStock: () => {},
   sellStock: () => {},
   updateStockValues: () => {},
+  getSerialized: () => "",
+  parse: () => {},
+  renameAccount: () => {},
 });
 
 // Component which exposes the LedgerContext
@@ -44,6 +52,33 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
       if (accounts.find((account) => account.name === name)) return accounts;
       return [...accounts, { name, owns: [], id: generateId() }];
     });
+  };
+
+  const getSerialized = () => {
+    return serializeLedger({ accounts, stocks, transactions });
+  };
+
+  const parse = (data: string) => {
+    const output = parseLedger(data);
+
+    const { accounts, stocks, transactions } = output;
+    setAccounts(accounts);
+    setStocks(stocks);
+    setTransactions(transactions);
+  };
+
+  const clear = () => {
+    setAccounts([]);
+    setStocks((stocks) =>
+      stocks.map((stock) => ({
+        ...stock,
+        historical: [],
+        value: stock.defaultValue,
+      }))
+    );
+    setTransactions([]);
+    setActive(false);
+    LOG("Ledger cleared");
   };
 
   const addTransactions = (
@@ -68,6 +103,34 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
       ];
 
       return newTransactions.sort((a, b) => b.time - a.time);
+    });
+  };
+
+  const renameAccount = (account: Account, newName: string) => {
+    const nameAlreadyExist = accounts.find((a) => a.name === newName);
+    if (nameAlreadyExist) {
+      throw new Error("An account with that name already exists");
+    }
+
+    setAccounts((accounts) => {
+      const newAccount = {
+        ...account,
+        name: newName,
+      };
+
+      return accounts.map((a) => (a.id === account.id ? newAccount : a));
+    });
+
+    setTransactions((transactions) => {
+      return transactions.map((t) => {
+        if (t.account.id === account.id) {
+          return {
+            ...t,
+            account: { ...account, name: newName },
+          };
+        }
+        return t;
+      });
     });
   };
 
@@ -138,6 +201,10 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     updateStockValues: setStocks,
     active,
     setActive,
+    getSerialized,
+    parse,
+    clear,
+    renameAccount,
   };
 
   return (

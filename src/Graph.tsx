@@ -1,17 +1,21 @@
-import { useContext } from "react";
-import { LedgerContext } from "./LedgerProvider";
 import { Card, CardContent } from "./components/ui/card";
 import { useResizeDetector } from "react-resize-detector";
 import Plot from "react-plotly.js";
+import { useLedger } from "./ledger/ledgerHook";
+import { LOG } from "./admin/Log";
 
 export default function Graph() {
-  const { stocks } = useContext(LedgerContext);
+  const { stocks } = useLedger();
   const { width, height, ref } = useResizeDetector({});
 
-  const layout = { ...defaultLayout, width: width, height: height };
+  const layout = {
+    ...defaultLayout,
+    width: width,
+    height: height,
+  };
 
   if (stocks[0]?.historical?.length && stocks[0].historical.length % 50 === 0)
-    console.log("len", stocks[0].historical.length);
+    LOG("Total updates: " + stocks[0].historical.length);
 
   return (
     <Card className="p-0 m-0 relative overflow-hidden ">
@@ -35,7 +39,7 @@ export default function Graph() {
   );
 }
 
-const defaultLayout = {
+const defaultLayout: Partial<Plotly.Layout> = {
   hovermode: false,
   showlegend: false,
   xaxis: {
@@ -54,7 +58,7 @@ const defaultLayout = {
     gridcolor: "rgb(75 85 99)", // Change the color of the vertical grid lines
   },
   plot_bgcolor: "rgba(0,0,0,0)", // Remove plot background
-  paper_bgcolor: "rgba(0,0,0,0)", // Remove surrounding paper background */,
+  paper_bgcolor: "rgba(0,0,0,0)", // Remove surrounding paper background
   autosize: true,
   margin: {
     l: 64, // Left margin

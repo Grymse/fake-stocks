@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -13,13 +13,13 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { LedgerContext } from "@/LedgerProvider";
 import { useToast } from "@/hooks/use-toast";
+import { useLedger } from "@/ledger/ledgerHook";
 
 type Props = { children: React.ReactNode };
 
 export default function AddAccount({ children }: Props) {
-  const { addAccount, accounts } = useContext(LedgerContext);
+  const { addAccount, accounts } = useLedger();
   const { toast } = useToast();
   const [name, setName] = React.useState("");
 
