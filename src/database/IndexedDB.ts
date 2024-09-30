@@ -77,6 +77,23 @@ export class IndexedDB implements Database {
     });
   }
 
+  async delete(name: string) {
+    if (!this.db) {
+      throw new Error("Database is not connected");
+    }
+
+    const transaction = this.db.transaction(["games"], "readwrite");
+    const store = transaction.objectStore("games");
+    store.delete(name);
+
+    return new Promise<void>((resolve, reject) => {
+      transaction.oncomplete = () => resolve();
+      transaction.onerror = (event) =>
+        // @ts-expect-error doesn't know about errorCode
+        reject(new Error("Failed to delete game: " + event.target.errorCode));
+    });
+  }
+
   async list() {
     if (!this.db) {
       throw new Error("Database is not connected");

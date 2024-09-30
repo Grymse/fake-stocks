@@ -42,16 +42,16 @@ export default function AdminPanel({ children }: Props) {
           <div className="flex gap-4 items-center">
             <StartStopButton /> <ClearButton />{" "}
             <Statistic help="Amount of simulation iterations">
-              <IterationCw />
+              <IterationCw size={16} />
               {stocks?.[0]?.historical?.length}
             </Statistic>
             <Statistic help="Total transactions and amount">
-              <ArrowLeftRight />
+              <ArrowLeftRight size={16} />
               {transactions.length}
               <span className="mr-1 text-gray-500">pcs</span>${moneyTransferred}
             </Statistic>
             <Statistic help="Amount of users">
-              <Users />
+              <Users size={16} />
               {accounts.length}
             </Statistic>
           </div>

@@ -2,13 +2,13 @@ import { useEffect, useState } from "react";
 import { useLedger } from "../ledger/ledgerHook";
 import { db } from "@/database/db";
 import {
+  DialogHeader,
   Dialog,
   DialogContent,
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@radix-ui/react-dialog";
-import { DialogHeader } from "@/components/ui/dialog";
+} from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
 import {
   Table,
@@ -19,26 +19,39 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { LOG } from "./Log";
+import { Button } from "@/components/ui/button";
+import { Trash } from "lucide-react";
+import ConfirmDialog from "../ConfirmDialog";
 
 type Props = { children: React.ReactNode };
 
 export default function LoadLedgerDialog({ children }: Props) {
   const { parse } = useLedger();
+  const [open, setOpen] = useState(false);
 
   const [ledgerList, setLedgerList] = useState<string[]>([]);
 
   useEffect(() => {
     db.list().then(setLedgerList);
-  }, []);
+  }, [open]);
+
+  async function remove(name: string) {
+    await db.delete(name);
+    setLedgerList(await db.list());
+    LOG(`${name} deleted`, "warn");
+  }
 
   async function loadGame(name: string) {
     try {
       parse(await db.load(name));
+
+      const ledgerName = name.split("|")[1];
       toast({
-        title: "Ledger loaded",
+        title: `${ledgerName} loaded`,
         description: "The ledger has been loaded successfully",
       });
-      LOG("New ledger loaded: " + name);
+      LOG(`New ledger loaded: ${ledgerName}`);
+      setOpen(false);
     } catch (e: unknown) {
       console.error(e);
       toast({
@@ -50,13 +63,14 @@ export default function LoadLedgerDialog({ children }: Props) {
   }
 
   return (
-    <Dialog>
+    <Dialog onOpenChange={setOpen} open={open}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Save ledger!</DialogTitle>
+          <DialogTitle>Load ledger!</DialogTitle>
           <DialogDescription>
-            You can save and load sessions to continue playing later
+            You can load and overwrite the current ledger by clicking on one of
+            the saved ledgers
           </DialogDescription>
         </DialogHeader>
         <div
@@ -66,23 +80,37 @@ export default function LoadLedgerDialog({ children }: Props) {
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Time</TableHead>
-                <TableHead>Name</TableHead>
+                <TableHead></TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {ledgerList.map((name) => {
+                const [time, ledgerName] = name.split("|");
+                const date = new Date(+time);
                 return (
-                  <TableRow onClick={() => loadGame(name)} key={name}>
-                    {/* <ConfirmDialog
-                      onConfirm={() => loadGame(name)}
-                      title="Overwrite current ledger"
-                      message="Are you sure you want to continue and overwrite the current ledger? This action cannot be undone!"
-                    > */}
-                    <TableCell>------------</TableCell>
-                    <TableCell>{name}</TableCell>
-                    {/* </ConfirmDialog> */}
-                  </TableRow>
+                  <ConfirmDialog
+                    key={name}
+                    onConfirm={() => loadGame(name)}
+                    title="Overwrite current ledger"
+                    message="Are you sure you want to continue and overwrite the current ledger? This action cannot be undone!"
+                  >
+                    <TableRow>
+                      <TableCell>{date.toLocaleString()}</TableCell>
+                      <TableCell>{ledgerName}</TableCell>
+                      <TableCell onClick={(e) => e.stopPropagation()}>
+                        <ConfirmDialog
+                          onConfirm={() => remove(name)}
+                          title={`Delete ${ledgerName}?`}
+                          message={`Are you sure you want to delete saved ledger: "${ledgerName}"`}
+                          asChild
+                        >
+                          <Button variant="destructive" size="icon">
+                            <Trash size={16} />
+                          </Button>
+                        </ConfirmDialog>
+                      </TableCell>
+                    </TableRow>
+                  </ConfirmDialog>
                 );
               })}
             </TableBody>

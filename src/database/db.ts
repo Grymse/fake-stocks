@@ -6,6 +6,7 @@ export interface Database {
   save(name: string, data: string): Promise<void>;
   load(name: string): Promise<string>;
   list(): Promise<string[]>;
+  delete(name: string): Promise<void>;
 }
 
 // Export a singleton instance of the IndexedDB class
