@@ -16,6 +16,16 @@ type Props = {
   message: string;
   title?: string;
   asChild?: boolean;
+  className?: string;
+  variant?:
+    | "secondary"
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "ghost"
+    | null
+    | undefined;
 };
 
 export default function ConfirmDialog({
@@ -24,10 +34,14 @@ export default function ConfirmDialog({
   message,
   title = "Are you absolutely sure?",
   asChild = false,
+  className,
+  variant,
 }: Props) {
   return (
     <Dialog>
-      <DialogTrigger asChild={asChild}>{children}</DialogTrigger>
+      <DialogTrigger className={className} asChild={asChild}>
+        {children}
+      </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -40,7 +54,7 @@ export default function ConfirmDialog({
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button type="button" onClick={onConfirm}>
+            <Button type="button" variant={variant} onClick={onConfirm}>
               Confirm
             </Button>
           </DialogClose>

@@ -21,6 +21,7 @@ export type Ledger = {
   parse: (data: string) => void;
   clear: () => void;
   renameAccount: (account: Account, newName: string) => void;
+  removeAccount: (account: Account) => void;
 };
 
 // The context should be the Ledger type.
@@ -38,6 +39,7 @@ export const LedgerContext = createContext<Ledger>({
   getSerialized: () => "",
   parse: () => {},
   renameAccount: () => {},
+  removeAccount: () => {},
 });
 
 // Component which exposes the LedgerContext
@@ -48,10 +50,16 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
 
   const addAccount = (name: string) => {
+    validateName(name, accounts); // Throws if invalid
+
     setAccounts((accounts) => {
       if (accounts.find((account) => account.name === name)) return accounts;
       return [...accounts, { name, owns: [], id: generateId() }];
     });
+  };
+
+  const removeAccount = (account: Account) => {
+    setAccounts((accounts) => accounts.filter((a) => a.id !== account.id));
   };
 
   const getSerialized = () => {
@@ -107,10 +115,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const renameAccount = (account: Account, newName: string) => {
-    const nameAlreadyExist = accounts.find((a) => a.name === newName);
-    if (nameAlreadyExist) {
-      throw new Error("An account with that name already exists");
-    }
+    validateName(newName, accounts); // Throws if invalid
 
     setAccounts((accounts) => {
       const newAccount = {
@@ -205,6 +210,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     parse,
     clear,
     renameAccount,
+    removeAccount,
   };
 
   return (
@@ -217,3 +223,18 @@ function generateId() {
 }
 
 export default LedgerProvider;
+
+function validateName(name: string, accounts: Account[]) {
+  if (name.length === 0) {
+    throw new Error("Name cannot be empty");
+  }
+
+  if (name.length > 10) {
+    throw new Error("Name cannot be longer than 10 characters");
+  }
+
+  const nameAlreadyExist = accounts.find((a) => a.name === name);
+  if (nameAlreadyExist) {
+    throw new Error("An account with that name already exists");
+  }
+}

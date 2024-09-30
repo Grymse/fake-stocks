@@ -3,25 +3,26 @@ import ConfirmDialog from "@/ConfirmDialog";
 import { toast } from "@/hooks/use-toast";
 import { useLedger } from "@/ledger/ledgerHook";
 
-export default function ClearButton() {
+export default function ResetButton() {
   const { clear } = useLedger();
 
   function clearLedger() {
     clear();
     toast({
-      title: "Ledger cleared",
-      description: "The ledger has been cleared",
+      title: "Ledger reset",
+      description: "The ledger has been reset",
     });
   }
 
   return (
     <ConfirmDialog
       onConfirm={clearLedger}
-      title="Clear the ledger?"
-      message="Are you totally sure you want to clear the ledger. If you do this, then all the progress has been lost!"
+      title="Reset the ledger?"
+      message="Are you totally sure you want to reset the ledger. If you do this, then all the progress has been lost!"
       asChild
+      variant="destructive"
     >
-      <Button>Clear ledger</Button>
+      <Button>Reset ledger</Button>
     </ConfirmDialog>
   );
 }

@@ -10,14 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { LOG } from "./Log";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
@@ -38,7 +30,7 @@ export default function LoadLedgerDialog({ children }: Props) {
   async function remove(name: string) {
     await db.delete(name);
     setLedgerList(await db.list());
-    LOG(`${name} deleted`, "warn");
+    LOG(`${name.split("|")[1]} deleted`, "warn");
   }
 
   async function loadGame(name: string) {
@@ -52,13 +44,14 @@ export default function LoadLedgerDialog({ children }: Props) {
       });
       LOG(`New ledger loaded: ${ledgerName}`);
       setOpen(false);
-    } catch (e: unknown) {
-      console.error(e);
-      toast({
-        title: "Error loading ledger",
-        description: "There was an error loading the ledger",
-        variant: "destructive",
-      });
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        toast({
+          title: "Error loading ledger",
+          description: `There was an error loading the ledger ${error.message}`,
+          variant: "destructive",
+        });
+      }
     }
   }
 
@@ -77,44 +70,40 @@ export default function LoadLedgerDialog({ children }: Props) {
           className="border w-full overflow-scroll overflow-x-hidden rounded-lg shadow-sm"
           style={{ maxHeight: "calc(100vh - 220px)" }}
         >
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead></TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {ledgerList.map((name) => {
-                const [time, ledgerName] = name.split("|");
-                const date = new Date(+time);
-                return (
+          {ledgerList.map((name) => {
+            const [time, ledgerName] = name.split("|");
+            const date = new Date(+time);
+            return (
+              <ConfirmDialog
+                key={name}
+                onConfirm={() => loadGame(name)}
+                title="Overwrite current ledger"
+                message="Are you sure you want to continue and overwrite the current ledger? This action cannot be undone!"
+                className="hover:bg-white hover:bg-opacity-10 flex p-2 justify-between w-full items-center"
+              >
+                <p>
+                  <span className="text-muted-foreground">
+                    {date.toLocaleString()}
+                  </span>{" "}
+                  {ledgerName}
+                </p>
+                <p></p>
+                <div onClick={(e) => e.stopPropagation()}>
                   <ConfirmDialog
-                    key={name}
-                    onConfirm={() => loadGame(name)}
-                    title="Overwrite current ledger"
-                    message="Are you sure you want to continue and overwrite the current ledger? This action cannot be undone!"
+                    onConfirm={() => remove(name)}
+                    title={`Delete ${ledgerName}?`}
+                    message={`Are you sure you want to delete saved ledger: "${ledgerName}"`}
+                    asChild
+                    variant="destructive"
                   >
-                    <TableRow>
-                      <TableCell>{date.toLocaleString()}</TableCell>
-                      <TableCell>{ledgerName}</TableCell>
-                      <TableCell onClick={(e) => e.stopPropagation()}>
-                        <ConfirmDialog
-                          onConfirm={() => remove(name)}
-                          title={`Delete ${ledgerName}?`}
-                          message={`Are you sure you want to delete saved ledger: "${ledgerName}"`}
-                          asChild
-                        >
-                          <Button variant="destructive" size="icon">
-                            <Trash size={16} />
-                          </Button>
-                        </ConfirmDialog>
-                      </TableCell>
-                    </TableRow>
+                    <Button variant="destructive" size="icon">
+                      <Trash size={16} />
+                    </Button>
                   </ConfirmDialog>
-                );
-              })}
-            </TableBody>
-          </Table>
+                </div>
+              </ConfirmDialog>
+            );
+          })}
           {ledgerList.length === 0 && (
             <div className="p-4 text-center text-gray-500">No saves found</div>
           )}

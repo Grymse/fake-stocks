@@ -12,11 +12,12 @@ import SaveLedgerDialog from "./SaveLedgerDialog";
 import { Button } from "@/components/ui/button";
 import LoadLedgerDialog from "./LoadLedgerDialog";
 import StartStopButton from "./StartStopButton";
-import ClearButton from "./ClearButton";
+import ResetButton from "./ResetButton";
 import { useLedger } from "@/ledger/ledgerHook";
 import { Label } from "@/components/ui/label";
 import Statistic from "./Statistic";
 import { ArrowLeftRight, IterationCw, Users } from "lucide-react";
+import EditAccountsDialog from "./EditAccountsDialog";
 
 type Props = { children: React.ReactNode };
 
@@ -40,7 +41,7 @@ export default function AdminPanel({ children }: Props) {
         <div className="flex flex-col gap-2">
           <Label>Status</Label>
           <div className="flex gap-4 items-center">
-            <StartStopButton /> <ClearButton />{" "}
+            <StartStopButton /> <ResetButton />{" "}
             <Statistic help="Amount of simulation iterations">
               <IterationCw size={16} />
               {stocks?.[0]?.historical?.length}
@@ -58,8 +59,6 @@ export default function AdminPanel({ children }: Props) {
         </div>
         {/** Edit stocks */}
 
-        {/** Accounts */}
-
         {/** Session */}
         <div className="flex flex-col gap-2">
           <Label>Status</Label>
@@ -71,6 +70,9 @@ export default function AdminPanel({ children }: Props) {
             <LoadLedgerDialog>
               <Button>Load Ledger</Button>
             </LoadLedgerDialog>
+            <EditAccountsDialog>
+              <Button>Edit Accounts</Button>
+            </EditAccountsDialog>
           </div>
         </div>
 
