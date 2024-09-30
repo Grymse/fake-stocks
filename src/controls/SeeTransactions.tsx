@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 
 import {
   Dialog,
@@ -9,7 +9,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { LedgerContext } from "@/LedgerProvider";
 import { Account } from "@/types";
 import { Button } from "@/components/ui/button";
 import { SelectAccount } from "./BuyStock";
@@ -21,11 +20,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useLedger } from "@/ledger/ledgerHook";
 
 type Props = { children: React.ReactNode };
 
 export default function SeeTransactions({ children }: Props) {
-  const { transactions, accounts } = useContext(LedgerContext);
+  const { transactions, accounts } = useLedger();
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
   const selectedTransactions = transactions.filter(

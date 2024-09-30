@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { LedgerContext } from "./LedgerProvider";
-import StockTable from "./StockTable";
+import { useLedger } from "./ledgerHook";
+import StockTable from "../StockTable";
 
 function Ledger() {
-  const { accounts, stocks } = useContext(LedgerContext);
+  const { accounts, stocks } = useLedger();
 
   function getStock(stockId: number) {
     return stocks.find((stock) => stock.id === stockId);

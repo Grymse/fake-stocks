@@ -1,9 +1,8 @@
-import { LedgerContext } from "./LedgerProvider";
-import { useContext } from "react";
+import { useLedger } from "./ledger/ledgerHook";
 import StockComponent from "./Stock";
 
 export default function StockOverview() {
-  const { stocks } = useContext(LedgerContext);
+  const { stocks } = useLedger();
 
   return (
     <div className="flex w-full gap-4">

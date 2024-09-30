@@ -7,7 +7,6 @@ import Realistic from "react-canvas-confetti/dist/presets/realistic";
 import Crossfire from "react-canvas-confetti/dist/presets/crossfire";
 import Snow from "react-canvas-confetti/dist/presets/snow";
 import Pride from "react-canvas-confetti/dist/presets/pride";
-import { Button } from "./components/ui/button";
 
 type AnimationsProviderProps = {
   children: React.ReactNode;
@@ -56,7 +55,6 @@ export const AnimationsProvider = ({ children }: AnimationsProviderProps) => {
 
   return (
     <AnimationsContext.Provider value={{ animate }}>
-      <Button onClick={() => animate("pride")}>animate</Button>
       {children}
       {animation && animations[animation]}
     </AnimationsContext.Provider>

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
-import Ledger from "./Ledger";
-import LedgerProvider from "./LedgerProvider";
-import LedgerUpdater from "./LedgerUpdater";
+import Ledger from "./ledger/Ledger";
+import LedgerProvider from "./ledger/LedgerProvider";
+import LedgerUpdater from "./ledger/LedgerUpdater";
 import StockOverview from "./StockOverview";
 import ControlPanel from "./controls/ControlPanel";
 import { Toaster } from "@/components/ui/toaster";
@@ -18,7 +18,6 @@ function App() {
   }, []);
 
   const debug = useRef(window.location.search.includes("debug=true")).current;
-  console.log(window.location);
 
   return (
     <>

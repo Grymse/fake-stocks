@@ -9,7 +9,6 @@ export type OwnerCertificate = {
   stockId: number;
   amount: number;
   initialValue: number;
-  // time: number;
 };
 
 export type Transaction = {
@@ -28,6 +27,7 @@ export type Stock = {
   name: string;
   shortName: string;
   value: number;
+  defaultValue: number;
   volatile: number;
   min: number;
   max: number;

@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,29 +6,29 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useLedger } from "@/ledger/ledgerHook";
+import { Account } from "@/types";
+import { DialogClose, DialogTrigger } from "@radix-ui/react-dialog";
+import { ReactNode, useState } from "react";
 
-type Props = { children: React.ReactNode };
+type Props = { account: Account; children: ReactNode };
 
-export default function AddAccount({ children }: Props) {
-  const { addAccount } = useLedger();
+export default function EditAccountDialog({ account, children }: Props) {
+  const [newName, setNewName] = useState(account.name);
   const { toast } = useToast();
-  const [name, setName] = React.useState("");
+  const { renameAccount } = useLedger();
 
   function onSubmit(e: React.FormEvent) {
     try {
-      addAccount(name);
+      renameAccount(account, newName);
       toast({
-        title: `Created new account ${name}`,
-        description: `You can now buy and sell stocks with your brand new account!`,
+        title: `${account.name} updated to ${newName}`,
       });
-      setName("");
+      setNewName("");
     } catch (error: unknown) {
       if (error instanceof Error) {
         toast({
@@ -44,7 +42,7 @@ export default function AddAccount({ children }: Props) {
   }
 
   function onNameChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setName(e.target.value.slice(0, 10));
+    setNewName(e.target.value.slice(0, 10));
   }
 
   return (
@@ -52,9 +50,10 @@ export default function AddAccount({ children }: Props) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add a new user!</DialogTitle>
+          <DialogTitle>Change {account.name} name</DialogTitle>
           <DialogDescription>
-            Become apart of the sickest and epicest game of all games
+            You are about to change the name of an account. Be careful! Two
+            accounts cannot have the same name
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -65,7 +64,7 @@ export default function AddAccount({ children }: Props) {
             <Input
               id="name"
               className="col-span-3"
-              value={name}
+              value={newName}
               onChange={onNameChange}
             />
           </div>
@@ -73,7 +72,7 @@ export default function AddAccount({ children }: Props) {
         <DialogFooter>
           <DialogClose asChild>
             <Button type="submit" onClick={onSubmit}>
-              Add User
+              Update name
             </Button>
           </DialogClose>
         </DialogFooter>

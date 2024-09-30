@@ -1,21 +1,24 @@
-import { useContext, useEffect, useState } from "react";
-import { LedgerContext } from "./LedgerProvider";
-import "./index.css";
-import { Stock, StockTendency } from "./types";
+import { useEffect, useState } from "react";
+import "../index.css";
+import { Stock, StockTendency } from "../types";
+import { useLedger } from "./ledgerHook";
+import { LOG } from "@/admin/Log";
 
 const durationInterval = 50;
 const tendencyLength = 60 * 3 * durationInterval;
 
+function logTendencies(tendency: StockTendency, stocks: Stock[]) {
+  LOG("General tendency: " + tendency);
+  LOG(stocks.map((stock) => stock.name + " " + stock.mood).join("\n"));
+}
+
 export default function LedgerUpdater() {
-  const { updateStockValues, active } = useContext(LedgerContext);
+  const { updateStockValues, active } = useLedger();
   const [tendency, setTendency] = useState<StockTendency>(generateTendency());
 
   useEffect(() => {
     updateStockValues(defaultStocks);
-    console.log("General tendency", tendency);
-    console.log(
-      defaultStocks.map((stock) => stock.name + " " + stock.mood).join("\n")
-    );
+    logTendencies(tendency, defaultStocks);
 
     return () => {
       updateStockValues([]);
@@ -62,17 +65,18 @@ export default function LedgerUpdater() {
     const tendencyInterval = setInterval(() => {
       const tendency = generateTendency();
       setTendency(tendency);
-      console.log("General tendency", tendency);
-      updateStockValues((stocks) =>
-        stocks.map((stock) => {
+      updateStockValues((stocks) => {
+        const newStockValues = stocks.map((stock) => {
           const mood = generateTendency();
-          console.log(stock.shortName, mood);
           return {
             ...stock,
             mood,
           };
-        })
-      );
+        });
+
+        logTendencies(tendency, newStockValues);
+        return newStockValues;
+      });
     }, tendencyLength);
 
     return () => {
@@ -96,12 +100,13 @@ function generateTendency(): StockTendency {
   return Math.floor(Math.random() * 7) - 3;
 }
 
-const defaultStocks: Stock[] = [
+export const defaultStocks: Stock[] = [
   {
     id: 0,
     name: "Olie Baronen",
     shortName: "OLIE",
     value: 50,
+    defaultValue: 50,
     min: 15,
     max: 500,
     volatile: 0.012,
@@ -114,6 +119,7 @@ const defaultStocks: Stock[] = [
     name: "Amager Airlines",
     shortName: "SKRT",
     value: 30,
+    defaultValue: 30,
     min: 10,
     max: 300,
     volatile: 0.012,
@@ -126,6 +132,7 @@ const defaultStocks: Stock[] = [
     name: "Hundekrone",
     shortName: "DOGE",
     value: 10,
+    defaultValue: 10,
     min: 1,
     max: 100,
     volatile: 0.017,
@@ -138,6 +145,7 @@ const defaultStocks: Stock[] = [
     name: "Nuclear Power",
     shortName: "BOOM",
     value: 35,
+    defaultValue: 35,
     min: 10,
     max: 800,
     volatile: 0.012,
@@ -150,6 +158,7 @@ const defaultStocks: Stock[] = [
     name: "Faxe Kondi",
     shortName: "FAXE",
     value: 20,
+    defaultValue: 20,
     min: 3,
     max: 140,
     volatile: 0.014,

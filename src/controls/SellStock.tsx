@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -12,7 +12,6 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { LedgerContext } from "@/LedgerProvider";
 import { SelectAccount } from "./BuyStock";
 import { Account, OwnerCertificate } from "@/types";
 import StockTable from "@/StockTable";
@@ -20,6 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
 import StockAmountToggleGroup from "./StockAmountToggleGroup";
 import { getRandomAnimation, useAnimations } from "@/AnimationsProvider";
+import { useLedger } from "@/ledger/ledgerHook";
 
 type Props = { children: React.ReactNode };
 
@@ -31,7 +31,7 @@ type Sale = {
 
 export default function SellStock({ children }: Props) {
   const { toast } = useToast();
-  const { sellStock, stocks, accounts } = useContext(LedgerContext);
+  const { sellStock, stocks, accounts } = useLedger();
   const { animate } = useAnimations();
   const [sale, setSale] = useState<Sale>({
     account: null,

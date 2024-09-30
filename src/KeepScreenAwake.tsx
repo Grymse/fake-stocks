@@ -8,7 +8,6 @@ export default function KeepScreenAwake({ active }: Props) {
   const requestWakeLock = async () => {
     try {
       wakeLock.current = await navigator.wakeLock.request("screen");
-      console.log("Wake Lock is active");
     } catch (err) {
       // @ts-expect-error this is a hack to get the error message
       console.error(`${err.name}, ${err.message}`);

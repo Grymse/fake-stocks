@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { LedgerContext } from "@/LedgerProvider";
 
 type Props = { children: React.ReactNode };
 
@@ -23,7 +22,7 @@ type Purchase = {
 
 export default function BuyStock({ children }: Props) {
   const { toast } = useToast();
-  const { buyStock, stocks, accounts } = useContext(LedgerContext);
+  const { buyStock, stocks, accounts } = useLedger();
   const [purchase, setPurchase] = React.useState<Purchase>({
     account: null,
     stock: null,
@@ -165,6 +164,7 @@ import { cn } from "@/lib/utils";
 import AddAccount from "./AddAccount";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useLedger } from "@/ledger/ledgerHook";
 
 type SelectAccountProps = {
   account: Account | null;
