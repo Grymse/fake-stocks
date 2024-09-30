@@ -45,13 +45,13 @@ export default function LedgerUpdater() {
           if (newValue < stock.min) {
             return {
               ...stock,
-              mood: 20,
+              mood: 10,
             };
           }
           if (newValue > stock.max) {
             return {
               ...stock,
-              mood: -20,
+              mood: -10,
             };
           }
           return {

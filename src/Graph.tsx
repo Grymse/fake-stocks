@@ -51,7 +51,6 @@ const defaultLayout: Partial<Plotly.Layout> = {
       color: "rgb(209 213 219)", // Change the Y-axis text color
       size: 14, // Set font size
     },
-    dtick: 5,
     ticks: "outside", // Position ticks outside of the axis line
     ticklen: 10, // Length of the tick lines
     nticks: 12, // Increase the number of vertical grid lines
