@@ -75,8 +75,10 @@ export default function AdminPanel({ children }: Props) {
             </EditAccountsDialog>
           </div>
         </div>
-
-        <Log />
+        <div className="flex flex-col gap-2">
+          <Label>Action Log</Label>
+          <Log />
+        </div>
       </SheetContent>
     </Sheet>
   );
