@@ -9,6 +9,8 @@ import Graph from "./Graph";
 import KeepScreenAwake from "./KeepScreenAwake";
 import AddFakeData from "./AddFakeData";
 import { AnimationsProvider } from "./AnimationsProvider";
+import PreventWebsiteExit from "./PreventWebsiteExit";
+import AutosaveLedger from "./AutosaveLedger";
 
 function App() {
   useEffect(() => {
@@ -23,8 +25,10 @@ function App() {
     <>
       <Toaster />
       <KeepScreenAwake />
+      <PreventWebsiteExit />
       <AnimationsProvider>
         <LedgerProvider>
+          <AutosaveLedger />
           <LedgerUpdater />
           {debug && <AddFakeData />}
           <div

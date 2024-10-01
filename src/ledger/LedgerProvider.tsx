@@ -17,7 +17,7 @@ export type Ledger = {
     amount: number
   ) => void;
   updateStockValues: React.Dispatch<React.SetStateAction<Stock[]>>;
-  getSerialized: () => string;
+  serialize: () => string;
   parse: (data: string) => void;
   clear: () => void;
   renameAccount: (account: Account, newName: string) => void;
@@ -38,7 +38,7 @@ export const LedgerContext = createContext<Ledger>({
   buyStock: () => {},
   sellStock: () => {},
   updateStockValues: () => {},
-  getSerialized: () => "",
+  serialize: () => "",
   parse: () => {},
   renameAccount: () => {},
   removeAccount: () => {},
@@ -67,7 +67,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     setAccounts((accounts) => accounts.filter((a) => a.id !== account.id));
   };
 
-  const getSerialized = () => {
+  const serialize = () => {
     return serializeLedger({ accounts, stocks, transactions });
   };
 
@@ -211,7 +211,7 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
     updateStockValues: setStocks,
     active,
     setActive,
-    getSerialized,
+    serialize,
     parse,
     clear,
     renameAccount,
