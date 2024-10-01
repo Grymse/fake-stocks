@@ -12,7 +12,6 @@ export default function AutosaveLedger() {
   }, [serialize]);
 
   function restore(content: string) {
-    console.log(content);
     setTimeout(() => {
       parse(content);
     }, 500);
