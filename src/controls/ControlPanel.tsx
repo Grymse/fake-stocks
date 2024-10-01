@@ -1,4 +1,3 @@
-import { Button } from "../components/ui/button";
 import BuyStock from "./BuyStock";
 import SellStock from "./SellStock";
 import SeeTransactions from "./SeeTransactions";
@@ -9,14 +8,42 @@ import {
   ScrollText,
   Settings,
 } from "lucide-react";
+import { useEffect, useRef } from "react";
+import StartStopButton from "@/admin/StartStopButton";
 import {
+  Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-  Tooltip,
-} from "../components/ui/tooltip";
+} from "@/components/ui/tooltip";
+import KeyboardHotkey from "./KeyboardHotkey";
 
 export default function ControlPanel() {
+  const transactionsButtonRef = useRef<HTMLDivElement>(null);
+  const buyButtonRef = useRef<HTMLDivElement>(null);
+  const sellButtonRef = useRef<HTMLDivElement>(null);
+  const playButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    function binds(e: KeyboardEvent) {
+      if (!e.metaKey && !e.ctrlKey) return;
+
+      if (e.key === "t") {
+        transactionsButtonRef.current?.click();
+      } else if (e.key === "b") {
+        buyButtonRef.current?.click();
+      } else if (e.key === "s") {
+        sellButtonRef.current?.click();
+      } else if (e.key === "p") {
+        e.preventDefault();
+        playButtonRef.current?.click();
+      }
+    }
+
+    window.addEventListener("keydown", binds);
+    return () => window.removeEventListener("keydown", binds);
+  }, []);
+
   return (
     <div className="absolute bottom-0 w-screen left-0 flex justify-center">
       <div className="flex gap-4 items-end px-4 py-2 rounded-t-xl bg-card border shadow-md">
@@ -24,12 +51,20 @@ export default function ControlPanel() {
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="secondary" size="icon">
+                <div
+                  ref={transactionsButtonRef}
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9"
+                >
                   <ArrowLeftRight size={16} />
-                </Button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>See all the transactions during the game!</p>
+                <p>
+                  <KeyboardHotkey>
+                    <span className="text-xs">⌘</span>T
+                  </KeyboardHotkey>{" "}
+                  See all the transactions during the game!
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -38,31 +73,59 @@ export default function ControlPanel() {
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="destructive" className="text-lg">
+                <div
+                  ref={buyButtonRef}
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 h-9 px-4 py-2 text-lg"
+                >
                   <ScrollText size={20} className="mr-2" />
                   Buy
-                </Button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Sell stocks and make money!</p>
+                <p>
+                  <KeyboardHotkey>
+                    <span className="text-xs">⌘</span>B
+                  </KeyboardHotkey>{" "}
+                  Buy stocks and create an account!
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
         </BuyStock>
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <StartStopButton ref={playButtonRef} isIcon />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                <KeyboardHotkey>
+                  <span className="text-xs">⌘</span>P
+                </KeyboardHotkey>{" "}
+                Play/Pause the game!
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
         <SellStock>
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button
-                  className="hover:bg-green-700 bg-green-600 text-lg"
-                  variant="secondary"
+                <div
+                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-secondary-foreground shadow-sm h-9 px-4 py-2 hover:bg-green-700 bg-green-600 text-lg"
+                  ref={sellButtonRef}
                 >
                   <CircleDollarSignIcon size={20} className="mr-2" />
                   Sell
-                </Button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Buy stocks and create an account!</p>
+                <p>
+                  <KeyboardHotkey>
+                    <span className="text-xs">⌘</span>S
+                  </KeyboardHotkey>{" "}
+                  Sell stocks and make money!
+                </p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -72,9 +135,9 @@ export default function ControlPanel() {
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
-                <Button variant="secondary" size="icon">
+                <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
                   <Settings size={16} />
-                </Button>
+                </div>
               </TooltipTrigger>
               <TooltipContent>
                 <p>Access the admin panel for the fake stocks!</p>

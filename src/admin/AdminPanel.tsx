@@ -3,21 +3,22 @@ import React, { useMemo } from "react";
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useLedger } from "@/ledger/ledgerHook";
 import Log from "./Log";
-import SaveLedgerDialog from "./SaveLedgerDialog";
+import { Label } from "recharts";
+import EditAccountsDialog from "./EditAccountsDialog";
 import { Button } from "@/components/ui/button";
 import LoadLedgerDialog from "./LoadLedgerDialog";
-import StartStopButton from "./StartStopButton";
-import ResetButton from "./ResetButton";
-import { useLedger } from "@/ledger/ledgerHook";
-import { Label } from "@/components/ui/label";
+import SaveLedgerDialog from "./SaveLedgerDialog";
 import Statistic from "./Statistic";
 import { ArrowLeftRight, IterationCw, Users } from "lucide-react";
-import EditAccountsDialog from "./EditAccountsDialog";
+import StartStopButton from "./StartStopButton";
+import ResetButton from "./ResetButton";
 
 type Props = { children: React.ReactNode };
 
@@ -32,11 +33,16 @@ export default function AdminPanel({ children }: Props) {
 
   return (
     <Sheet>
-      <SheetTrigger asChild>{children}</SheetTrigger>
+      <SheetTrigger>{children}</SheetTrigger>
       <SheetContent className="max-w-[800px] w-[800px] flex gap-8 flex-col">
-        <SheetHeader>
-          <SheetTitle>Settings Panel</SheetTitle>
-        </SheetHeader>
+        <div className="flex flex-col gap-2">
+          <SheetHeader>
+            <SheetTitle>Admin Panel</SheetTitle>
+          </SheetHeader>
+          <SheetDescription>
+            Admin panel to setup the fake stocks game
+          </SheetDescription>
+        </div>
         {/** Current status */}
         <div className="flex flex-col gap-2">
           <Label>Status</Label>

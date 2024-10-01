@@ -35,7 +35,7 @@ export default function SeeTransactions({ children }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="w-[700px]">
         <DialogHeader>
           <DialogTitle>All transactions</DialogTitle>
