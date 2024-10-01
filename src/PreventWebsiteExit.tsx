@@ -3,7 +3,7 @@ import { toast } from "./hooks/use-toast";
 
 export default function PreventWebsiteExit() {
   useEffect(() => {
-    // Dissallow right clicks
+    // Disallow right clicks
     const preventDefault = (e: MouseEvent) => {
       e.preventDefault();
     };

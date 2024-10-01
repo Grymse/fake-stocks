@@ -22,7 +22,7 @@ type Props = { children: React.ReactNode };
 export default function SaveLedgerDialog({ children }: Props) {
   const [ledgerName, setLedgerName] = useState<string>("");
   const [statusMessage, setStatusMessage] = useState<string>("");
-  const { getSerialized } = useLedger();
+  const { serialize } = useLedger();
 
   useEffect(() => {
     setStatusMessage("");
@@ -35,7 +35,7 @@ export default function SaveLedgerDialog({ children }: Props) {
       const date = Date.now();
       const timedLedgerName = date + "|" + ledgerName;
 
-      await db.save(timedLedgerName, getSerialized());
+      await db.save(timedLedgerName, serialize());
       setStatusMessage("Game saved successfully");
       toast({
         title: `${ledgerName} saved`,
