@@ -17,11 +17,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import KeyboardHotkey from "./KeyboardHotkey";
+import FullscreenButton from "./FullscreenButton";
 
 export default function ControlPanel() {
   const transactionsButtonRef = useRef<HTMLDivElement>(null);
   const buyButtonRef = useRef<HTMLDivElement>(null);
   const sellButtonRef = useRef<HTMLDivElement>(null);
+  const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
   const playButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -37,6 +39,9 @@ export default function ControlPanel() {
       } else if (e.key === "p") {
         e.preventDefault();
         playButtonRef.current?.click();
+      } else if (e.key === "f") {
+        e.preventDefault();
+        fullscreenButtonRef.current?.click();
       }
     }
 
@@ -145,6 +150,22 @@ export default function ControlPanel() {
             </Tooltip>
           </TooltipProvider>
         </AdminPanel>
+
+        <TooltipProvider delayDuration={200}>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <FullscreenButton ref={fullscreenButtonRef} />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>
+                <KeyboardHotkey>
+                  <span className="text-xs">⌘</span>F
+                </KeyboardHotkey>{" "}
+                Maximize or minimize the game!
+              </p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </div>
   );
