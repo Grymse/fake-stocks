@@ -8,6 +8,7 @@ import {
 import { ChartContainer } from "./components/ui/chart";
 import { Area, AreaChart, YAxis } from "recharts";
 import { Stock } from "./types";
+import { NaNToZero } from "./lib/utils";
 
 type Props = { stock: Stock };
 
@@ -37,7 +38,7 @@ export default function StockComponent({ stock }: Props) {
             ${percentage < 0 ? "text-red-400" : "text-green-500"}`}
           >
             {percentage > 0 ? "+" : ""}
-            {percentage.toFixed(1)}%
+            {NaNToZero(percentage).toFixed(1)}%
           </span>
         </CardTitle>
       </CardHeader>
