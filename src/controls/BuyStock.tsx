@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -23,11 +23,12 @@ type Purchase = {
 export default function BuyStock({ children }: Props) {
   const { toast } = useToast();
   const { buyStock, stocks, accounts } = useLedger();
-  const [purchase, setPurchase] = React.useState<Purchase>({
+  const [purchase, setPurchase] = useState<Purchase>({
     account: null,
     stock: null,
     amount: 1,
   });
+  const [dollars, setDollars] = useState(0);
 
   function onSubmit(e: React.FormEvent) {
     if (
@@ -47,6 +48,7 @@ export default function BuyStock({ children }: Props) {
     try {
       buyStock(purchase.account, purchase.stock, purchase.amount);
       setPurchase({ account: null, stock: null, amount: 1 });
+      setDollars(0);
       toast({
         title:
           "PAY UP! - " +
@@ -62,9 +64,34 @@ export default function BuyStock({ children }: Props) {
     }
   }
 
+  function onNewAccount(account: Account) {
+    setPurchase({ ...purchase, account });
+  }
+
   const total = Math.floor(
     (purchase?.amount ?? 0) * (purchase?.stock?.value ?? 0)
   );
+
+  function onDollarChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const dollars = parseInt(e.target.value);
+    if (dollars < 1) {
+      setDollars(1);
+      setPurchase({ ...purchase, amount: 0 });
+      return;
+    }
+    setDollars(dollars);
+    const amount = Math.floor(dollars / (purchase?.stock?.value ?? 1));
+    setPurchase({ ...purchase, amount });
+  }
+
+  function onAmountChange(e: React.ChangeEvent<HTMLInputElement>) {
+    let amount = parseInt(e.target.value);
+    if (amount < 1) {
+      amount = 1;
+    }
+    setPurchase({ ...purchase, amount });
+    setDollars(amount * (purchase?.stock?.value ?? 1));
+  }
 
   return (
     <Dialog>
@@ -89,7 +116,7 @@ export default function BuyStock({ children }: Props) {
                 setPurchase({ ...purchase, account: acc })
               }
             />
-            <AddAccount>
+            <AddAccount onNewAccount={onNewAccount}>
               <Button variant="secondary">
                 <PlusIcon />
               </Button>
@@ -111,37 +138,51 @@ export default function BuyStock({ children }: Props) {
             <Label htmlFor="name" className="text-right">
               Amount
             </Label>
-            <Input
-              type="number"
-              className="w-[280px]"
-              value={isNaN(purchase.amount ?? 0) ? "" : purchase.amount}
-              onChange={(e) => {
-                let amount = parseInt(e.target.value);
-                if (amount < 1) {
-                  amount = 1;
-                }
-                setPurchase({ ...purchase, amount });
-              }}
-              placeholder="Amount"
-            />
+            <div className="flex gap-4">
+              <div className="flex relative">
+                <Input
+                  className="w-[132px]"
+                  type="number"
+                  value={isNaN(purchase.amount ?? 0) ? "" : purchase.amount}
+                  onChange={onAmountChange}
+                  placeholder="Amount"
+                />
+                <p className="text-muted-foreground absolute top-1.5 right-2">
+                  pcs
+                </p>
+              </div>
+
+              <div className="flex relative">
+                <Input
+                  type="number"
+                  className="w-[132px]"
+                  value={dollars}
+                  onChange={onDollarChange}
+                  placeholder="Price"
+                />
+                <p className="text-muted-foreground absolute top-1.5 right-2">
+                  $
+                </p>
+              </div>
+            </div>
           </div>
           <div className="w-full justify-end flex">
             <p>
-              Total: <span>{Number.isNaN(total) ? "---" : total}</span>
+              Total price: <span>${Number.isNaN(total) ? "---" : total}</span>
             </p>
           </div>
         </div>
         <DialogFooter>
           <div className="w-full flex justify-between">
-            <AddAccount>
+            <AddAccount onNewAccount={onNewAccount}>
               <Button variant="secondary">
                 <span className="sr-only sm:not-sr-only">Add Account</span>
               </Button>
             </AddAccount>
             <DialogClose asChild>
-              <Button type="submit" onClick={onSubmit}>
+              <EnterTriggeredButton type="submit" onClick={onSubmit}>
                 Buy
-              </Button>
+              </EnterTriggeredButton>
             </DialogClose>
           </div>
         </DialogFooter>
@@ -165,6 +206,7 @@ import AddAccount from "./AddAccount";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useLedger } from "@/ledger/ledgerHook";
+import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 
 type SelectAccountProps = {
   account: Account | null;

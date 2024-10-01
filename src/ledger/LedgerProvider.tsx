@@ -9,7 +9,7 @@ export type Ledger = {
   accounts: Account[];
   stocks: Stock[];
   transactions: Transaction[];
-  addAccount: (name: string) => void;
+  addAccount: (name: string) => Account;
   buyStock: (account: Account, stock: Stock, amount: number) => void;
   sellStock: (
     account: Account,
@@ -32,7 +32,9 @@ export const LedgerContext = createContext<Ledger>({
   accounts: [],
   stocks: [],
   transactions: [],
-  addAccount: () => {},
+  addAccount: () => {
+    return { name: "", owns: [], id: 0 };
+  },
   buyStock: () => {},
   sellStock: () => {},
   updateStockValues: () => {},
@@ -52,10 +54,13 @@ const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const addAccount = (name: string) => {
     validateName(name, accounts); // Throws if invalid
 
+    const newAccount = { name, owns: [], id: generateId() };
+
     setAccounts((accounts) => {
-      if (accounts.find((account) => account.name === name)) return accounts;
-      return [...accounts, { name, owns: [], id: generateId() }];
+      return [...accounts, newAccount];
     });
+
+    return newAccount;
   };
 
   const removeAccount = (account: Account) => {

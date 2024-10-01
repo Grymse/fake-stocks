@@ -1,6 +1,5 @@
 import React from "react";
 
-import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,17 +14,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 import { useLedger } from "@/ledger/ledgerHook";
+import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
+import { Account } from "@/types";
 
-type Props = { children: React.ReactNode };
+type Props = {
+  children: React.ReactNode;
+  onNewAccount?: (account: Account) => void;
+};
 
-export default function AddAccount({ children }: Props) {
+export default function AddAccount({ children, onNewAccount }: Props) {
   const { addAccount } = useLedger();
   const { toast } = useToast();
   const [name, setName] = React.useState("");
 
   function onSubmit(e: React.FormEvent) {
     try {
-      addAccount(name);
+      const newAccount = addAccount(name);
+      onNewAccount?.(newAccount);
       toast({
         title: `Created new account ${name}`,
         description: `You can now buy and sell stocks with your brand new account!`,
@@ -72,9 +77,9 @@ export default function AddAccount({ children }: Props) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" onClick={onSubmit}>
+            <EnterTriggeredButton type="submit" onClick={onSubmit}>
               Add User
-            </Button>
+            </EnterTriggeredButton>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
