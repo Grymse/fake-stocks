@@ -1,26 +1,21 @@
-import { useEffect } from "react";
-import Ledger from "./ledger/Ledger";
-import LedgerProvider from "./ledger/LedgerProvider";
-import LedgerUpdater from "./ledger/LedgerUpdater";
-import StockOverview from "./StockOverview";
-import ControlPanel from "./controls/ControlPanel";
+import Ledger from "./components/ledger/Ledger";
+import LedgerProvider from "./components/ledger/LedgerProvider";
+import LedgerUpdaterVisualizer from "./components/ledger/LedgerUpdaterVisualizer";
+import Stocks from "./components/stocks/Stocks";
+import ControlPanel from "./components/controls/ControlPanel";
 import { Toaster } from "@/components/ui/toaster";
-import Graph from "./Graph";
-import KeepScreenAwake from "./KeepScreenAwake";
-import AddFakeData from "./AddFakeData";
-import { AnimationsProvider } from "./AnimationsProvider";
-import PreventWebsiteExit from "./PreventWebsiteExit";
-import AutosaveLedger from "./AutosaveLedger";
-import { useFlags } from "./useFlags";
+import Graph from "./components/stocks/Graph";
+import KeepScreenAwake from "./components/utils/KeepScreenAwake";
+import AddFakeData from "./components/ledger/AddFakeData";
+import { AnimationsProvider } from "./components/utils/AnimationsProvider";
+import PreventWebsiteExit from "./components/utils/PreventWebsiteExit";
+import AutosaveLedger from "./components/ledger/AutosaveLedger";
+import { useFlags } from "./hooks/useFlags";
+import { useDarkmode } from "./hooks/useDarkmode";
 
 function App() {
-  useEffect(() => {
-    const root = window.document.documentElement;
-
-    root.classList.add("dark");
-  }, []);
-
   const { fake } = useFlags();
+  useDarkmode();
 
   return (
     <>
@@ -30,26 +25,17 @@ function App() {
       <AnimationsProvider>
         <LedgerProvider>
           <AutosaveLedger />
-          <LedgerUpdater />
+          <LedgerUpdaterVisualizer />
           {fake && <AddFakeData />}
           <div
-            className="w-screen max-w-screen gap-4 p-4 h-screen overflow-hidden"
+            className="w-screen gap-4 p-4 h-screen"
             style={{
               display: "grid",
               gridTemplateColumns: "auto 370px",
-              gridTemplateRows: "1fr",
-              gridTemplateAreas: `
-            "main side"
-          `,
             }}
           >
-            <div
-              style={{
-                gridArea: "main",
-              }}
-              className="flex gap-4 flex-col max-h-full w-full max-w-full h-full"
-            >
-              <StockOverview />
+            <div className="flex gap-4 flex-col">
+              <Stocks />
               <Graph />
             </div>
             <Ledger />

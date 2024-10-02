@@ -1,0 +1,40 @@
+import { createContext, ReactNode } from "react";
+import { Ledger, useLedgerStateManager } from "@/hooks/useLedgerStateManager";
+import { useSimulator } from "@/hooks/useSimulator";
+import { useContext } from "react";
+
+export function useLedger() {
+  return useContext(LedgerContext);
+}
+
+// The context should be the Ledger type.
+export const LedgerContext = createContext<Ledger>({
+  active: false,
+  setActive: () => {},
+  clear: () => {},
+  accounts: [],
+  stocks: [],
+  transactions: [],
+  addAccount: () => {
+    return { name: "", owns: [], id: 0 };
+  },
+  buyStock: () => {},
+  sellStock: () => {},
+  updateStockValues: () => {},
+  serialize: () => "",
+  parse: () => {},
+  renameAccount: () => {},
+  removeAccount: () => {},
+});
+
+// Component which exposes the LedgerContext
+const LedgerProvider = ({ children }: { children: ReactNode }) => {
+  const ledger = useLedgerStateManager();
+  useSimulator(ledger.updateStockValues, ledger.active);
+
+  return (
+    <LedgerContext.Provider value={ledger}>{children}</LedgerContext.Provider>
+  );
+};
+
+export default LedgerProvider;

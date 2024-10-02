@@ -33,7 +33,4 @@ export type Stock = {
   max: number;
   historical: number[];
   color: string;
-  mood: StockTendency;
 };
-
-export type StockTendency = number;
