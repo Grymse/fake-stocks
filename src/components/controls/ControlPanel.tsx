@@ -1,6 +1,6 @@
-import BuyStock from "./BuyStock";
-import SellStock from "./SellStock";
-import SeeTransactions from "./SeeTransactions";
+import BuyStockDialog from "./dialogs/BuyStockDialog";
+import SellStockDialog from "./dialogs/SellStockDialog";
+import TransactionsDialog from "./dialogs/TransactionsDialog";
 import AdminPanel from "../admin/AdminPanel";
 import {
   ArrowLeftRight,
@@ -52,7 +52,7 @@ export default function ControlPanel() {
   return (
     <div className="absolute bottom-0 w-screen left-0 flex justify-center">
       <div className="flex gap-4 items-end px-4 py-2 rounded-t-xl bg-card border shadow-md">
-        <SeeTransactions>
+        <TransactionsDialog>
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -73,8 +73,8 @@ export default function ControlPanel() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </SeeTransactions>
-        <BuyStock>
+        </TransactionsDialog>
+        <BuyStockDialog>
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -96,7 +96,7 @@ export default function ControlPanel() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </BuyStock>
+        </BuyStockDialog>
         {/* Play/Pause */}
         <TooltipProvider delayDuration={200}>
           <Tooltip>
@@ -113,7 +113,7 @@ export default function ControlPanel() {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
-        <SellStock>
+        <SellStockDialog>
           <TooltipProvider delayDuration={200}>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -135,7 +135,7 @@ export default function ControlPanel() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
-        </SellStock>
+        </SellStockDialog>
 
         {/* Maximize */}
         <TooltipProvider delayDuration={200}>

@@ -11,7 +11,6 @@ import {
 import { Label } from "@/components/ui/label";
 import { Account } from "@/types";
 import { Button } from "@/components/ui/button";
-import { SelectAccount } from "./BuyStock";
 import {
   Table,
   TableBody,
@@ -21,10 +20,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useLedger } from "@/components/ledger/LedgerProvider";
+import { SelectAccount } from "../selects/SelectAccount";
 
 type Props = { children: React.ReactNode };
 
-export default function SeeTransactions({ children }: Props) {
+export default function TransactionsDialog({ children }: Props) {
   const { transactions, accounts } = useLedger();
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 

@@ -19,7 +19,7 @@ type Props = {
 
 const STOCK_SHOW_CHANGE_TIME = 7000;
 
-export default function StockTable({ stocks, onSelect }: Props) {
+export default function LedgerTable({ stocks, onSelect }: Props) {
   const [selected, setSelected] = useState<TableEntry | null>(null);
   const [index, setIndex] = useState(0);
   const [stockLength, setStockLength] = useState(stocks.length);

@@ -11,18 +11,18 @@ import {
   DialogClose,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { SelectAccount } from "./BuyStock";
 import { Account, OwnerCertificate } from "@/types";
-import StockTable from "@/components/stocks/StockTable";
+import LedgerTable from "@/components/ledger/LedgerTable";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import StockAmountToggleGroup from "./StockAmountToggleGroup";
+import StockAmountToggleGroup from "../StockAmountToggleGroup";
 import {
   getRandomAnimation,
   useAnimations,
 } from "@/components/utils/AnimationsProvider";
 import { useLedger } from "@/components/ledger/LedgerProvider";
 import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
+import { SelectAccount } from "../selects/SelectAccount";
 
 type Props = { children: React.ReactNode };
 
@@ -32,7 +32,7 @@ type Sale = {
   amount: number | undefined;
 };
 
-export default function SellStock({ children }: Props) {
+export default function SellStockDialog({ children }: Props) {
   const { toast } = useToast();
   const { sellStock, stocks, accounts } = useLedger();
   const { animate } = useAnimations();
@@ -153,7 +153,7 @@ export default function SellStock({ children }: Props) {
           </div>
           {sale.account && !currentAccountOwns && <p>You own no stocks! :(</p>}
           {currentAccountOwns && (
-            <StockTable stocks={currentAccountOwns} onSelect={onEntrySelect} />
+            <LedgerTable stocks={currentAccountOwns} onSelect={onEntrySelect} />
           )}
 
           {currentAccountOwns && sale.certificate && (

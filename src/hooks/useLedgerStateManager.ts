@@ -17,7 +17,7 @@ export type Ledger = {
     certificate: OwnerCertificate,
     amount: number
   ) => void;
-  updateStockValues: React.Dispatch<React.SetStateAction<Stock[]>>;
+  setStocks: React.Dispatch<React.SetStateAction<Stock[]>>;
   serialize: () => string;
   parse: (data: string) => void;
   clear: () => void;
@@ -194,7 +194,7 @@ export const useLedgerStateManager = () => {
     addAccount,
     buyStock,
     sellStock,
-    updateStockValues: setStocks,
+    setStocks,
     active,
     setActive,
     serialize,

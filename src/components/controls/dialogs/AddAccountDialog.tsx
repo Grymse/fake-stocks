@@ -22,7 +22,7 @@ type Props = {
   onNewAccount?: (account: Account) => void;
 };
 
-export default function AddAccount({ children, onNewAccount }: Props) {
+export default function AddAccountDialog({ children, onNewAccount }: Props) {
   const { addAccount } = useLedger();
   const { toast } = useToast();
   const [name, setName] = React.useState("");

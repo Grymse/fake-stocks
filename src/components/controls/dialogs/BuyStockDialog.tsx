@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-
+import { Account, Stock } from "@/types";
+import { useToast } from "@/hooks/use-toast";
+import { Input } from "@/components/ui/input";
+import AddAccount from "./AddAccountDialog";
+import { PlusIcon } from "@radix-ui/react-icons";
+import { DialogClose } from "@radix-ui/react-dialog";
+import { useLedger } from "@/components/ledger/LedgerProvider";
+import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
+import SelectStock from "../selects/SelectStock";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,6 +19,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
+import { SelectAccount } from "../selects/SelectAccount";
 
 type Props = { children: React.ReactNode };
 
@@ -20,7 +29,7 @@ type Purchase = {
   amount: number | undefined;
 };
 
-export default function BuyStock({ children }: Props) {
+export default function BuyStockDialog({ children }: Props) {
   const { toast } = useToast();
   const { buyStock, stocks, accounts } = useLedger();
   const [purchase, setPurchase] = useState<Purchase>({
@@ -188,88 +197,5 @@ export default function BuyStock({ children }: Props) {
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-}
-
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Account, Stock } from "@/types";
-import { useToast } from "@/hooks/use-toast";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import AddAccount from "./AddAccount";
-import { PlusIcon } from "@radix-ui/react-icons";
-import { DialogClose } from "@radix-ui/react-dialog";
-import { useLedger } from "@/components/ledger/LedgerProvider";
-import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
-
-type SelectAccountProps = {
-  account: Account | null;
-  setAccount: (account: Account | null) => void;
-  accounts: Account[];
-  className?: string;
-};
-
-export function SelectAccount({
-  account,
-  setAccount,
-  accounts,
-  className,
-}: SelectAccountProps) {
-  function onValueChange(value: string) {
-    setAccount(accounts.find((acc) => acc.name === value) ?? null);
-  }
-
-  return (
-    <Select onValueChange={onValueChange} value={account?.name ?? "none"}>
-      <SelectTrigger className={cn("w-[280px]", className)}>
-        <SelectValue placeholder="Select an account" />
-      </SelectTrigger>
-      <SelectContent>
-        {accounts
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map((acc) => (
-            <SelectItem value={acc.name} key={acc.name}>
-              {acc.name}
-            </SelectItem>
-          ))}
-      </SelectContent>
-    </Select>
-  );
-}
-
-type SelectStockProps = {
-  stock: Stock | null;
-  setStock: (stock: Stock | null) => void;
-  stocks: Stock[];
-};
-
-function SelectStock({ stock, setStock, stocks }: SelectStockProps) {
-  function onValueChange(value: string) {
-    setStock(stocks.find((stock) => stock.shortName === value) ?? null);
-  }
-
-  return (
-    <Select onValueChange={onValueChange} value={stock?.shortName}>
-      <SelectTrigger className="w-[280px]">
-        <SelectValue placeholder="Select a stock" />
-      </SelectTrigger>
-      <SelectContent>
-        {stocks
-          .sort((a, b) => a.name.localeCompare(b.name))
-          .map((acc) => (
-            <SelectItem value={acc.shortName} key={acc.id}>
-              <span style={{ color: acc.color }}>
-                ({acc.shortName}) {acc.name} - ${acc.value.toFixed(0)}
-              </span>
-            </SelectItem>
-          ))}
-      </SelectContent>
-    </Select>
   );
 }

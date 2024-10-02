@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useLedger } from "./LedgerProvider";
 import { LOG } from "../admin/Log";
 
@@ -15,45 +15,40 @@ const fakeAccounts = [
 ];
 
 export default function AddFakeData() {
-  const { addAccount, accounts, stocks, buyStock } = useLedger();
-  const [fakePurchases, setFakePurchases] = useState(false);
+  const { addAccount, accounts, setStocks, buyStock } = useLedger();
+  const accountsHasBeenAdded = useRef(false);
+  const stocksHasBeenAdded = useRef(false);
 
   useEffect(() => {
-    if (accounts.length >= fakeAccounts.length) return;
-    async function addAccounts() {
-      for (const name of fakeAccounts) {
-        addAccount(name);
-      }
-      return Promise.resolve();
-    }
+    if (accounts.length >= fakeAccounts.length || accountsHasBeenAdded.current)
+      return;
+    accountsHasBeenAdded.current = true;
 
-    addAccounts();
+    LOG("Start adding fake data", "update");
+
+    for (const name of fakeAccounts) {
+      addAccount(name);
+    }
   }, []);
 
   useEffect(() => {
-    if (
-      fakePurchases ||
-      accounts.length < fakeAccounts.length ||
-      stocks.length !== 5
-    )
+    if (stocksHasBeenAdded.current || accounts.length < fakeAccounts.length)
       return;
+    stocksHasBeenAdded.current = true;
 
-    async function addPurchases() {
-      LOG("Start adding fake data", "update");
+    setStocks((stocks) => {
       for (const name of fakeAccounts) {
-        const acc = accounts.find((account) => account.name === name);
+        const account = accounts.find((account) => account.name === name);
         for (const stock of stocks) {
           const price = Math.floor(Math.random() * 10) * 5;
-          if (!acc || price === 0) continue;
-          buyStock(acc, stock, price);
+          if (!account || price === 0) continue;
+          buyStock(account, stock, price);
         }
       }
       LOG("Finished adding fake data", "update");
-      return Promise.resolve();
-    }
-    addPurchases();
+      return [...stocks];
+    });
+  }, [accounts]);
 
-    setFakePurchases(true);
-  }, [stocks, buyStock]);
   return null;
 }

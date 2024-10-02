@@ -1,5 +1,5 @@
 import { useLedger } from "./LedgerProvider";
-import StockTable from "../stocks/StockTable";
+import LedgerTable from "./LedgerTable";
 
 function Ledger() {
   const { accounts, stocks } = useLedger();
@@ -14,7 +14,7 @@ function Ledger() {
     })
   );
 
-  return <StockTable stocks={allStocks} />;
+  return <LedgerTable stocks={allStocks} />;
 }
 
 export default Ledger;

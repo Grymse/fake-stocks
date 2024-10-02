@@ -20,7 +20,7 @@ export const LedgerContext = createContext<Ledger>({
   },
   buyStock: () => {},
   sellStock: () => {},
-  updateStockValues: () => {},
+  setStocks: () => {},
   serialize: () => "",
   parse: () => {},
   renameAccount: () => {},
@@ -30,7 +30,7 @@ export const LedgerContext = createContext<Ledger>({
 // Component which exposes the LedgerContext
 const LedgerProvider = ({ children }: { children: ReactNode }) => {
   const ledger = useLedgerStateManager();
-  useSimulator(ledger.updateStockValues, ledger.active);
+  useSimulator(ledger.setStocks, ledger.active);
 
   return (
     <LedgerContext.Provider value={ledger}>{children}</LedgerContext.Provider>
