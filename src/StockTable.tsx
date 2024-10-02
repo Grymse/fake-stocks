@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/table";
 import { OwnerCertificate, Stock } from "./types";
 import { useEffect, useMemo, useState } from "react";
+import { useResizeDetector } from "react-resize-detector";
 
 type TableEntry = { owner: string } & OwnerCertificate & Partial<Stock>;
 
@@ -16,13 +17,17 @@ type Props = {
   onSelect?: (stock: TableEntry | null) => void;
 };
 
-const MAX_STOCKS = 25;
 const STOCK_SHOW_CHANGE_TIME = 10000;
 
 export default function StockTable({ stocks, onSelect }: Props) {
   const [selected, setSelected] = useState<TableEntry | null>(null);
   const [index, setIndex] = useState(0);
   const [stockLength, setStockLength] = useState(stocks.length);
+  const { height, ref } = useResizeDetector({});
+  const maxStocks = useMemo(
+    () => Math.floor(((height ?? 800) - 70) / 41),
+    [height]
+  );
 
   useEffect(() => {
     setStockLength(stocks.length);
@@ -44,7 +49,7 @@ export default function StockTable({ stocks, onSelect }: Props) {
       setIndex((index) => {
         if (Number.isNaN(index) || index === undefined) return 0;
 
-        const lim = Math.ceil(stockLength / MAX_STOCKS);
+        const lim = Math.ceil(stockLength / maxStocks);
         return (index + 1) % lim;
       });
     };
@@ -52,23 +57,22 @@ export default function StockTable({ stocks, onSelect }: Props) {
     func();
 
     return () => clearInterval(interval);
-  }, [stockLength]);
+  }, [stockLength, maxStocks]);
 
   const stockSection = useMemo(
-    () => stocks.slice(index * MAX_STOCKS, index * MAX_STOCKS + MAX_STOCKS),
-    [stocks, index]
+    () => stocks.slice(index * maxStocks, index * maxStocks + maxStocks),
+    [stocks, index, maxStocks]
   );
 
   return (
     <>
-      <div className="border rounded-lg shadow-sm">
-        <Table>
+      <div ref={ref} className="border overflow-hidden rounded-lg shadow-sm">
+        <Table className="text-base">
           <TableHeader>
             <TableRow>
               <TableHead>Owner</TableHead>
               <TableHead>Stock</TableHead>
               <TableHead>Pcs</TableHead>
-              <TableHead>GAK</TableHead>
               <TableHead>%</TableHead>
               <TableHead>Value</TableHead>
             </TableRow>
@@ -94,7 +98,6 @@ export default function StockTable({ stocks, onSelect }: Props) {
                     </span>
                   </TableCell>
                   <TableCell>{stock.amount}</TableCell>
-                  <TableCell>${stock.initialValue.toFixed(0)}</TableCell>
                   <TableCell>
                     <span
                       className={
@@ -113,17 +116,17 @@ export default function StockTable({ stocks, onSelect }: Props) {
             })}
           </TableBody>
         </Table>
+        {maxStocks < stockLength && (
+          <div className="w-full flex justify-center">
+            <p className="text-xl text-gray-400">
+              {index + 1} / {Math.ceil(stockLength / maxStocks)}
+            </p>
+          </div>
+        )}
         {stocks.length === 0 && (
           <div className="p-4 text-center text-gray-500">No stocks found</div>
         )}
       </div>
-      {MAX_STOCKS < stockLength && (
-        <div className="w-full flex justify-center">
-          <p className="text-xl text-gray-400">
-            {index + 1} / {Math.ceil(stockLength / MAX_STOCKS)}
-          </p>
-        </div>
-      )}
     </>
   );
 }

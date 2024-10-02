@@ -1,8 +1,13 @@
 import { useEffect } from "react";
 import { toast } from "./hooks/use-toast";
+import { useFlags } from "./useFlags";
 
 export default function PreventWebsiteExit() {
+  const { debug } = useFlags();
+
   useEffect(() => {
+    if (debug) return;
+
     // Disallow right clicks
     const preventDefault = (e: MouseEvent) => {
       e.preventDefault();

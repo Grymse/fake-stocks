@@ -90,12 +90,12 @@ export default function BuyStock({ children }: Props) {
       amount = 1;
     }
     setPurchase({ ...purchase, amount });
-    setDollars(amount * (purchase?.stock?.value ?? 1));
+    setDollars(Math.floor(amount * (purchase?.stock?.value ?? 1)));
   }
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Buy stocks!</DialogTitle>
@@ -168,7 +168,7 @@ export default function BuyStock({ children }: Props) {
           </div>
           <div className="w-full justify-end flex">
             <p>
-              Total price: <span>${Number.isNaN(total) ? "---" : total}</span>
+              Total price: <span>${Number.isNaN(total) ? 0 : total}</span>
             </p>
           </div>
         </div>

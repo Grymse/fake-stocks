@@ -11,11 +11,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { LOG } from "./Log";
 import { toast } from "@/hooks/use-toast";
 import { Label } from "@/components/ui/label";
+import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 
 type Props = { children: React.ReactNode };
 
@@ -81,9 +81,9 @@ export default function SaveLedgerDialog({ children }: Props) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button type="submit" onClick={saveGame}>
+            <EnterTriggeredButton type="submit" onClick={saveGame}>
               Save
-            </Button>
+            </EnterTriggeredButton>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

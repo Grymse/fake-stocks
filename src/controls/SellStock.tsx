@@ -129,7 +129,7 @@ export default function SellStock({ children }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger>{children}</DialogTrigger>
       <DialogContent className="w-[700px]">
         <DialogHeader>
           <DialogTitle>Sell stocks</DialogTitle>

@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 import { useLedger } from "./ledger/ledgerHook";
+import { useFlags } from "./useFlags";
 
 const autosaveInterval = 10000;
 
 export default function AutosaveLedger() {
   const { parse, serialize } = useLedger();
   const serializeRef = useRef(serialize);
+  const { debug } = useFlags();
 
   useEffect(() => {
     serializeRef.current = serialize;
@@ -24,12 +26,13 @@ export default function AutosaveLedger() {
     const autosaveContent = localStorage.getItem("autosave-content");
     const autosaveTime = localStorage.getItem("autosave-time");
 
-    if (autosaveContent !== null && autosaveTime !== null) {
+    if (debug === false && autosaveContent !== null && autosaveTime !== null) {
       const diff = Date.now() - parseInt(autosaveTime);
       // Format diff in minutes
       const minutes = Math.floor(diff / 60000);
       const seconds = Math.floor((diff % 60000) / 1000);
       if (
+        minutes < 300 &&
         window.confirm(
           `Do you want to restore your previous session from ${minutes}m ${seconds}s ago?`
         )

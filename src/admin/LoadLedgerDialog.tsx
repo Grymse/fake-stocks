@@ -82,12 +82,14 @@ export default function LoadLedgerDialog({ children }: Props) {
                 className="hover:bg-white hover:bg-opacity-10 flex p-2 justify-between w-full items-center"
               >
                 <p>
-                  <span className="text-muted-foreground">
-                    {date.toLocaleString()}
-                  </span>{" "}
+                  <span className="text-muted-foreground text-sm mr-2">
+                    {date.getDate()}.{" "}
+                    {date.toLocaleString("default", { month: "short" })}{" "}
+                    {date.getHours()}:
+                    {date.getMinutes().toString().padStart(2, "0")}
+                  </span>
                   {ledgerName}
                 </p>
-                <p></p>
                 <div onClick={(e) => e.stopPropagation()}>
                   <ConfirmDialog
                     onConfirm={() => remove(name)}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import Ledger from "./ledger/Ledger";
 import LedgerProvider from "./ledger/LedgerProvider";
 import LedgerUpdater from "./ledger/LedgerUpdater";
@@ -11,6 +11,7 @@ import AddFakeData from "./AddFakeData";
 import { AnimationsProvider } from "./AnimationsProvider";
 import PreventWebsiteExit from "./PreventWebsiteExit";
 import AutosaveLedger from "./AutosaveLedger";
+import { useFlags } from "./useFlags";
 
 function App() {
   useEffect(() => {
@@ -19,7 +20,7 @@ function App() {
     root.classList.add("dark");
   }, []);
 
-  const debug = useRef(window.location.search.includes("debug=true")).current;
+  const { fake } = useFlags();
 
   return (
     <>
@@ -30,12 +31,12 @@ function App() {
         <LedgerProvider>
           <AutosaveLedger />
           <LedgerUpdater />
-          {debug && <AddFakeData />}
+          {fake && <AddFakeData />}
           <div
-            className="w-screen gap-4 p-4 h-screen overflow-hidden"
+            className="w-screen max-w-screen gap-4 p-4 h-screen overflow-hidden"
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 450px",
+              gridTemplateColumns: "auto 370px",
               gridTemplateRows: "1fr",
               gridTemplateAreas: `
             "main side"
@@ -46,21 +47,14 @@ function App() {
               style={{
                 gridArea: "main",
               }}
-              className="flex gap-4 flex-col max-h-full h-full"
+              className="flex gap-4 flex-col max-h-full w-full max-w-full h-full"
             >
               <StockOverview />
               <Graph />
             </div>
-            <div
-              style={{
-                gridArea: "side",
-              }}
-              className="flex gap-4 flex-col"
-            >
-              <ControlPanel />
-              <Ledger />
-            </div>
+            <Ledger />
           </div>
+          <ControlPanel />
         </LedgerProvider>
       </AnimationsProvider>
     </>

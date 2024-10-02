@@ -1,5 +1,3 @@
-// Create a provider that provides a method to trigger animations
-
 import React, { createContext, useContext, useRef, useState } from "react";
 import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 import Explosion from "react-canvas-confetti/dist/presets/explosion";

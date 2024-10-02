@@ -1,9 +1,10 @@
-import { Button } from "@/components/ui/button";
 import ConfirmDialog from "@/ConfirmDialog";
 import { toast } from "@/hooks/use-toast";
 import { useLedger } from "@/ledger/ledgerHook";
 
-export default function ResetButton() {
+type Props = { children: React.ReactNode };
+
+export default function ResetButton({ children }: Props) {
   const { clear } = useLedger();
 
   function clearLedger() {
@@ -22,7 +23,7 @@ export default function ResetButton() {
       asChild
       variant="destructive"
     >
-      <Button>Reset ledger</Button>
+      {children}
     </ConfirmDialog>
   );
 }
