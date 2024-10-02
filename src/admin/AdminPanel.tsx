@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/sheet";
 import { useLedger } from "@/ledger/ledgerHook";
 import Log from "./Log";
-import { Label } from "recharts";
 import EditAccountsDialog from "./EditAccountsDialog";
 import { Button } from "@/components/ui/button";
 import LoadLedgerDialog from "./LoadLedgerDialog";
@@ -19,6 +18,7 @@ import Statistic from "./Statistic";
 import { ArrowLeftRight, IterationCw, Users } from "lucide-react";
 import StartStopButton from "./StartStopButton";
 import ResetButton from "./ResetButton";
+import { Label } from "@/components/ui/label";
 
 type Props = { children: React.ReactNode };
 
@@ -47,7 +47,7 @@ export default function AdminPanel({ children }: Props) {
         <div className="flex flex-col gap-2">
           <Label>Status</Label>
           <div className="flex gap-4 items-center">
-            <StartStopButton /> <ResetButton />{" "}
+            <StartStopButton isIcon />{" "}
             <Statistic help="Amount of simulation iterations">
               <IterationCw size={16} />
               {stocks?.[0]?.historical?.length}
@@ -67,18 +67,21 @@ export default function AdminPanel({ children }: Props) {
 
         {/** Session */}
         <div className="flex flex-col gap-2">
-          <Label>Status</Label>
+          <Label>Ledger</Label>
 
           <div className="flex gap-4">
+            <EditAccountsDialog>
+              <Button variant="secondary">Edit Accounts</Button>
+            </EditAccountsDialog>
             <SaveLedgerDialog>
-              <Button>Save Ledger</Button>
+              <Button variant="secondary">Save Ledger</Button>
             </SaveLedgerDialog>
             <LoadLedgerDialog>
-              <Button>Load Ledger</Button>
+              <Button variant="secondary">Load Ledger</Button>
             </LoadLedgerDialog>
-            <EditAccountsDialog>
-              <Button>Edit Accounts</Button>
-            </EditAccountsDialog>
+            <ResetButton>
+              <Button variant="destructive">Reset ledger</Button>
+            </ResetButton>
           </div>
         </div>
         <div className="flex flex-col gap-2">
