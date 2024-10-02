@@ -27,7 +27,7 @@ export default function Log() {
   return (
     <div
       className="border w-full overflow-scroll overflow-x-hidden p-4 flex-1 rounded-lg shadow-sm"
-      style={{ maxHeight: "calc(100vh - 220px)" }}
+      style={{ maxHeight: "calc(100vh - 350px)" }}
     >
       {logsState.map((log) => {
         return (

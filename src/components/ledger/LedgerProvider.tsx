@@ -9,7 +9,7 @@ export function useLedger() {
 
 // The context should be the Ledger type.
 export const LedgerContext = createContext<Ledger>({
-  active: false,
+  active: "INACTIVE",
   setActive: () => {},
   clear: () => {},
   accounts: [],

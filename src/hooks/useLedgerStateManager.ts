@@ -5,8 +5,8 @@ import { LOG } from "@/components/admin/Log";
 import { defaultStocks } from "@/lib/defaultStocks";
 
 export type Ledger = {
-  active: boolean;
-  setActive: (active: boolean) => void;
+  active: ActiveState;
+  setActive: (active: ActiveState) => void;
   accounts: Account[];
   stocks: Stock[];
   transactions: Transaction[];
@@ -25,11 +25,24 @@ export type Ledger = {
   removeAccount: (account: Account) => void;
 };
 
+export type ActiveState = "ACTIVE" | "INACTIVE" | "SIMULATING";
+
 export const useLedgerStateManager = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [stocks, setStocks] = useState<Stock[]>(defaultStocks);
-  const [active, setActive] = useState<boolean>(false);
+  const [active, setInnerActive] = useState<ActiveState>("INACTIVE");
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+
+  const setActive = useCallback(
+    (newActive: ActiveState) => {
+      if (newActive === active) return;
+      if (newActive === "SIMULATING") LOG("Simulation started");
+      if (active === "SIMULATING" && newActive === "INACTIVE")
+        LOG("Simulation stopped");
+      setInnerActive(newActive);
+    },
+    [active]
+  );
 
   const addAccount = useCallback(
     (name: string) => {
@@ -73,7 +86,7 @@ export const useLedgerStateManager = () => {
       }))
     );
     setTransactions([]);
-    setActive(false);
+    setActive("INACTIVE");
     LOG("Ledger cleared");
   }, []);
 

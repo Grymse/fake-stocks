@@ -2,28 +2,31 @@ import { ISimulationAlgorithm } from "@/lib/simulationAlgorithm/ISimulationAlgor
 import { SimpleSimulationAlgorithm } from "@/lib/simulationAlgorithm/SimpleSimulationAlgorithms";
 import { Stock } from "@/types";
 import { useEffect, useState } from "react";
-
-const durationInterval = 50;
+import { ActiveState } from "./useLedgerStateManager";
 
 export function useSimulator(
   setStocks: React.Dispatch<React.SetStateAction<Stock[]>>,
-  active: boolean
+  active: ActiveState
 ) {
   const [algorithm, setAlgorithm] = useState<ISimulationAlgorithm>(
     new SimpleSimulationAlgorithm()
   );
 
   useEffect(() => {
-    if (!active) return;
+    if (active === "INACTIVE") return;
+
+    const durationInterval = active === "ACTIVE" ? 1000 : 50;
 
     const interval = setInterval(() => {
       setStocks((stocks) =>
         stocks.map((stock) => {
-          stock.historical.push(stock.value);
+          const value = algorithm.nextValue(stock);
+
+          stock.historical.push(value);
 
           return {
             ...stock,
-            value: algorithm.nextValue(stock),
+            value,
           };
         })
       );

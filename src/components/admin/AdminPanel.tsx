@@ -19,6 +19,7 @@ import { ArrowLeftRight, IterationCw, Users } from "lucide-react";
 import StartStopButton from "./StartStopButton";
 import ResetButton from "./ResetButton";
 import { Label } from "@/components/ui/label";
+import SimulateButton from "./SimulateButton";
 
 type Props = { children: React.ReactNode };
 
@@ -47,7 +48,7 @@ export default function AdminPanel({ children }: Props) {
         <div className="flex flex-col gap-2">
           <Label>Status</Label>
           <div className="flex gap-4 items-center">
-            <StartStopButton />{" "}
+            <StartStopButton /> <SimulateButton />
             <Statistic help="Amount of simulation iterations">
               <IterationCw size={16} />
               {stocks?.[0]?.historical?.length}
