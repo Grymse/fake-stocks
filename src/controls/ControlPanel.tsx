@@ -97,6 +97,7 @@ export default function ControlPanel() {
             </Tooltip>
           </TooltipProvider>
         </BuyStock>
+        {/* Play/Pause */}
         <TooltipProvider delayDuration={200}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -136,21 +137,7 @@ export default function ControlPanel() {
           </TooltipProvider>
         </SellStock>
 
-        <AdminPanel>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
-                  <Settings size={16} />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Access the admin panel for the fake stocks!</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
-        </AdminPanel>
-
+        {/* Maximize */}
         <TooltipProvider delayDuration={200}>
           <Tooltip>
             <TooltipTrigger asChild>
@@ -166,6 +153,21 @@ export default function ControlPanel() {
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
+
+        <AdminPanel>
+          <TooltipProvider delayDuration={200}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
+                  <Settings size={16} />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Access the admin panel for the fake stocks!</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+        </AdminPanel>
       </div>
     </div>
   );

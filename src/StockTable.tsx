@@ -28,7 +28,6 @@ export default function StockTable({ stocks, onSelect }: Props) {
     () => Math.floor(((height ?? 800) - 70) / 41),
     [height]
   );
-  console.log(height, maxStocks);
 
   useEffect(() => {
     setStockLength(stocks.length);
