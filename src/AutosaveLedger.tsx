@@ -13,18 +13,18 @@ export default function AutosaveLedger() {
     serializeRef.current = serialize;
   }, [serialize]);
 
-  function restore(content: string) {
-    setTimeout(() => {
-      parse(content);
-    }, 500);
-
-    localStorage.removeItem("autosave-content");
-    localStorage.removeItem("autosave-time");
-  }
-
   useEffect(() => {
     const autosaveContent = localStorage.getItem("autosave-content");
     const autosaveTime = localStorage.getItem("autosave-time");
+
+    function restore(content: string) {
+      setTimeout(() => {
+        parse(content);
+      }, 500);
+
+      localStorage.removeItem("autosave-content");
+      localStorage.removeItem("autosave-time");
+    }
 
     if (debug === false && autosaveContent !== null && autosaveTime !== null) {
       const diff = Date.now() - parseInt(autosaveTime);
@@ -47,7 +47,7 @@ export default function AutosaveLedger() {
     }, autosaveInterval);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [debug]);
 
   return null;
 }
