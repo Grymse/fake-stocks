@@ -21,7 +21,11 @@ export default function StockComponent({ stock }: Props) {
   const percentage = (stock.value / prevPrice - 1) * 100;
 
   return (
-    <Card className="w-full" x-chunk="charts-01-chunk-7">
+    <Card
+      className="h-[214px] flex justify-between overflow-hidden flex-col"
+      x-chunk="charts-01-chunk-7"
+      style={{ width: "calc((100vw - 480px) / 5)" }}
+    >
       <CardHeader className="space-y-0 pb-0">
         <CardDescription style={{ color: stock.color }}>
           {stock.name} ({stock.shortName})
@@ -33,13 +37,15 @@ export default function StockComponent({ stock }: Props) {
               $
             </span>{" "}
           </div>
-          <span
-            className={`font-sans text-lg font-normal tracking-normal text-muted-foreground
+          <p className="text-green-500">
+            <span
+              className={`font-sans text-lg font-normal tracking-normal text-muted-foreground
             ${percentage < 0 ? "text-red-400" : "text-green-500"}`}
-          >
-            {percentage > 0 ? "+" : ""}
-            {NaNToZero(percentage).toFixed(1)}%
-          </span>
+            >
+              {percentage > 0 ? "+" : ""}
+              {NaNToZero(percentage).toFixed(1)}%
+            </span>
+          </p>
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
@@ -50,6 +56,7 @@ export default function StockComponent({ stock }: Props) {
               color: stock.color,
             },
           }}
+          className="h-[130px] w-full"
         >
           <AreaChart
             accessibilityLayer

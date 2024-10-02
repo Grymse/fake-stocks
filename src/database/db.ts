@@ -1,4 +1,4 @@
-import { IndexedDB } from "./indexedDB";
+import { IndexedDB } from "./IndexedDB";
 
 export interface Database {
   connect(): Promise<void>;

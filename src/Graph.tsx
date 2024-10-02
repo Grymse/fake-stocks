@@ -18,10 +18,10 @@ export default function Graph() {
     LOG("Total updates: " + stocks[0].historical.length);
 
   return (
-    <Card className="p-0 m-0 relative overflow-hidden ">
+    <Card className="p-0 m-0 relative overflow-hidden w-full">
       <CardContent
         className="p-0 m-0"
-        style={{ height: "calc(100vh - 264px)" }}
+        style={{ height: "calc(100vh - 264px)", width: "calc(100vw - 420px)" }}
         ref={ref}
       >
         <Plot
