@@ -10,13 +10,7 @@ import {
 } from "lucide-react";
 import { useEffect, useRef } from "react";
 import StartStopButton from "@/components/admin/StartStopButton";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import KeyboardHotkey from "./KeyboardHotkey";
+import { CommandTooltip, SimpleTooltip } from "@/components/ui/tooltip";
 import FullscreenButton from "./FullscreenButton";
 
 export default function ControlPanel() {
@@ -52,121 +46,84 @@ export default function ControlPanel() {
   return (
     <div className="absolute bottom-0 w-screen left-0 flex justify-center">
       <div className="flex gap-4 items-end px-4 py-2 rounded-t-xl bg-card border shadow-md">
+        {/* Transactions */}
         <TransactionsDialog>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div
-                  ref={transactionsButtonRef}
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9"
-                >
-                  <ArrowLeftRight size={16} />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  <KeyboardHotkey>
-                    <span className="text-xs">⌘</span>T
-                  </KeyboardHotkey>{" "}
-                  See all the transactions during the game!
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CommandTooltip
+            hotkey="T"
+            prefix="⌘"
+            message="Show transactions"
+            asChild
+          >
+            <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
+              <ArrowLeftRight size={16} />
+            </div>
+          </CommandTooltip>
         </TransactionsDialog>
+
+        {/* Buy */}
         <BuyStockDialog>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div
-                  ref={buyButtonRef}
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 h-9 px-4 py-2 text-lg"
-                >
-                  <ScrollText size={20} className="mr-2" />
-                  Buy
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  <KeyboardHotkey>
-                    <span className="text-xs">⌘</span>B
-                  </KeyboardHotkey>{" "}
-                  Buy stocks and create an account!
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CommandTooltip
+            hotkey="B"
+            prefix="⌘"
+            message="Buy stocks and create an account!"
+            asChild
+          >
+            <div
+              ref={buyButtonRef}
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 h-9 px-4 py-2 text-lg"
+            >
+              <ScrollText size={20} className="mr-2" />
+              Buy
+            </div>
+          </CommandTooltip>
         </BuyStockDialog>
         {/* Play/Pause */}
-        <TooltipProvider delayDuration={200}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <StartStopButton ref={playButtonRef} />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                <KeyboardHotkey>
-                  <span className="text-xs">⌘</span>P
-                </KeyboardHotkey>{" "}
-                Play/Pause the game!
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <CommandTooltip
+          hotkey="P"
+          prefix="⌘"
+          message="Play/Pause the game!"
+          asChild
+        >
+          <StartStopButton ref={playButtonRef} />
+        </CommandTooltip>
+
+        {/* Sell */}
         <SellStockDialog>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div
-                  className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 text-secondary-foreground shadow-sm h-9 px-4 py-2 hover:bg-green-700 bg-green-600 text-lg"
-                  ref={sellButtonRef}
-                >
-                  <CircleDollarSignIcon size={20} className="mr-2" />
-                  Sell
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>
-                  <KeyboardHotkey>
-                    <span className="text-xs">⌘</span>S
-                  </KeyboardHotkey>{" "}
-                  Sell stocks and make money!
-                </p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <CommandTooltip
+            hotkey="S"
+            prefix="⌘"
+            message="Sell stocks and make money!"
+            asChild
+          >
+            <div
+              ref={sellButtonRef}
+              className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-green text-green-foreground shadow-sm h-9 px-4 py-2 hover:bg-green/80 text-lg"
+            >
+              <CircleDollarSignIcon size={20} className="mr-2" />
+              Sell
+            </div>
+          </CommandTooltip>
         </SellStockDialog>
 
         {/* Maximize */}
-        <TooltipProvider delayDuration={200}>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <FullscreenButton ref={fullscreenButtonRef} />
-            </TooltipTrigger>
-            <TooltipContent>
-              <p>
-                <KeyboardHotkey>
-                  <span className="text-xs">⌘</span>F
-                </KeyboardHotkey>{" "}
-                Maximize or minimize the game!
-              </p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <CommandTooltip
+          hotkey="F"
+          prefix="⌘"
+          message="Maximize or minimize the game!"
+          asChild
+        >
+          <FullscreenButton ref={fullscreenButtonRef} />
+        </CommandTooltip>
 
         <AdminPanel>
-          <TooltipProvider delayDuration={200}>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
-                  <Settings size={16} />
-                </div>
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Access the admin panel for the fake stocks!</p>
-              </TooltipContent>
-            </Tooltip>
-          </TooltipProvider>
+          <SimpleTooltip
+            message="Access the admin panel for the fake stocks!"
+            asChild
+          >
+            <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
+              <Settings size={16} />
+            </div>
+          </SimpleTooltip>
         </AdminPanel>
       </div>
     </div>

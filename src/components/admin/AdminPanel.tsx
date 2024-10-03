@@ -20,6 +20,7 @@ import StartStopButton from "./StartStopButton";
 import ResetButton from "./ResetButton";
 import { Label } from "@/components/ui/label";
 import SimulateButton from "./SimulateButton";
+import { CommandTooltip } from "../ui/tooltip";
 
 type Props = { children: React.ReactNode };
 
@@ -48,17 +49,25 @@ export default function AdminPanel({ children }: Props) {
         <div className="flex flex-col gap-2">
           <Label>Status</Label>
           <div className="flex gap-4 items-center">
-            <StartStopButton /> <SimulateButton />
-            <Statistic help="Amount of simulation iterations">
+            <CommandTooltip
+              hotkey="P"
+              prefix="⌘"
+              message="Play/Pause the game!"
+              asChild
+            >
+              <StartStopButton />
+            </CommandTooltip>{" "}
+            <SimulateButton />
+            <Statistic description="Amount of simulation iterations">
               <IterationCw size={16} />
               {stocks?.[0]?.historical?.length}
             </Statistic>
-            <Statistic help="Total transactions and amount">
+            <Statistic description="Total transactions and amount">
               <ArrowLeftRight size={16} />
               {transactions.length}
               <span className="mr-1 text-gray-500">pcs</span>${moneyTransferred}
             </Statistic>
-            <Statistic help="Amount of users">
+            <Statistic description="Amount of users">
               <Users size={16} />
               {accounts.length}
             </Statistic>
