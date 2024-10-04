@@ -90,6 +90,7 @@ export default function SellStockDialog({ children }: Props) {
 
   const currentAccountOwns = useMemo(() => {
     if (!sale.account) return undefined;
+
     // Find newest version of the account object, as the user may have selected
     // the specific account on previous renders, and the account object may have
     // changed since then.
@@ -154,7 +155,7 @@ export default function SellStockDialog({ children }: Props) {
           {sale.account && !currentAccountOwns && <p>You own no stocks! :(</p>}
           {currentAccountOwns && (
             <LedgerTable
-              height={window.innerHeight - 300}
+              height={window.innerHeight - 400}
               stocks={currentAccountOwns}
               onSelect={onEntrySelect}
             />

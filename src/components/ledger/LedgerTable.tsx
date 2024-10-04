@@ -9,6 +9,7 @@ import {
 import { OwnerCertificate, Stock } from "@/types";
 import { useEffect, useMemo, useState } from "react";
 import { useResizeDetector } from "react-resize-detector";
+import Percentage from "../stocks/Percentage";
 
 type TableEntry = { owner: string } & OwnerCertificate & Partial<Stock>;
 
@@ -76,7 +77,7 @@ export default function LedgerTable({
     <>
       <div
         ref={ref}
-        style={{ height: forceHeight }}
+        style={{ maxHeight: forceHeight }}
         className={`border rounded-lg shadow-sm ${
           forceHeight && !paged
             ? "overflow-y-scroll overflow-x-hidden"
@@ -115,14 +116,7 @@ export default function LedgerTable({
                   </TableCell>
                   <TableCell>{stock.amount}</TableCell>
                   <TableCell>
-                    <span
-                      className={
-                        percentage < 0 ? "text-red-500" : "text-green-600"
-                      }
-                    >
-                      {percentage > 0 ? "+" : ""}
-                      {percentage.toFixed(1)}%
-                    </span>
+                    <Percentage percentage={percentage} />
                   </TableCell>
                   <TableCell>
                     ${(stock.amount * stockValue).toFixed(0)}
