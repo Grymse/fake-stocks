@@ -15,7 +15,7 @@ import { Account, OwnerCertificate } from "@/types";
 import LedgerTable from "@/components/ledger/LedgerTable";
 import { useToast } from "@/hooks/use-toast";
 import { Input } from "@/components/ui/input";
-import StockAmountToggleGroup from "../StockAmountToggleGroup";
+import StockAmountToggleGroup from "../../controls/StockAmountToggleGroup";
 import {
   getRandomAnimation,
   useAnimations,
@@ -153,7 +153,11 @@ export default function SellStockDialog({ children }: Props) {
           </div>
           {sale.account && !currentAccountOwns && <p>You own no stocks! :(</p>}
           {currentAccountOwns && (
-            <LedgerTable stocks={currentAccountOwns} onSelect={onEntrySelect} />
+            <LedgerTable
+              height={window.innerHeight - 300}
+              stocks={currentAccountOwns}
+              onSelect={onEntrySelect}
+            />
           )}
 
           {currentAccountOwns && sale.certificate && (

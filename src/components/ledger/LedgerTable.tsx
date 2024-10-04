@@ -15,18 +15,26 @@ type TableEntry = { owner: string } & OwnerCertificate & Partial<Stock>;
 type Props = {
   stocks: TableEntry[];
   onSelect?: (stock: TableEntry | null) => void;
+  paged?: boolean;
+  height?: number;
 };
 
 const STOCK_SHOW_CHANGE_TIME = 7000;
 
-export default function LedgerTable({ stocks, onSelect }: Props) {
+export default function LedgerTable({
+  stocks,
+  paged = false,
+  height: forceHeight,
+  onSelect,
+}: Props) {
   const [selected, setSelected] = useState<TableEntry | null>(null);
   const [index, setIndex] = useState(0);
   const [stockLength, setStockLength] = useState(stocks.length);
   const { height, ref } = useResizeDetector({});
   const maxStocks = useMemo(
-    () => Math.floor(((height ?? 800) - 70) / 41),
-    [height]
+    () =>
+      paged ? Math.floor(((forceHeight ?? height ?? 800) - 70) / 41) : 1000,
+    [height, paged, forceHeight]
   );
 
   useEffect(() => {
@@ -66,7 +74,15 @@ export default function LedgerTable({ stocks, onSelect }: Props) {
 
   return (
     <>
-      <div ref={ref} className="border overflow-hidden rounded-lg shadow-sm">
+      <div
+        ref={ref}
+        style={{ height: forceHeight }}
+        className={`border rounded-lg shadow-sm ${
+          forceHeight && !paged
+            ? "overflow-y-scroll overflow-x-hidden"
+            : "overflow-hidden"
+        }`}
+      >
         <Table className="text-base">
           <TableHeader>
             <TableRow>

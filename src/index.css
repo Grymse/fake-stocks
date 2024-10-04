@@ -55,6 +55,22 @@
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
+
+  /* Scrollbar */
+  .dark ::-webkit-scrollbar {
+    width: 6px;
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: hsl(var(--background) / 0.1);
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: hsl(var(--foreground) / 0.4);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--foreground) / 0.6);
+  }
 }
 @layer base {
   * {

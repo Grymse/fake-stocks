@@ -1,6 +1,6 @@
-import BuyStockDialog from "./dialogs/BuyStockDialog";
-import SellStockDialog from "./dialogs/SellStockDialog";
-import TransactionsDialog from "./dialogs/TransactionsDialog";
+import BuyStockDialog from "../ledger/dialogs/BuyStockDialog";
+import SellStockDialog from "../ledger/dialogs/SellStockDialog";
+import TransactionsDialog from "../ledger/dialogs/TransactionsDialog";
 import AdminPanel from "../admin/AdminPanel";
 import {
   ArrowLeftRight,

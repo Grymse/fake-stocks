@@ -14,7 +14,7 @@ function Ledger() {
     })
   );
 
-  return <LedgerTable stocks={allStocks} />;
+  return <LedgerTable paged stocks={allStocks} />;
 }
 
 export default Ledger;
