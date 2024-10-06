@@ -1,5 +1,7 @@
 # FAKE STOCKS
 
+[Live version](https://stocks.grymse.dk)
+
 - This interface allows you to simulate a fake stock market over an evening
 - People buy/sell stocks using an external currency
 - The interface will display the stock changes
