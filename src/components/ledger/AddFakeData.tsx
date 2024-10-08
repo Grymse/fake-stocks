@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { useLedger } from "./LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { LOG } from "../admin/Log";
 
 const fakeAccounts = [

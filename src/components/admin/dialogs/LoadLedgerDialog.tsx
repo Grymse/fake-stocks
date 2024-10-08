@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLedger } from "../../ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { db } from "@/services/IDatabase";
 import {
   DialogHeader,
@@ -9,7 +9,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/useToast";
 import { LOG } from "../Log";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";

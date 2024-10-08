@@ -8,7 +8,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { useLedger } from "@/components/ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import Log from "./Log";
 import EditAccountsDialog from "./dialogs/EditAccountsDialog";
 import { Button } from "@/components/ui/button";
@@ -21,6 +21,7 @@ import ResetButton from "./ResetButton";
 import { Label } from "@/components/ui/label";
 import SimulateButton from "./SimulateButton";
 import { CommandTooltip } from "../ui/tooltip";
+import DarkmodeButton from "./DarkmodeButton";
 
 type Props = { children: React.ReactNode };
 
@@ -58,6 +59,7 @@ export default function AdminPanel({ children }: Props) {
               <StartStopButton />
             </CommandTooltip>{" "}
             <SimulateButton />
+            <DarkmodeButton />
             <Statistic description="Amount of simulation iterations">
               <IterationCw size={16} />
               {stocks?.[0]?.historical?.length}

@@ -1,13 +1,13 @@
-import LedgerProvider from "./components/ledger/LedgerProvider";
+import LedgerProvider from "./contexts/LedgerProvider";
 import { Toaster } from "@/components/ui/toaster";
 import KeepScreenAwake from "./components/utils/KeepScreenAwake";
 import AddFakeData from "./components/ledger/AddFakeData";
-import { AnimationsProvider } from "./components/utils/AnimationsProvider";
+import { AnimationsProvider } from "./contexts/AnimationsProvider";
 import PreventWebsiteExit from "./components/utils/PreventWebsiteExit";
 import AutosaveLedger from "./components/ledger/AutosaveLedger";
 import { useFlags } from "./hooks/useFlags";
-import { useDarkmode } from "./hooks/useDarkmode";
 import React from "react";
+import { DarkmodeProvider } from "./contexts/DarkmodeProvider";
 
 type Props = {
   children: React.ReactNode;
@@ -15,20 +15,21 @@ type Props = {
 
 export default function Providers({ children }: Props) {
   const { fake } = useFlags();
-  useDarkmode();
 
   return (
     <>
       <Toaster />
       <KeepScreenAwake />
       <PreventWebsiteExit />
-      <AnimationsProvider>
-        <LedgerProvider>
-          <AutosaveLedger />
-          {fake && <AddFakeData />}
-          {children}
-        </LedgerProvider>
-      </AnimationsProvider>
+      <DarkmodeProvider>
+        <AnimationsProvider>
+          <LedgerProvider>
+            <AutosaveLedger />
+            {fake && <AddFakeData />}
+            {children}
+          </LedgerProvider>
+        </AnimationsProvider>
+      </DarkmodeProvider>
     </>
   );
 }

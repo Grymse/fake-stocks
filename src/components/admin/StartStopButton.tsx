@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { useLedger } from "@/components/ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { Pause, Play, ZapOff } from "lucide-react";
 import { forwardRef } from "react";
 
@@ -26,7 +26,10 @@ const StartStopButton = forwardRef<HTMLButtonElement, Props>(
         {active === "ACTIVE" ? (
           <Pause size={20} />
         ) : active === "SIMULATING" ? (
-          <ZapOff className="text-yellow-400 hover:text-yellow-500" size={20} />
+          <ZapOff
+            className="text-yellow-500 hover:text-yellow-400 dark:text-yellow-400 dark:hover:text-yellow-500"
+            size={20}
+          />
         ) : (
           <Play size={20} />
         )}

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Account, Stock } from "@/types";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/useToast";
 import { Input } from "@/components/ui/input";
 import AddAccount from "./AddAccountDialog";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useLedger } from "@/components/ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 import SelectStock from "../selects/SelectStock";
 import { Button } from "@/components/ui/button";

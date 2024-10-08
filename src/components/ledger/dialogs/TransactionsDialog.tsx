@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useLedger } from "@/components/ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { SelectAccount } from "../selects/SelectAccount";
 
 type Props = { children: React.ReactNode };

@@ -1,4 +1,4 @@
-import { useLedger } from "../ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import Stock from "./Stock";
 
 export default function Stocks() {

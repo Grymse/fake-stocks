@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { toast } from "../../hooks/use-toast";
+import { toast } from "../../hooks/useToast";
 import { useFlags } from "../../hooks/useFlags";
 
 export default function PreventWebsiteExit() {

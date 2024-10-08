@@ -1,4 +1,4 @@
-import { useLedger } from "./LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import LedgerTable from "./LedgerTable";
 
 function Ledger() {

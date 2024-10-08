@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useLedger } from "../../ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { db } from "@/services/IDatabase";
 import {
   DialogFooter,
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { LOG } from "../Log";
-import { toast } from "@/hooks/use-toast";
+import { toast } from "@/hooks/useToast";
 import { Label } from "@/components/ui/label";
 import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 
