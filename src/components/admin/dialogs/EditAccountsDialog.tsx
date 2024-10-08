@@ -15,7 +15,7 @@ import {
   TableBody,
   TableCell,
 } from "@/components/ui/table";
-import { useLedger } from "@/components/ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { Pencil, Trash } from "lucide-react";
 import ConfirmDialog from "../../utils/ConfirmDialog";
 import EditAccountDialog from "./EditAccountDialog";

@@ -1,6 +1,6 @@
 import ConfirmDialog from "@/components/utils/ConfirmDialog";
-import { toast } from "@/hooks/use-toast";
-import { useLedger } from "@/components/ledger/LedgerProvider";
+import { toast } from "@/hooks/useToast";
+import { useLedger } from "@/hooks/useLedger";
 
 type Props = { children: React.ReactNode };
 

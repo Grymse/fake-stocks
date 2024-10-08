@@ -13,14 +13,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { Account, OwnerCertificate } from "@/types";
 import LedgerTable from "@/components/ledger/LedgerTable";
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/useToast";
 import { Input } from "@/components/ui/input";
 import StockAmountToggleGroup from "../../controls/StockAmountToggleGroup";
-import {
-  getRandomAnimation,
-  useAnimations,
-} from "@/components/utils/AnimationsProvider";
-import { useLedger } from "@/components/ledger/LedgerProvider";
+import { getRandomAnimation, useAnimations } from "@/hooks/useAnimations";
+import { useLedger } from "@/hooks/useLedger";
 import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 import { SelectAccount } from "../selects/SelectAccount";
 

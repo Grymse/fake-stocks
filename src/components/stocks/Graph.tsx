@@ -1,11 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { useResizeDetector } from "react-resize-detector";
 import Plot from "react-plotly.js";
-import { useLedger } from "../ledger/LedgerProvider";
+import { useLedger } from "@/hooks/useLedger";
 import { LOG } from "../admin/Log";
+import { useDarkmode } from "@/hooks/useDarkmode";
 
 export default function Graph() {
   const { stocks } = useLedger();
+  const { isDarkmode } = useDarkmode();
   const { width, height, ref } = useResizeDetector({});
 
   const layout = {
@@ -13,6 +15,12 @@ export default function Graph() {
     width: width,
     height: height,
   };
+
+  if (!isDarkmode) {
+    layout.yaxis!.tickfont!.color = "rgb(100 116 139)";
+    layout.yaxis!.gridcolor = "rgb(203 213 225)";
+    console.log("Darkmode", isDarkmode);
+  }
 
   if (stocks[0]?.historical?.length && stocks[0].historical.length % 50 === 0)
     LOG("Total updates: " + stocks[0].historical.length);

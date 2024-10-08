@@ -1,11 +1,6 @@
 import { createContext, ReactNode } from "react";
 import { Ledger, useLedgerStateManager } from "@/hooks/useLedgerStateManager";
 import { useSimulator } from "@/hooks/useSimulator";
-import { useContext } from "react";
-
-export function useLedger() {
-  return useContext(LedgerContext);
-}
 
 // The context should be the Ledger type.
 export const LedgerContext = createContext<Ledger>({
