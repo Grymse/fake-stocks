@@ -20,9 +20,14 @@ import { Account } from "@/types";
 type Props = {
   children: React.ReactNode;
   onNewAccount?: (account: Account) => void;
+  hasNestedButton?: boolean;
 };
 
-export default function AddAccountDialog({ children, onNewAccount }: Props) {
+export default function AddAccountDialog({
+  children,
+  onNewAccount,
+  hasNestedButton,
+}: Props) {
   const { addAccount } = useLedger();
   const { toast } = useToast();
   const [name, setName] = React.useState("");
@@ -54,7 +59,9 @@ export default function AddAccountDialog({ children, onNewAccount }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger asChild hasNestedButton={hasNestedButton}>
+        {children}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add a new user!</DialogTitle>

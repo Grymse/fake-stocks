@@ -20,8 +20,9 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { SelectAccount } from "../selects/SelectAccount";
+import { SimpleTooltip } from "@/components/ui/tooltip";
 
-type Props = { children: React.ReactNode };
+type Props = { children: React.ReactNode; hasNestedButton?: boolean };
 
 type Purchase = {
   account: Account | null;
@@ -29,7 +30,7 @@ type Purchase = {
   amount: number | undefined;
 };
 
-export default function BuyStockDialog({ children }: Props) {
+export default function BuyStockDialog({ children, hasNestedButton }: Props) {
   const { toast } = useToast();
   const { buyStock, stocks, accounts } = useLedger();
   const [purchase, setPurchase] = useState<Purchase>({
@@ -104,7 +105,9 @@ export default function BuyStockDialog({ children }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger hasNestedButton={hasNestedButton}>
+        {children}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Buy stocks!</DialogTitle>
@@ -125,10 +128,12 @@ export default function BuyStockDialog({ children }: Props) {
                 setPurchase({ ...purchase, account: acc })
               }
             />
-            <AddAccount onNewAccount={onNewAccount}>
-              <Button variant="secondary">
-                <PlusIcon />
-              </Button>
+            <AddAccount hasNestedButton onNewAccount={onNewAccount}>
+              <SimpleTooltip message="Add a new account">
+                <Button variant="secondary">
+                  <PlusIcon />
+                </Button>
+              </SimpleTooltip>
             </AddAccount>
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
@@ -183,10 +188,12 @@ export default function BuyStockDialog({ children }: Props) {
         </div>
         <DialogFooter>
           <div className="w-full flex justify-between">
-            <AddAccount onNewAccount={onNewAccount}>
-              <Button variant="secondary">
-                <span className="sr-only sm:not-sr-only">Add Account</span>
-              </Button>
+            <AddAccount onNewAccount={onNewAccount} hasNestedButton>
+              <SimpleTooltip message="Add a new account">
+                <Button variant="secondary">
+                  <span className="sr-only sm:not-sr-only">Add Account</span>
+                </Button>
+              </SimpleTooltip>
             </AddAccount>
             <DialogClose asChild>
               <EnterTriggeredButton type="submit" onClick={onSubmit}>

@@ -1,5 +1,5 @@
-import { NaNToZero } from "@/lib/utils";
-import { cn } from "../../lib/utils";
+import { NaNToZero } from "@/hooks/lib/utils";
+import { cn } from "../../hooks/lib/utils";
 
 type Props = { percentage: number; className?: string };
 

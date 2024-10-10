@@ -16,12 +16,22 @@ import { LOG } from "../Log";
 import { toast } from "@/hooks/useToast";
 import { Label } from "@/components/ui/label";
 import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
+import useLoader from "@/hooks/useLoader";
 
-type Props = { children: React.ReactNode };
+type Props = {
+  children: React.ReactNode;
+  hasNestedButton?: boolean;
+  disabled?: boolean;
+};
 
-export default function SaveLedgerDialog({ children }: Props) {
+export default function SaveLedgerDialog({
+  children,
+  hasNestedButton,
+  disabled,
+}: Props) {
   const [ledgerName, setLedgerName] = useState<string>("");
   const [statusMessage, setStatusMessage] = useState<string>("");
+  const { isLoading, setLoading } = useLoader();
   const { serialize } = useLedger();
 
   useEffect(() => {
@@ -31,27 +41,35 @@ export default function SaveLedgerDialog({ children }: Props) {
   const saveGame = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
-    try {
-      const date = Date.now();
-      const timedLedgerName = date + "|" + ledgerName;
-
-      await db.save(timedLedgerName, serialize());
-      setStatusMessage("Game saved successfully");
-      toast({
-        title: `${ledgerName} saved`,
-        description: "You can now load the ledger from your list",
-      });
-      setLedgerName("");
-      LOG("Ledger saved: " + ledgerName);
-    } catch (error) {
-      e.stopPropagation();
-      setStatusMessage("Error: " + error);
-    }
+    setLoading(true);
+    db.save(ledgerName, serialize())
+      .then(() => {
+        setLoading(false);
+        setStatusMessage("Game saved successfully");
+        toast({
+          title: `${ledgerName} saved`,
+          description: "You can now load the ledger from your list",
+        });
+        setLedgerName("");
+        LOG("Ledger saved: " + ledgerName);
+      })
+      .catch((error: Error) => {
+        LOG("Error saving ledger: " + error, "error");
+        e.stopPropagation();
+        setStatusMessage("Error: " + error.message);
+      })
+      .finally(() => setLoading(false));
   };
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      {disabled ? (
+        children
+      ) : (
+        <DialogTrigger asChild hasNestedButton={hasNestedButton}>
+          {children}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Save the ledger</DialogTitle>
@@ -81,7 +99,11 @@ export default function SaveLedgerDialog({ children }: Props) {
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <EnterTriggeredButton type="submit" onClick={saveGame}>
+            <EnterTriggeredButton
+              isLoading={isLoading}
+              type="submit"
+              onClick={saveGame}
+            >
               Save
             </EnterTriggeredButton>
           </DialogClose>

@@ -16,6 +16,7 @@ type Props = {
   message: string;
   title?: string;
   asChild?: boolean;
+  hasNestedButton?: boolean;
   className?: string;
   variant?:
     | "secondary"
@@ -33,13 +34,18 @@ export default function ConfirmDialog({
   onConfirm,
   message,
   title = "Are you absolutely sure?",
-  asChild = false,
+  asChild,
+  hasNestedButton,
   className,
   variant,
 }: Props) {
   return (
     <Dialog>
-      <DialogTrigger className={className} asChild={asChild}>
+      <DialogTrigger
+        className={className}
+        hasNestedButton={hasNestedButton}
+        asChild={asChild}
+      >
         {children}
       </DialogTrigger>
       <DialogContent>
