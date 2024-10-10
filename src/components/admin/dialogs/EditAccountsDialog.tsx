@@ -20,14 +20,19 @@ import { Pencil, Trash } from "lucide-react";
 import ConfirmDialog from "@/components/ui/confirmdialog";
 import EditAccountDialog from "./EditAccountDialog";
 
-type Props = { children: React.ReactNode };
+type Props = { children: React.ReactNode; hasNestedButton?: boolean };
 
-export default function EditAccountsDialog({ children }: Props) {
+export default function EditAccountsDialog({
+  children,
+  hasNestedButton,
+}: Props) {
   const { accounts, removeAccount } = useLedger();
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger hasNestedButton={hasNestedButton} asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Change accounts</DialogTitle>

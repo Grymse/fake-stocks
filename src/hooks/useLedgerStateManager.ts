@@ -1,8 +1,8 @@
 import { useCallback, useState } from "react";
 import { Account, OwnerCertificate, Stock, Transaction } from "@/types";
-import { parseLedger, serializeLedger } from "@/lib/ledgerSerializer";
+import { parseLedger, serializeLedger } from "@/hooks/lib/ledgerSerializer";
 import { LOG } from "@/components/admin/Log";
-import { defaultStocks } from "@/lib/defaultStocks";
+import { defaultStocks } from "@/hooks/lib/defaultStocks";
 
 export type Ledger = {
   active: ActiveState;

@@ -1,7 +1,7 @@
 import useAuth from "@/hooks/useAuth";
 import React from "react";
 import { Button } from "../ui/button";
-import { signinWithGoogle } from "@/lib/firebase";
+import { signinWithGoogle } from "@/hooks/lib/firebase";
 
 type Variants =
   | "default"

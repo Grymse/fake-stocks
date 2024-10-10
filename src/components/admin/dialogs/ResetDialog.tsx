@@ -2,9 +2,9 @@ import ConfirmDialog from "@/components/ui/confirmdialog";
 import { toast } from "@/hooks/useToast";
 import { useLedger } from "@/hooks/useLedger";
 
-type Props = { children: React.ReactNode };
+type Props = { children: React.ReactNode; hasNestedButton?: boolean };
 
-export default function ResetButton({ children }: Props) {
+export default function ResetButton({ children, hasNestedButton }: Props) {
   const { clear } = useLedger();
 
   function clearLedger() {
@@ -21,6 +21,7 @@ export default function ResetButton({ children }: Props) {
       title="Reset the ledger?"
       message="Are you totally sure you want to reset the ledger. If you do this, then all the progress has been lost!"
       asChild
+      hasNestedButton={hasNestedButton}
       variant="destructive"
     >
       {children}

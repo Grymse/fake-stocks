@@ -16,7 +16,7 @@ type Props = {
   message: string;
   title?: string;
   asChild?: boolean;
-  multipleChildren?: boolean;
+  hasNestedButton?: boolean;
   className?: string;
   variant?:
     | "secondary"
@@ -35,7 +35,7 @@ export default function ConfirmDialog({
   message,
   title = "Are you absolutely sure?",
   asChild,
-  multipleChildren,
+  hasNestedButton,
   className,
   variant,
 }: Props) {
@@ -43,7 +43,7 @@ export default function ConfirmDialog({
     <Dialog>
       <DialogTrigger
         className={className}
-        multipleChildren={multipleChildren}
+        hasNestedButton={hasNestedButton}
         asChild={asChild}
       >
         {children}

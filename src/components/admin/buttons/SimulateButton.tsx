@@ -1,7 +1,7 @@
-import { Button } from "../ui/button";
+import { Button } from "../../ui/button";
 import { Zap, ZapOff } from "lucide-react";
 import { useLedger } from "@/hooks/useLedger";
-import { SimpleTooltip } from "../ui/tooltip";
+import { SimpleTooltip } from "../../ui/tooltip";
 
 export default function SimulateButton() {
   const { setActive, active } = useLedger();
@@ -14,7 +14,7 @@ export default function SimulateButton() {
       <Button
         className="text-yellow-500 hover:text-yellow-400 dark:text-yellow-400 dark:hover:text-yellow-500"
         onClick={toggleSimulation}
-        variant="ghost"
+        variant="secondary"
         size="icon"
       >
         {active === "SIMULATING" ? <ZapOff size={20} /> : <Zap size={20} />}

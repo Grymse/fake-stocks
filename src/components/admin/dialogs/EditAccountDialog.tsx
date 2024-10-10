@@ -5,6 +5,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  DialogClose,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 import { Input } from "@/components/ui/input";
@@ -12,12 +14,19 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/useToast";
 import { useLedger } from "@/hooks/useLedger";
 import { Account } from "@/types";
-import { DialogClose, DialogTrigger } from "@radix-ui/react-dialog";
 import { ReactNode, useState } from "react";
 
-type Props = { account: Account; children: ReactNode };
+type Props = {
+  account: Account;
+  children: ReactNode;
+  hasNestedButton?: boolean;
+};
 
-export default function EditAccountDialog({ account, children }: Props) {
+export default function EditAccountDialog({
+  account,
+  children,
+  hasNestedButton,
+}: Props) {
   const [newName, setNewName] = useState(account.name);
   const { toast } = useToast();
   const { renameAccount } = useLedger();
@@ -47,7 +56,9 @@ export default function EditAccountDialog({ account, children }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger hasNestedButton={hasNestedButton} asChild>
+        {children}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Change {account.name} name</DialogTitle>

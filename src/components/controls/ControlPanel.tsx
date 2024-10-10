@@ -9,7 +9,7 @@ import {
   Settings,
 } from "lucide-react";
 import { useEffect, useRef } from "react";
-import StartStopButton from "@/components/admin/StartStopButton";
+import StartStopButton from "@/components/admin/buttons/StartStopButton";
 import { CommandTooltip, SimpleTooltip } from "@/components/ui/tooltip";
 import FullscreenButton from "./FullscreenButton";
 import { Button } from "../ui/button";
@@ -80,14 +80,7 @@ export default function ControlPanel() {
           </CommandTooltip>
         </BuyStockDialog>
         {/* Play/Pause */}
-        <CommandTooltip
-          hotkey="P"
-          prefix="⌘"
-          message="Play/Pause the game!"
-          asChild
-        >
-          <StartStopButton ref={playButtonRef} />
-        </CommandTooltip>
+        <StartStopButton ref={playButtonRef} />
 
         {/* Sell */}
         <SellStockDialog hasNestedButton>
@@ -109,15 +102,9 @@ export default function ControlPanel() {
         </SellStockDialog>
 
         {/* Maximize */}
-        <CommandTooltip
-          hotkey="F"
-          prefix="⌘"
-          message="Maximize or minimize the game!"
-          asChild
-        >
-          <FullscreenButton ref={fullscreenButtonRef} />
-        </CommandTooltip>
+        <FullscreenButton ref={fullscreenButtonRef} />
 
+        {/* Admin */}
         <AdminPanel>
           <SimpleTooltip
             message="Access the admin panel for the fake stocks!"

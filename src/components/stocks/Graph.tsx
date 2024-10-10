@@ -19,7 +19,6 @@ export default function Graph() {
   if (!isDarkmode) {
     layout.yaxis!.tickfont!.color = "rgb(100 116 139)";
     layout.yaxis!.gridcolor = "rgb(203 213 225)";
-    console.log("Darkmode", isDarkmode);
   }
 
   if (stocks[0]?.historical?.length && stocks[0].historical.length % 50 === 0)

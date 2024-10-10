@@ -14,18 +14,19 @@ import EditAccountsDialog from "./dialogs/EditAccountsDialog";
 import { Button } from "@/components/ui/button";
 import LoadLedgerDialog from "./dialogs/LoadLedgerDialog";
 import SaveLedgerDialog from "./dialogs/SaveLedgerDialog";
-import Statistic from "./Statistic";
+import Statistic from "../ui/statistic";
 import { ArrowLeftRight, IterationCw, Users } from "lucide-react";
-import StartStopButton from "./StartStopButton";
+import StartStopButton from "./buttons/StartStopButton";
 import ResetButton from "./dialogs/ResetDialog";
 import { Label } from "@/components/ui/label";
-import SimulateButton from "./SimulateButton";
-import { CommandTooltip } from "../ui/tooltip";
-import DarkmodeButton from "./DarkmodeButton";
+import SimulateButton from "./buttons/SimulateButton";
+import DarkmodeButton from "./buttons/DarkmodeButton";
 import useAuth from "@/hooks/useAuth";
-import RequireAuth from "../utils/RequireAuth";
 import User from "./User";
-import LoginButton from "./LoginButton";
+import LoginButton from "./buttons/LoginButton";
+import FullscreenButton from "../controls/FullscreenButton";
+import { SimpleTooltip } from "@/components/ui/tooltip";
+import { signinWithGoogle } from "@/hooks/lib/firebase";
 
 type Props = { children: React.ReactNode };
 
@@ -38,6 +39,10 @@ export default function AdminPanel({ children }: Props) {
       transactions.reduce((acc, transaction) => acc + transaction.amount, 0),
     [transactions]
   );
+
+  function loginIfDisabled() {
+    if (user === null) signinWithGoogle();
+  }
 
   return (
     <Sheet>
@@ -55,15 +60,9 @@ export default function AdminPanel({ children }: Props) {
         <div className="flex flex-col gap-2">
           <Label>Status</Label>
           <div className="flex gap-4 items-center">
-            <CommandTooltip
-              hotkey="P"
-              prefix="⌘"
-              message="Play/Pause the game!"
-              asChild
-            >
-              <StartStopButton />
-            </CommandTooltip>{" "}
+            <StartStopButton />
             <SimulateButton />
+            <FullscreenButton />
             <DarkmodeButton />
             <Statistic description="Amount of simulation iterations">
               <IterationCw size={16} />
@@ -87,23 +86,49 @@ export default function AdminPanel({ children }: Props) {
           <Label>Ledger</Label>
 
           <div className="flex gap-4">
-            <EditAccountsDialog>
-              <Button variant="secondary">Edit Accounts</Button>
+            <EditAccountsDialog hasNestedButton>
+              <SimpleTooltip
+                asChild
+                message="Change the names or delete accounts"
+              >
+                <Button variant="secondary">Edit Accounts</Button>
+              </SimpleTooltip>
             </EditAccountsDialog>
-            <RequireAuth message="Login to save & load" variant="secondary">
-              <SaveLedgerDialog>
-                <Button disabled={user === null} variant="secondary">
+            <SaveLedgerDialog disabled={user === null} hasNestedButton>
+              <SimpleTooltip
+                message={
+                  user === null
+                    ? "Login to save the current stocks and ledger"
+                    : "Save the current stocks and ledger"
+                }
+                asChild
+              >
+                <Button onClick={loginIfDisabled} variant="secondary">
                   Save
                 </Button>
-              </SaveLedgerDialog>
-              <LoadLedgerDialog>
-                <Button disabled={user === null} variant="secondary">
+              </SimpleTooltip>
+            </SaveLedgerDialog>
+            <LoadLedgerDialog disabled={user === null} hasNestedButton>
+              <SimpleTooltip
+                message={
+                  user === null
+                    ? "Login to load previous saved stocks and ledger"
+                    : "Load previously saved stocks and ledger"
+                }
+                asChild
+              >
+                <Button onClick={loginIfDisabled} variant="secondary">
                   Load
                 </Button>
-              </LoadLedgerDialog>
-            </RequireAuth>
-            <ResetButton>
-              <Button variant="destructive">Reset</Button>
+              </SimpleTooltip>
+            </LoadLedgerDialog>
+            <ResetButton hasNestedButton>
+              <SimpleTooltip
+                asChild
+                message="Delete accounts, stocks-progression and transactions"
+              >
+                <Button variant="destructive">Reset</Button>
+              </SimpleTooltip>
             </ResetButton>
           </div>
         </div>

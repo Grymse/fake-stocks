@@ -1,4 +1,4 @@
-import { IndexedDB } from "./IndexedDB";
+import { FirebaseDB } from "./FirebaseDB";
 
 export interface IDatabase {
   connect(): Promise<void>;
@@ -21,6 +21,6 @@ export type DatabaseRecord = {
 };
 
 // Export a singleton instance of the IndexedDB class
-const db = new IndexedDB();
+const db = new FirebaseDB(); //IndexedDB();
 db.connect();
 export { db };

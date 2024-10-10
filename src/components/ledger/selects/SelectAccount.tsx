@@ -5,7 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+import { cn } from "@/hooks/lib/utils";
 import { Account } from "@/types";
 
 type SelectAccountProps = {

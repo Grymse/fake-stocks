@@ -14,60 +14,95 @@ import { LOG } from "../Log";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
 import ConfirmDialog from "../../ui/confirmdialog";
+import useLoader from "@/hooks/useLoader";
 
-type Props = { children: React.ReactNode };
+type Props = {
+  children: React.ReactNode;
+  hasNestedButton?: boolean;
+  disabled?: boolean;
+};
 
-export default function LoadLedgerDialog({ children }: Props) {
+export default function LoadLedgerDialog({
+  children,
+  hasNestedButton,
+  disabled,
+}: Props) {
   const { parse } = useLedger();
   const [open, setOpen] = useState(false);
+  const { setLoading: setLoading, Loading } = useLoader();
 
   const [ledgerList, setLedgerList] = useState<DatabaseRecordWithoutData[]>([]);
 
   useEffect(() => {
     if (!open) return;
-    db.list().then(setLedgerList);
+    setLoading(true);
+    db.list()
+      .then(setLedgerList)
+      .catch((e: Error) => {
+        LOG(`Error loading ledger list: ${e}`, "error");
+        toast({
+          title: "Error loading ledger list",
+          description: e.message,
+          variant: "destructive",
+        });
+      })
+      .finally(() => setLoading(false));
   }, [open]);
 
   async function remove(ledger: DatabaseRecordWithoutData) {
-    try {
-      await db.delete(ledger.id);
-    } catch (e) {
-      toast({
-        title: "Error deleting ledger",
-        description: `There was an error deleting the ledger ${ledger.name}. Check the logs for more information`,
-        variant: "destructive",
-      });
-      return LOG(`Error deleting ${ledger.name}: ${e}`, "error");
-    }
-    setLedgerList(ledgerList.filter((l) => l.id !== ledger.id));
-    LOG(`${ledger.name} deleted`, "warn");
+    setLoading(true);
+    db.delete(ledger.id)
+      .then(() => {
+        setLedgerList(ledgerList.filter((l) => l.id !== ledger.id));
+        LOG(`${ledger.name} deleted`, "warn");
+      })
+      .catch((e: Error) => {
+        LOG(`Error deleting ${ledger.name}: ${e}`, "error");
+        toast({
+          title: "Error deleting ledger",
+          description: `There was an error deleting the ledger ${ledger.name}. ${e.message}`,
+          variant: "destructive",
+        });
+      })
+      .finally(() => setLoading(false));
   }
 
   async function loadGame(id: string) {
-    try {
-      const ledger = await db.load(id);
-      parse(ledger.data);
-      toast({
-        title: `${ledger.name} loaded`,
-        description: "The ledger has been loaded successfully",
-      });
-      LOG(`New ledger loaded: ${ledger.name}`);
-      setOpen(false);
-    } catch (error: unknown) {
-      if (error instanceof Error) {
+    setLoading(true);
+    db.load(id)
+      .then((ledger) => {
+        parse(ledger.data);
+        toast({
+          title: `${ledger.name} loaded`,
+          description: "The ledger has been loaded successfully",
+        });
+        LOG(`New ledger loaded: ${ledger.name}`);
+        setOpen(false);
+      })
+      .catch((e: Error) => {
+        LOG(`Error loading ledger: ${e}`, "error");
         toast({
           title: "Error loading ledger",
-          description: `There was an error loading the ledger ${error.message}`,
+          description: `There was an error loading the ledger ${e.message}`,
           variant: "destructive",
         });
-        LOG(`Error loading ledger: ${error.message}`, "error");
-      }
-    }
+      })
+      .finally(() => setLoading(false));
   }
 
   return (
     <Dialog onOpenChange={setOpen} open={open}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      {disabled ? (
+        children
+      ) : (
+        <DialogTrigger
+          disabled={disabled}
+          hasNestedButton={hasNestedButton}
+          asChild
+        >
+          {children}
+        </DialogTrigger>
+      )}
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Load ledger!</DialogTitle>
@@ -117,9 +152,16 @@ export default function LoadLedgerDialog({ children }: Props) {
               </ConfirmDialog>
             );
           })}
-          {ledgerList.length === 0 && (
-            <div className="p-4 text-center text-gray-500">No saves found</div>
-          )}
+
+          <div className="w-full flex justify-center">
+            <Loading>
+              {ledgerList.length === 0 && (
+                <div className="p-4 text-center text-gray-500">
+                  No saves found
+                </div>
+              )}
+            </Loading>
+          </div>
         </div>
       </DialogContent>
     </Dialog>

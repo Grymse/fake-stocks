@@ -1,4 +1,5 @@
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { SimpleTooltip } from "@/components/ui/tooltip";
 import { useMemo } from "react";
 
 type StockAmountToggleGroupProps = {
@@ -18,18 +19,24 @@ export default function StockAmountToggleGroup({
 
   return (
     <ToggleGroup variant="outline" type="single" value={amount.toString()}>
-      <ToggleGroupItem
-        value={p100.toString()}
-        onClick={() => setAmount(maxAmount)}
-      >
-        All
-      </ToggleGroupItem>
-      <ToggleGroupItem value={p50.toString()} onClick={() => setAmount(p50)}>
-        50%
-      </ToggleGroupItem>
-      <ToggleGroupItem value={p25.toString()} onClick={() => setAmount(p25)}>
-        25%
-      </ToggleGroupItem>
+      <SimpleTooltip message="Buy all the stocks!">
+        <ToggleGroupItem
+          value={p100.toString()}
+          onClick={() => setAmount(maxAmount)}
+        >
+          All
+        </ToggleGroupItem>
+      </SimpleTooltip>
+      <SimpleTooltip message="Buy half the stocks!">
+        <ToggleGroupItem value={p50.toString()} onClick={() => setAmount(p50)}>
+          50%
+        </ToggleGroupItem>
+      </SimpleTooltip>
+      <SimpleTooltip message="Buy a quarter of the stocks!">
+        <ToggleGroupItem value={p25.toString()} onClick={() => setAmount(p25)}>
+          25%
+        </ToggleGroupItem>
+      </SimpleTooltip>
     </ToggleGroup>
   );
 }
