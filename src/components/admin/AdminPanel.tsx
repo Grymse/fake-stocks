@@ -17,16 +17,21 @@ import SaveLedgerDialog from "./dialogs/SaveLedgerDialog";
 import Statistic from "./Statistic";
 import { ArrowLeftRight, IterationCw, Users } from "lucide-react";
 import StartStopButton from "./StartStopButton";
-import ResetButton from "./ResetButton";
+import ResetButton from "./dialogs/ResetDialog";
 import { Label } from "@/components/ui/label";
 import SimulateButton from "./SimulateButton";
 import { CommandTooltip } from "../ui/tooltip";
 import DarkmodeButton from "./DarkmodeButton";
+import useAuth from "@/hooks/useAuth";
+import RequireAuth from "../utils/RequireAuth";
+import User from "./User";
+import LoginButton from "./LoginButton";
 
 type Props = { children: React.ReactNode };
 
 export default function AdminPanel({ children }: Props) {
   const { accounts, transactions, stocks } = useLedger();
+  const user = useAuth();
 
   const moneyTransferred = useMemo(
     () =>
@@ -85,15 +90,30 @@ export default function AdminPanel({ children }: Props) {
             <EditAccountsDialog>
               <Button variant="secondary">Edit Accounts</Button>
             </EditAccountsDialog>
-            <SaveLedgerDialog>
-              <Button variant="secondary">Save Ledger</Button>
-            </SaveLedgerDialog>
-            <LoadLedgerDialog>
-              <Button variant="secondary">Load Ledger</Button>
-            </LoadLedgerDialog>
+            <RequireAuth message="Login to save & load" variant="secondary">
+              <SaveLedgerDialog>
+                <Button disabled={user === null} variant="secondary">
+                  Save
+                </Button>
+              </SaveLedgerDialog>
+              <LoadLedgerDialog>
+                <Button disabled={user === null} variant="secondary">
+                  Load
+                </Button>
+              </LoadLedgerDialog>
+            </RequireAuth>
             <ResetButton>
-              <Button variant="destructive">Reset ledger</Button>
+              <Button variant="destructive">Reset</Button>
             </ResetButton>
+          </div>
+        </div>
+
+        {/** Login */}
+        <div className="flex flex-col gap-2">
+          <Label>Login</Label>
+          <div className="flex gap-4">
+            {user !== null && <User />}
+            <LoginButton />
           </div>
         </div>
         <div className="flex flex-col gap-2">

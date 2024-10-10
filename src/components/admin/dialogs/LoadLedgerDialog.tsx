@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useLedger } from "@/hooks/useLedger";
-import { db } from "@/services/IDatabase";
+import { DatabaseRecordWithoutData, db } from "@/services/IDatabase";
 import {
   DialogHeader,
   Dialog,
@@ -13,7 +13,7 @@ import { toast } from "@/hooks/useToast";
 import { LOG } from "../Log";
 import { Button } from "@/components/ui/button";
 import { Trash } from "lucide-react";
-import ConfirmDialog from "../../utils/ConfirmDialog";
+import ConfirmDialog from "../../ui/confirmdialog";
 
 type Props = { children: React.ReactNode };
 
@@ -21,28 +21,37 @@ export default function LoadLedgerDialog({ children }: Props) {
   const { parse } = useLedger();
   const [open, setOpen] = useState(false);
 
-  const [ledgerList, setLedgerList] = useState<string[]>([]);
+  const [ledgerList, setLedgerList] = useState<DatabaseRecordWithoutData[]>([]);
 
   useEffect(() => {
+    if (!open) return;
     db.list().then(setLedgerList);
   }, [open]);
 
-  async function remove(name: string) {
-    await db.delete(name);
-    setLedgerList(await db.list());
-    LOG(`${name.split("|")[1]} deleted`, "warn");
+  async function remove(ledger: DatabaseRecordWithoutData) {
+    try {
+      await db.delete(ledger.id);
+    } catch (e) {
+      toast({
+        title: "Error deleting ledger",
+        description: `There was an error deleting the ledger ${ledger.name}. Check the logs for more information`,
+        variant: "destructive",
+      });
+      return LOG(`Error deleting ${ledger.name}: ${e}`, "error");
+    }
+    setLedgerList(ledgerList.filter((l) => l.id !== ledger.id));
+    LOG(`${ledger.name} deleted`, "warn");
   }
 
-  async function loadGame(name: string) {
+  async function loadGame(id: string) {
     try {
-      parse(await db.load(name));
-
-      const ledgerName = name.split("|")[1];
+      const ledger = await db.load(id);
+      parse(ledger.data);
       toast({
-        title: `${ledgerName} loaded`,
+        title: `${ledger.name} loaded`,
         description: "The ledger has been loaded successfully",
       });
-      LOG(`New ledger loaded: ${ledgerName}`);
+      LOG(`New ledger loaded: ${ledger.name}`);
       setOpen(false);
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -51,6 +60,7 @@ export default function LoadLedgerDialog({ children }: Props) {
           description: `There was an error loading the ledger ${error.message}`,
           variant: "destructive",
         });
+        LOG(`Error loading ledger: ${error.message}`, "error");
       }
     }
   }
@@ -70,31 +80,32 @@ export default function LoadLedgerDialog({ children }: Props) {
           className="border w-full overflow-scroll overflow-x-hidden rounded-lg shadow-sm"
           style={{ maxHeight: "calc(100vh - 220px)" }}
         >
-          {ledgerList.map((name) => {
-            const [time, ledgerName] = name.split("|");
-            const date = new Date(+time);
+          {ledgerList.map((ledger) => {
             return (
               <ConfirmDialog
-                key={name}
-                onConfirm={() => loadGame(name)}
+                key={ledger.id}
+                onConfirm={() => loadGame(ledger.id)}
                 title="Overwrite current ledger"
                 message="Are you sure you want to continue and overwrite the current ledger? This action cannot be undone!"
-                className="hover:bg-white hover:bg-opacity-10 flex p-2 justify-between w-full items-center"
+                className="hover:bg-foreground/10 flex p-2 justify-between w-full items-center"
+                hasNestedButton
               >
                 <p>
                   <span className="text-muted-foreground text-sm mr-2">
-                    {date.getDate()}.{" "}
-                    {date.toLocaleString("default", { month: "short" })}{" "}
-                    {date.getHours()}:
-                    {date.getMinutes().toString().padStart(2, "0")}
+                    {ledger.createdAt.getDate()}.{" "}
+                    {ledger.createdAt.toLocaleString("default", {
+                      month: "short",
+                    })}{" "}
+                    {ledger.createdAt.getHours()}:
+                    {ledger.createdAt.getMinutes().toString().padStart(2, "0")}
                   </span>
-                  {ledgerName}
+                  {ledger.name}
                 </p>
                 <div onClick={(e) => e.stopPropagation()}>
                   <ConfirmDialog
-                    onConfirm={() => remove(name)}
-                    title={`Delete ${ledgerName}?`}
-                    message={`Are you sure you want to delete saved ledger: "${ledgerName}"`}
+                    onConfirm={() => remove(ledger)}
+                    title={`Delete ${ledger.name}?`}
+                    message={`Are you sure you want to delete saved ledger: "${ledger.name}"`}
                     asChild
                     variant="destructive"
                   >

@@ -1,4 +1,4 @@
-import ConfirmDialog from "@/components/utils/ConfirmDialog";
+import ConfirmDialog from "@/components/ui/confirmdialog";
 import { toast } from "@/hooks/useToast";
 import { useLedger } from "@/hooks/useLedger";
 

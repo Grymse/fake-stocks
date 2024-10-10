@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/table";
 import { useLedger } from "@/hooks/useLedger";
 import { Pencil, Trash } from "lucide-react";
-import ConfirmDialog from "../../utils/ConfirmDialog";
+import ConfirmDialog from "@/components/ui/confirmdialog";
 import EditAccountDialog from "./EditAccountDialog";
 
 type Props = { children: React.ReactNode };

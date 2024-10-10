@@ -15,13 +15,13 @@ import { Account, OwnerCertificate } from "@/types";
 import LedgerTable from "@/components/ledger/LedgerTable";
 import { useToast } from "@/hooks/useToast";
 import { Input } from "@/components/ui/input";
-import StockAmountToggleGroup from "../../controls/StockAmountToggleGroup";
+import StockAmountToggleGroup from "../selects/StockAmountToggleGroup";
 import { getRandomAnimation, useAnimations } from "@/hooks/useAnimations";
 import { useLedger } from "@/hooks/useLedger";
 import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
 import { SelectAccount } from "../selects/SelectAccount";
 
-type Props = { children: React.ReactNode };
+type Props = { children: React.ReactNode; hasNestedButton?: boolean };
 
 type Sale = {
   account: Account | null;
@@ -29,7 +29,7 @@ type Sale = {
   amount: number | undefined;
 };
 
-export default function SellStockDialog({ children }: Props) {
+export default function SellStockDialog({ children, hasNestedButton }: Props) {
   const { toast } = useToast();
   const { sellStock, stocks, accounts } = useLedger();
   const { animate } = useAnimations();
@@ -130,7 +130,9 @@ export default function SellStockDialog({ children }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger hasNestedButton={hasNestedButton}>
+        {children}
+      </DialogTrigger>
       <DialogContent className="w-[700px]">
         <DialogHeader>
           <DialogTitle>Sell stocks</DialogTitle>

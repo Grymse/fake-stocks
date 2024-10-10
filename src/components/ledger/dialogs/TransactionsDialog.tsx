@@ -22,9 +22,12 @@ import {
 import { useLedger } from "@/hooks/useLedger";
 import { SelectAccount } from "../selects/SelectAccount";
 
-type Props = { children: React.ReactNode };
+type Props = { children: React.ReactNode; hasNestedButton?: boolean };
 
-export default function TransactionsDialog({ children }: Props) {
+export default function TransactionsDialog({
+  children,
+  hasNestedButton,
+}: Props) {
   const { transactions, accounts } = useLedger();
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null);
 
@@ -35,7 +38,9 @@ export default function TransactionsDialog({ children }: Props) {
 
   return (
     <Dialog>
-      <DialogTrigger>{children}</DialogTrigger>
+      <DialogTrigger hasNestedButton={hasNestedButton}>
+        {children}
+      </DialogTrigger>
       <DialogContent className="w-[700px]">
         <DialogHeader>
           <DialogTitle>All transactions</DialogTitle>

@@ -33,7 +33,7 @@ export class FirebaseDB implements IDatabase {
     return setDoc(gameDoc, { data });
   }
 
-  getGamesCollection() {
+  private getGamesCollection() {
     const db = getFirestore(app);
     const auth = getAuth();
     if (!auth.currentUser) {
@@ -62,7 +62,7 @@ export class FirebaseDB implements IDatabase {
     return keys;
   }
 
-  delete(name: string): Promise<void> {
+  async delete(name: string): Promise<void> {
     const gamesCollection = this.getGamesCollection();
     const gameDoc = doc(gamesCollection, name);
     return deleteDoc(gameDoc);

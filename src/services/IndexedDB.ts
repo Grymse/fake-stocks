@@ -1,4 +1,8 @@
-import { IDatabase } from "./IDatabase";
+import {
+  DatabaseRecord,
+  DatabaseRecordWithoutData,
+  IDatabase,
+} from "./IDatabase";
 
 const openDB = (): Promise<IDBDatabase> => {
   return new Promise((resolve, reject) => {
@@ -7,7 +11,7 @@ const openDB = (): Promise<IDBDatabase> => {
     request.onupgradeneeded = (event: IDBVersionChangeEvent) => {
       const db = (event.target as IDBOpenDBRequest).result;
       if (!db.objectStoreNames.contains("games")) {
-        db.createObjectStore("games", { keyPath: "name" });
+        db.createObjectStore("games", { keyPath: "id" });
       }
     };
 
@@ -36,24 +40,33 @@ export class IndexedDB implements IDatabase {
     this.db = null;
   }
 
-  async save(name: string, data: string) {
+  async save(name: string, data: string): Promise<DatabaseRecord> {
     if (!this.db) {
       throw new Error("Database is not connected");
     }
 
+    const payload = {
+      id: Math.random().toString(36),
+      name,
+      data,
+      createdAt: new Date(),
+      ownerId: null,
+      ownerName: null,
+    };
+
     const transaction = this.db.transaction(["games"], "readwrite");
     const store = transaction.objectStore("games");
-    store.put({ name, data });
+    store.put(payload);
 
-    return new Promise<void>((resolve, reject) => {
-      transaction.oncomplete = () => resolve();
+    return new Promise<DatabaseRecord>((resolve, reject) => {
+      transaction.oncomplete = () => resolve(payload);
       transaction.onerror = (event) =>
         // @ts-expect-error doesn't know about errorCode
         reject(new Error("Failed to save game: " + event.target.errorCode));
     });
   }
 
-  async load(name: string) {
+  async load(name: string): Promise<DatabaseRecord> {
     if (!this.db) {
       throw new Error("Database is not connected");
     }
@@ -62,10 +75,10 @@ export class IndexedDB implements IDatabase {
     const store = transaction.objectStore("games");
     const request = store.get(name);
 
-    return new Promise<string>((resolve, reject) => {
+    return new Promise<DatabaseRecord>((resolve, reject) => {
       request.onsuccess = () => {
         if (request.result) {
-          resolve(request.result.data);
+          resolve(request.result);
         } else {
           reject(new Error("Game not found"));
         }
@@ -77,14 +90,14 @@ export class IndexedDB implements IDatabase {
     });
   }
 
-  async delete(name: string) {
+  async delete(id: string) {
     if (!this.db) {
       throw new Error("Database is not connected");
     }
 
     const transaction = this.db.transaction(["games"], "readwrite");
     const store = transaction.objectStore("games");
-    store.delete(name);
+    store.delete(id);
 
     return new Promise<void>((resolve, reject) => {
       transaction.oncomplete = () => resolve();
@@ -94,17 +107,16 @@ export class IndexedDB implements IDatabase {
     });
   }
 
-  async list() {
+  async list(): Promise<DatabaseRecordWithoutData[]> {
     if (!this.db) {
       throw new Error("Database is not connected");
     }
 
     const transaction = this.db.transaction(["games"], "readonly");
     const store = transaction.objectStore("games");
-    const request = store.getAllKeys();
+    const request = store.getAll();
 
-    return new Promise<string[]>((resolve, reject) => {
-      // @ts-expect-error doesn't know about result, even though it's in the spec
+    return new Promise<DatabaseRecordWithoutData[]>((resolve, reject) => {
       request.onsuccess = () => resolve(request.result);
       request.onerror = () => reject(new Error("Failed to list games"));
     });

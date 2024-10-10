@@ -32,10 +32,7 @@ export default function SaveLedgerDialog({ children }: Props) {
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     try {
-      const date = Date.now();
-      const timedLedgerName = date + "|" + ledgerName;
-
-      await db.save(timedLedgerName, serialize());
+      await db.save(ledgerName, serialize());
       setStatusMessage("Game saved successfully");
       toast({
         title: `${ledgerName} saved`,

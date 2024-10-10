@@ -13,6 +13,7 @@ export default function DarkmodeButton() {
   return (
     <SimpleTooltip
       message={isDarkmode ? "Turn off darkmode" : "Turn on darkmode"}
+      asChild
     >
       <Button variant="ghost" size="icon" onClick={toggleDarkmode}>
         {isDarkmode ? <Sun size={20} /> : <Moon size={20} />}

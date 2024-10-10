@@ -12,11 +12,12 @@ import { useEffect, useRef } from "react";
 import StartStopButton from "@/components/admin/StartStopButton";
 import { CommandTooltip, SimpleTooltip } from "@/components/ui/tooltip";
 import FullscreenButton from "./FullscreenButton";
+import { Button } from "../ui/button";
 
 export default function ControlPanel() {
-  const transactionsButtonRef = useRef<HTMLDivElement>(null);
-  const buyButtonRef = useRef<HTMLDivElement>(null);
-  const sellButtonRef = useRef<HTMLDivElement>(null);
+  const transactionsButtonRef = useRef<HTMLButtonElement>(null);
+  const buyButtonRef = useRef<HTMLButtonElement>(null);
+  const sellButtonRef = useRef<HTMLButtonElement>(null);
   const fullscreenButtonRef = useRef<HTMLButtonElement>(null);
   const playButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -47,34 +48,35 @@ export default function ControlPanel() {
     <div className="absolute bottom-0 w-screen left-0 flex justify-center">
       <div className="flex gap-4 items-end px-4 py-2 rounded-t-xl bg-card border shadow-md">
         {/* Transactions */}
-        <TransactionsDialog>
+        <TransactionsDialog hasNestedButton>
           <CommandTooltip
             hotkey="T"
             prefix="⌘"
             message="Show transactions"
             asChild
           >
-            <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
+            <Button ref={transactionsButtonRef} size="icon" variant="secondary">
               <ArrowLeftRight size={16} />
-            </div>
+            </Button>
           </CommandTooltip>
         </TransactionsDialog>
 
         {/* Buy */}
-        <BuyStockDialog>
+        <BuyStockDialog hasNestedButton>
           <CommandTooltip
             hotkey="B"
             prefix="⌘"
             message="Buy stocks and create an account!"
             asChild
           >
-            <div
+            <Button
               ref={buyButtonRef}
-              className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90 h-9 px-4 py-2 text-lg"
+              className="text-lg"
+              variant="destructive"
             >
               <ScrollText size={20} className="mr-2" />
               Buy
-            </div>
+            </Button>
           </CommandTooltip>
         </BuyStockDialog>
         {/* Play/Pause */}
@@ -88,20 +90,21 @@ export default function ControlPanel() {
         </CommandTooltip>
 
         {/* Sell */}
-        <SellStockDialog>
+        <SellStockDialog hasNestedButton>
           <CommandTooltip
             hotkey="S"
             prefix="⌘"
             message="Sell stocks and make money!"
             asChild
           >
-            <div
+            <Button
               ref={sellButtonRef}
-              className="inline-flex text-white items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-green-600 hover:bg-green-700 shadow-sm h-9 px-4 py-2 text-lg"
+              variant="secondary"
+              className="text-lg bg-green-600 hover:bg-green-700"
             >
               <CircleDollarSignIcon size={20} className="mr-2" />
               Sell
-            </div>
+            </Button>
           </CommandTooltip>
         </SellStockDialog>
 
