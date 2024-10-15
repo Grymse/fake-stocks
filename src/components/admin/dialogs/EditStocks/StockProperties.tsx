@@ -39,7 +39,7 @@ export default function StockProperties({ stock, setStock }: Props) {
         </div>
         <Intensity
           color={stock.color}
-          value={(stock.volatile - 0.005) * 6000} // 0.0010 til 0.025 => 5 til 25
+          value={(stock.volatile - 0.004) * 5000} // 0.0010 til 0.025 => 5 til 25
           aria-label="25% increase"
         />
       </CardContent>

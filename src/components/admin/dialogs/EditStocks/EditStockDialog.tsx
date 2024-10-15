@@ -12,6 +12,8 @@ import { Stock } from "@/types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Slider } from "@/components/ui/slider";
+import Help from "@/components/ui/help";
 
 type Props = {
   children: React.ReactNode;
@@ -19,6 +21,11 @@ type Props = {
   stock: Stock;
   setStock: (stock: Stock) => void;
 };
+
+// TODO: Fix input of numbers in the EditStockDialog
+// TODO: Fix Confirm modal before updating the stocks (use ConfirmDialog)
+// TODO: Add button to cancel the update of the stocks
+// TODO: Look into disallowing closing the dialog without updating the stocks or cancelling?
 
 export default function EditStockDialog({
   children,
@@ -45,10 +52,10 @@ export default function EditStockDialog({
       return;
     }
 
-    if (stock.shortName === "") {
+    if (stock.shortName.length < 2) {
       e.preventDefault();
       e.stopPropagation();
-      setError("Short name is empty");
+      setError("Short name is too short. 2-4 characters");
       return;
     }
 
@@ -97,6 +104,10 @@ export default function EditStockDialog({
     setStock({ ...stock, max });
   }
 
+  function onVolatileChanged(numbers: number[]) {
+    setStock({ ...stock, volatile: numbers[0] });
+  }
+
   return (
     <Dialog onOpenChange={setOpen}>
       <DialogTrigger hasNestedButton={hasNestedButton} asChild>
@@ -119,7 +130,23 @@ export default function EditStockDialog({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">ID</Label>
+            <div className="flex gap-2 justify-end">
+              <Label className="text-right">ID</Label>
+              <Help>
+                <p className="font-bold">
+                  A 3-4 letter representation of the stock
+                </p>
+                <p>
+                  This should somehow be a short representation of the stock. It
+                  is used in the ledger to represent the stocks, as the full
+                  name cannot be written out every time.
+                </p>
+                <p>
+                  It also serves as a mock of real stockmarkets where stocks are
+                  represented by a short ID
+                </p>
+              </Help>
+            </div>
             <Input
               value={stock.shortName}
               onChange={onShortNameChanged}
@@ -128,17 +155,16 @@ export default function EditStockDialog({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">Min</Label>
-            <Input
-              value={stock.min}
-              onChange={onMinChanged}
-              type="number"
-              placeholder="5"
-              className="col-span-3"
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">Default</Label>
+            <div className="flex gap-2 justify-end">
+              <Label className="text-right">Start</Label>
+              <Help>
+                <p className="font-bold">The start value of the stock</p>
+                <p>
+                  This should typically be 2x to 10x the value of the minimum
+                  value
+                </p>
+              </Help>
+            </div>
             <Input
               value={stock.defaultValue}
               onChange={onDefaultValueChanged}
@@ -148,7 +174,48 @@ export default function EditStockDialog({
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-            <Label className="text-right">Max</Label>
+            <div className="flex gap-2 justify-end">
+              <Label className="text-right">Min</Label>
+              <Help>
+                <p className="font-bold">
+                  The Minimum value that a stock can have
+                </p>
+                <p>
+                  This should typically be a low value of 1 to 10. The value
+                  cannot concede this value, and it is used to regulate the game
+                </p>
+                <p>
+                  The range between maximum and minimum should ideally be 20x to
+                  50x
+                </p>
+              </Help>
+            </div>
+            <Input
+              value={stock.min}
+              onChange={onMinChanged}
+              type="number"
+              placeholder="5"
+              className="col-span-3"
+            />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <div className="flex gap-2 justify-end">
+              <Label className="text-right">Max</Label>
+              <Help>
+                <p className="font-bold">
+                  The maximum value that a stock can have
+                </p>
+                <p>
+                  This should typically be a high value of 100 to 2000. The
+                  value cannot exceed this value, and it is used to regulate the
+                  game
+                </p>
+                <p>
+                  The range between maximum and minimum should ideally be 20x to
+                  50x
+                </p>
+              </Help>
+            </div>
             <Input
               value={stock.max}
               onChange={onMaxChanged}
@@ -156,6 +223,42 @@ export default function EditStockDialog({
               placeholder="500"
               className="col-span-3"
             />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4 h-8">
+            <div className="flex gap-2 justify-end">
+              <Label className="text-right">Volatile</Label>
+              <Help>
+                <p className="font-bold">The volatility of the stock.</p>
+                <p>
+                  The higher the value, the more unpredictable and rowdy the
+                  stock will be.
+                </p>
+                <p>
+                  It is a good idea to have stocks in each category, but mostly
+                  medium.
+                </p>
+                <p>
+                  Very low and very high can be very unpredicable and may be
+                  less fun to play with.
+                </p>
+              </Help>
+            </div>
+            <div className="col-span-3 flex gap-2">
+              <Slider
+                value={[stock.volatile]}
+                onValueChange={onVolatileChanged}
+                min={0.005}
+                max={0.025}
+                step={0.001}
+              />
+              <p
+                className={`text-sm w-24 text-right ${
+                  getVolatileStamp(stock.volatile).color
+                }`}
+              >
+                {getVolatileStamp(stock.volatile).text}
+              </p>
+            </div>
           </div>
           {error !== null && (
             <p className="text-right text-destructive">{error}</p>
@@ -169,4 +272,12 @@ export default function EditStockDialog({
       </DialogContent>
     </Dialog>
   );
+}
+
+function getVolatileStamp(volatile: number) {
+  if (volatile < 0.007) return { text: "Very low", color: "text-green-500" };
+  if (volatile < 0.011) return { text: "Low", color: "text-teal-500" };
+  if (volatile < 0.017) return { text: "Medium", color: "text-blue-500" };
+  if (volatile < 0.022) return { text: "High", color: "text-amber-500" };
+  return { text: "Very high", color: "text-red-500" };
 }
