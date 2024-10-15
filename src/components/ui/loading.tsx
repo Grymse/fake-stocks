@@ -1,4 +1,4 @@
-import { cn } from "@/hooks/lib/utils";
+import { cn } from "@/lib/utils";
 import "./loading.css";
 
 type Props = {

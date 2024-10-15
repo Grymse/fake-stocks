@@ -26,7 +26,8 @@ import User from "./User";
 import LoginButton from "./buttons/LoginButton";
 import FullscreenButton from "../controls/FullscreenButton";
 import { SimpleTooltip } from "@/components/ui/tooltip";
-import { signinWithGoogle } from "@/hooks/lib/firebase";
+import { signinWithGoogle } from "@/lib/firebase";
+import EditStocksDialog from "./dialogs/EditStocks/EditStocksDialog";
 
 type Props = { children: React.ReactNode };
 
@@ -94,6 +95,14 @@ export default function AdminPanel({ children }: Props) {
                 <Button variant="secondary">Edit Accounts</Button>
               </SimpleTooltip>
             </EditAccountsDialog>
+            <EditStocksDialog hasNestedButton>
+              <SimpleTooltip
+                asChild
+                message="Change the stocks (Resets the simulation)"
+              >
+                <Button variant="secondary">Edit Stocks</Button>
+              </SimpleTooltip>
+            </EditStocksDialog>
             <SaveLedgerDialog disabled={user === null} hasNestedButton>
               <SimpleTooltip
                 message={

@@ -1,6 +1,6 @@
 import useAuth from "@/hooks/useAuth";
 import { Button } from "../../ui/button";
-import { signinWithGoogle, signout } from "@/hooks/lib/firebase";
+import { signinWithGoogle, signout } from "@/lib/firebase";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 
 export default function LoginButton() {

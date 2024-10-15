@@ -1,5 +1,5 @@
-import { ISimulationAlgorithm } from "@/hooks/lib/simulationAlgorithm/ISimulationAlgorithm";
-import { SimpleSimulationAlgorithm } from "@/hooks/lib/simulationAlgorithm/SimpleSimulationAlgorithms";
+import { ISimulationAlgorithm } from "@/lib/simulationAlgorithm/ISimulationAlgorithm";
+import { SimpleSimulationAlgorithm } from "@/lib/simulationAlgorithm/SimpleSimulationAlgorithms";
 import { Stock } from "@/types";
 import { useEffect, useState } from "react";
 import { ActiveState } from "./useLedgerStateManager";
