@@ -1,7 +1,7 @@
 import { Button } from "../../ui/button";
-import { Zap, ZapOff } from "lucide-react";
 import { useLedger } from "@/hooks/useLedger";
 import { SimpleTooltip } from "../../ui/tooltip";
+import { LightningBoltIcon, PauseIcon } from "@radix-ui/react-icons";
 
 export default function SimulateButton() {
   const { setActive, active } = useLedger();
@@ -17,7 +17,11 @@ export default function SimulateButton() {
         variant="secondary"
         size="icon"
       >
-        {active === "SIMULATING" ? <ZapOff size={20} /> : <Zap size={20} />}
+        {active === "SIMULATING" ? (
+          <PauseIcon className="w-5 h-5" />
+        ) : (
+          <LightningBoltIcon className="w-5 h-5" />
+        )}
       </Button>
     </SimpleTooltip>
   );

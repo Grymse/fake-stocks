@@ -2,17 +2,17 @@ import BuyStockDialog from "../ledger/dialogs/BuyStockDialog";
 import SellStockDialog from "../ledger/dialogs/SellStockDialog";
 import TransactionsDialog from "../ledger/dialogs/TransactionsDialog";
 import AdminPanel from "../admin/AdminPanel";
-import {
-  ArrowLeftRight,
-  CircleDollarSignIcon,
-  ScrollText,
-  Settings,
-} from "lucide-react";
 import { useEffect, useRef } from "react";
 import StartStopButton from "@/components/admin/buttons/StartStopButton";
 import { CommandTooltip, SimpleTooltip } from "@/components/ui/tooltip";
 import FullscreenButton from "./FullscreenButton";
 import { Button } from "../ui/button";
+import {
+  GearIcon,
+  HamburgerMenuIcon,
+  RocketIcon,
+  StarIcon,
+} from "@radix-ui/react-icons";
 
 export default function ControlPanel() {
   const transactionsButtonRef = useRef<HTMLButtonElement>(null);
@@ -56,7 +56,7 @@ export default function ControlPanel() {
             asChild
           >
             <Button ref={transactionsButtonRef} size="icon" variant="secondary">
-              <ArrowLeftRight size={16} />
+              <HamburgerMenuIcon className="w-5 h-5" />
             </Button>
           </CommandTooltip>
         </TransactionsDialog>
@@ -74,7 +74,7 @@ export default function ControlPanel() {
               className="text-lg"
               variant="destructive"
             >
-              <ScrollText size={20} className="mr-2" />
+              <RocketIcon className="mr-2 w-5 h-5" />
               Buy
             </Button>
           </CommandTooltip>
@@ -95,7 +95,7 @@ export default function ControlPanel() {
               variant="secondary"
               className="text-lg bg-green-600 hover:bg-green-700"
             >
-              <CircleDollarSignIcon size={20} className="mr-2" />
+              <StarIcon className="mr-2 w-5 h-5" />
               Sell
             </Button>
           </CommandTooltip>
@@ -111,7 +111,7 @@ export default function ControlPanel() {
             asChild
           >
             <div className="inline-flex items-center justify-center whitespace-nowrap rounded-md font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 h-9 w-9">
-              <Settings size={16} />
+              <GearIcon className="w-5 h-5" />
             </div>
           </SimpleTooltip>
         </AdminPanel>

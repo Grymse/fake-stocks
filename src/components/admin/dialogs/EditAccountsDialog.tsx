@@ -16,9 +16,9 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { useLedger } from "@/hooks/useLedger";
-import { Pencil, Trash } from "lucide-react";
 import ConfirmDialog from "@/components/ui/confirmdialog";
 import EditAccountDialog from "./EditAccountDialog";
+import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 
 type Props = { children: React.ReactNode; hasNestedButton?: boolean };
 
@@ -63,7 +63,7 @@ export default function EditAccountsDialog({
                     <TableCell className="flex gap-4 justify-end">
                       <EditAccountDialog account={account}>
                         <Button variant="ghost" size="icon">
-                          <Pencil />
+                          <Pencil2Icon className="w-5 h-5" />
                         </Button>
                       </EditAccountDialog>
                       <ConfirmDialog
@@ -73,7 +73,7 @@ export default function EditAccountsDialog({
                         asChild
                       >
                         <Button variant="destructive" size="icon">
-                          <Trash />
+                          <TrashIcon className="w-5 h-5" />
                         </Button>
                       </ConfirmDialog>
                     </TableCell>

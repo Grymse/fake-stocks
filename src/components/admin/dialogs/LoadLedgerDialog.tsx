@@ -12,9 +12,9 @@ import {
 import { toast } from "@/hooks/useToast";
 import { LOG } from "../Log";
 import { Button } from "@/components/ui/button";
-import { Trash } from "lucide-react";
 import ConfirmDialog from "../../ui/confirmdialog";
 import useLoader from "@/hooks/useLoader";
+import { TrashIcon } from "@radix-ui/react-icons";
 
 type Props = {
   children: React.ReactNode;
@@ -145,7 +145,7 @@ export default function LoadLedgerDialog({
                     variant="destructive"
                   >
                     <Button variant="destructive" size="icon">
-                      <Trash size={16} />
+                      <TrashIcon className="h-5 w-5" />
                     </Button>
                   </ConfirmDialog>
                 </div>

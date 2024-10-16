@@ -1,9 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { useLedger } from "@/hooks/useLedger";
-import { Pause, Play, ZapOff } from "lucide-react";
 import { forwardRef } from "react";
 import { CommandTooltip } from "../../ui/tooltip";
 import { ActiveState } from "@/hooks/useLedgerStateManager";
+import { PauseIcon, PlayIcon } from "@radix-ui/react-icons";
 
 type Props = React.ComponentProps<typeof Button>;
 
@@ -32,14 +32,11 @@ const StartStopButton = forwardRef<HTMLButtonElement, Props>(
           onClick={toggleActivity}
         >
           {active === "ACTIVE" ? (
-            <Pause size={20} />
+            <PauseIcon className="w-5 h-5" />
           ) : active === "SIMULATING" ? (
-            <ZapOff
-              className="text-yellow-500 hover:text-yellow-400 dark:text-yellow-400 dark:hover:text-yellow-500"
-              size={20}
-            />
+            <PauseIcon className="w-5 h-5 text-yellow-500 hover:text-yellow-400 dark:text-yellow-400 dark:hover:text-yellow-500" />
           ) : (
-            <Play size={20} />
+            <PlayIcon className="w-5 h-5" />
           )}
         </Button>
       </CommandTooltip>

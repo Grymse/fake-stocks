@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { useResizeDetector } from "react-resize-detector";
-import Plot from "react-plotly.js";
+import { Plotly } from "@/lib/plotly";
 import { useLedger } from "@/hooks/useLedger";
 import { useDarkmode } from "@/hooks/useDarkmode";
 
@@ -27,7 +27,7 @@ export default function Graph() {
         style={{ height: "calc(100vh - 264px)", width: "calc(100vw - 420px)" }}
         ref={ref}
       >
-        <Plot
+        <Plotly
           data={stocks.map((stock) => ({
             x: stock.historical.map((_, index) => index),
             y: stock.historical,
