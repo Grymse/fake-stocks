@@ -1,12 +1,14 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { lightenColor } from "@/lib/utils";
-import { useLedger } from "@/hooks/useLedger";
 import Plot from "react-plotly.js";
 import { Data } from "plotly.js";
+import { Stock } from "@/types";
 
-export default function StocksPropertiesGraph() {
-  const { stocks } = useLedger();
+type Props = {
+  stocks: Stock[];
+};
 
+export default function StocksPropertiesGraph({ stocks }: Props) {
   const minValues = {
     x: stocks.map((s) => s.shortName),
     y: stocks.map((s) => s.min),

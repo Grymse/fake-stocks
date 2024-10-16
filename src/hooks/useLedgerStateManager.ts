@@ -137,6 +137,8 @@ export const useLedgerStateManager = () => {
           return t;
         });
       });
+
+      LOG(`Account ${account.name} renamed to ${newName}`);
     },
     [accounts]
   );
@@ -158,6 +160,8 @@ export const useLedgerStateManager = () => {
 
         const acc = accounts.find((a) => a.name === account.name);
         if (!acc) return accounts;
+
+        LOG(`Bought ${amount} stocks of ${stock.name} for ${stock.value}`);
 
         const newAccount = {
           ...acc,
@@ -193,6 +197,8 @@ export const useLedgerStateManager = () => {
             })
             .filter((c) => c.amount > 0),
         };
+
+        LOG(`Sold ${amount} stocks of ${stock?.name} for ${stock?.value}`);
 
         return accounts.map((a) => (a.name === account.name ? newAccount : a));
       });

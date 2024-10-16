@@ -1,6 +1,5 @@
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -14,6 +13,9 @@ import StockProperties from "./StockProperties";
 import StocksPropertiesGraph from "./StocksPropertiesGraph";
 import { useEffect, useState } from "react";
 import { Stock } from "@/types";
+import { LOG } from "../../Log";
+import ConfirmDialog from "@/components/ui/confirmdialog";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   children: React.ReactNode;
@@ -22,30 +24,34 @@ type Props = {
 
 export default function EditStocksDialog({ children, hasNestedButton }: Props) {
   const { toast } = useToast();
-  const { stocks: globalStocks, setStocks: setGlobalStocks } = useLedger();
+  const ledger = useLedger();
   const [isOpen, setOpen] = useState(false);
-  const [stocks, setStocks] = useState(globalStocks);
+  const [stocks, setStocks] = useState(ledger.stocks);
+  const hasProgress = ledger.stocks[0].historical.length !== 0;
 
   useEffect(() => {
     if (!isOpen) return;
 
-    console.log("TRIGGER UPDATE");
-
-    setGlobalStocks((s) => {
+    ledger.setStocks((s) => {
       setStocks(s.map((stock) => ({ ...stock, historical: [] })));
       return s;
     });
-  }, [isOpen, setGlobalStocks]);
+  }, [isOpen]);
 
-  function onSubmit() {
+  function onConfirm() {
     toast({
       title: "Stocks updated",
     });
-    setGlobalStocks(stocks.map((s) => ({ ...s, value: s.defaultValue })));
+    ledger.setStocks(
+      stocks.map((s: Stock) => ({ ...s, value: s.defaultValue }))
+    );
+    ledger.clear();
+    setOpen(false);
+    LOG("Stocks updated");
   }
 
   function setStock(stock: Stock) {
-    setStocks((stocks) => {
+    setStocks((stocks: Stock[]) => {
       const index = stocks.findIndex((s) => s.id === stock.id);
       if (index === -1) return stocks;
 
@@ -56,7 +62,7 @@ export default function EditStocksDialog({ children, hasNestedButton }: Props) {
   }
 
   return (
-    <Dialog onOpenChange={setOpen}>
+    <Dialog onOpenChange={setOpen} open={isOpen}>
       <DialogTrigger hasNestedButton={hasNestedButton} asChild>
         {children}
       </DialogTrigger>
@@ -69,21 +75,35 @@ export default function EditStocksDialog({ children, hasNestedButton }: Props) {
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 grid-cols-3">
-          <StocksPropertiesGraph />
+          <StocksPropertiesGraph stocks={stocks} />
           <div className="grid col-span-2 gap-4 grid-cols-2">
-            {stocks.map((stock) => (
+            {stocks.map((stock: Stock) => (
               <StockProperties
                 key={stock.id}
                 stock={stock}
                 setStock={setStock}
               />
             ))}
-            <div className="w-full h-full flex justify-end items-end">
-              <DialogClose asChild>
-                <EnterTriggeredButton type="submit" onClick={onSubmit}>
+            <div className="w-full h-full flex justify-between items-end">
+              <Button onClick={() => setOpen(false)} variant="secondary">
+                Cancel
+              </Button>
+              {hasProgress ? (
+                <ConfirmDialog
+                  asChild
+                  title="Overwrite current stocks?"
+                  message="If you continue, you will erase the progress of the current stocks"
+                  onConfirm={onConfirm}
+                >
+                  <EnterTriggeredButton type="submit">
+                    Update Stocks
+                  </EnterTriggeredButton>
+                </ConfirmDialog>
+              ) : (
+                <EnterTriggeredButton type="submit" onClick={onConfirm}>
                   Update Stocks
                 </EnterTriggeredButton>
-              </DialogClose>
+              )}
             </div>
           </div>
         </div>

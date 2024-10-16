@@ -1,5 +1,6 @@
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -10,10 +11,12 @@ import {
 import { useEffect, useState } from "react";
 import { Stock } from "@/types";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import Help from "@/components/ui/help";
+import { NaNOrDefault } from "@/lib/utils";
+import { EnterTriggeredButton } from "@/components/ui/entertriggeredbutton";
+import { Button } from "@/components/ui/button";
 
 type Props = {
   children: React.ReactNode;
@@ -21,11 +24,6 @@ type Props = {
   stock: Stock;
   setStock: (stock: Stock) => void;
 };
-
-// TODO: Fix input of numbers in the EditStockDialog
-// TODO: Fix Confirm modal before updating the stocks (use ConfirmDialog)
-// TODO: Add button to cancel the update of the stocks
-// TODO: Look into disallowing closing the dialog without updating the stocks or cancelling?
 
 export default function EditStockDialog({
   children,
@@ -56,6 +54,17 @@ export default function EditStockDialog({
       e.preventDefault();
       e.stopPropagation();
       setError("Short name is too short. 2-4 characters");
+      return;
+    }
+
+    if (
+      Number.isNaN(stock.min) ||
+      Number.isNaN(stock.defaultValue) ||
+      Number.isNaN(stock.max)
+    ) {
+      e.preventDefault();
+      e.stopPropagation();
+      setError("Fill in all the numbers: Min, Start, Max");
       return;
     }
 
@@ -166,7 +175,7 @@ export default function EditStockDialog({
               </Help>
             </div>
             <Input
-              value={stock.defaultValue}
+              value={NaNOrDefault(stock.defaultValue, "")}
               onChange={onDefaultValueChanged}
               type="number"
               placeholder="20"
@@ -191,7 +200,7 @@ export default function EditStockDialog({
               </Help>
             </div>
             <Input
-              value={stock.min}
+              value={NaNOrDefault(stock.min, "")}
               onChange={onMinChanged}
               type="number"
               placeholder="5"
@@ -217,7 +226,7 @@ export default function EditStockDialog({
               </Help>
             </div>
             <Input
-              value={stock.max}
+              value={NaNOrDefault(stock.max, "")}
               onChange={onMaxChanged}
               type="number"
               placeholder="500"
@@ -265,9 +274,14 @@ export default function EditStockDialog({
           )}
         </div>
         <DialogFooter>
-          <DialogTrigger asChild>
-            <Button onClick={onSubmit}>Update</Button>
-          </DialogTrigger>
+          <DialogClose asChild>
+            <Button variant="secondary">Cancel</Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <EnterTriggeredButton onClick={onSubmit}>
+              Update
+            </EnterTriggeredButton>
+          </DialogClose>
         </DialogFooter>
       </DialogContent>
     </Dialog>

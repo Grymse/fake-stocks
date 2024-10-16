@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import LoadLedgerDialog from "./dialogs/LoadLedgerDialog";
 import SaveLedgerDialog from "./dialogs/SaveLedgerDialog";
 import Statistic from "../ui/statistic";
-import { ArrowLeftRight, IterationCw, Users } from "lucide-react";
+import { ArrowLeftRight, Clock, IterationCw } from "lucide-react";
 import StartStopButton from "./buttons/StartStopButton";
 import ResetButton from "./dialogs/ResetDialog";
 import { Label } from "@/components/ui/label";
@@ -28,11 +28,12 @@ import FullscreenButton from "../controls/FullscreenButton";
 import { SimpleTooltip } from "@/components/ui/tooltip";
 import { signinWithGoogle } from "@/lib/firebase";
 import EditStocksDialog from "./dialogs/EditStocks/EditStocksDialog";
+import { displayHourMinutes } from "@/lib/utils";
 
 type Props = { children: React.ReactNode };
 
 export default function AdminPanel({ children }: Props) {
-  const { accounts, transactions, stocks } = useLedger();
+  const { transactions, stocks } = useLedger();
   const user = useAuth();
 
   const moneyTransferred = useMemo(
@@ -69,14 +70,14 @@ export default function AdminPanel({ children }: Props) {
               <IterationCw size={16} />
               {stocks?.[0]?.historical?.length}
             </Statistic>
+            <Statistic description="Duration of current game">
+              <Clock size={16} />
+              {displayHourMinutes(stocks?.[0]?.historical?.length ?? 0)}
+            </Statistic>
             <Statistic description="Total transactions and amount">
               <ArrowLeftRight size={16} />
               {transactions.length}
               <span className="mr-1 text-gray-500">pcs</span>${moneyTransferred}
-            </Statistic>
-            <Statistic description="Amount of users">
-              <Users size={16} />
-              {accounts.length}
             </Statistic>
           </div>
         </div>

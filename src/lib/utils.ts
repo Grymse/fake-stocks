@@ -6,7 +6,15 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function NaNToZero(value: number): number {
-  return isNaN(value) ? 0 : value;
+  return NaNOrDefault(value, 0);
+}
+
+export function NaNOrDefault<T>(value: number, defaultValue: T): number | T {
+  return isNaN(value) ? defaultValue : value;
+}
+
+export function displayHourMinutes(seconds: number) {
+  return `${Math.floor(seconds / 3600)}h${Math.floor((seconds / 60) % 60)}m`;
 }
 
 export function lightenColor(hex: string, amount: number) {
