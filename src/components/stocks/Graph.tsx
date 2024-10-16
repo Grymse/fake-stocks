@@ -2,7 +2,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { useResizeDetector } from "react-resize-detector";
 import Plot from "react-plotly.js";
 import { useLedger } from "@/hooks/useLedger";
-import { LOG } from "../admin/Log";
 import { useDarkmode } from "@/hooks/useDarkmode";
 
 export default function Graph() {
@@ -20,9 +19,6 @@ export default function Graph() {
     layout.yaxis!.tickfont!.color = "rgb(100 116 139)";
     layout.yaxis!.gridcolor = "rgb(203 213 225)";
   }
-
-  if (stocks[0]?.historical?.length && stocks[0].historical.length % 50 === 0)
-    LOG("Total updates: " + stocks[0].historical.length);
 
   return (
     <Card className="p-0 m-0 relative overflow-hidden w-full">

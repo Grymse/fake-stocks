@@ -19,10 +19,12 @@ export class SimpleSimulationAlgorithm implements ISimulationAlgorithm {
         Math.random() * (stock.volatile * 2 + overallTendency));
 
     if (newValue < stock.min) {
-      return 10;
+      this.tendencyCalculator.forceTendency(stock, 10);
+      return stock.min;
     }
-    if (newValue > stock.max) {
-      return -10;
+    if (stock.max < newValue) {
+      this.tendencyCalculator.forceTendency(stock, -10);
+      return stock.max;
     }
     return newValue;
   }

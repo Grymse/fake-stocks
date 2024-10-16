@@ -1,4 +1,4 @@
-import { app } from "@/hooks/lib/firebase";
+import { app } from "@/lib/firebase";
 import { getAuth } from "firebase/auth";
 import {
   getFirestore,

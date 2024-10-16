@@ -1,4 +1,3 @@
-import { LOG } from "@/components/admin/Log";
 import { Stock } from "@/types";
 
 type StockTendency = {
@@ -32,20 +31,17 @@ export class TendencyCalculator {
     return updateValue;
   }
 
+  forceTendency(stock: Stock, tendency: number): void {
+    const updateValue = this.getStockUpdateValue(stock);
+    updateValue.tendency = tendency;
+  }
+
   getTendency(stock: Stock): StockTendency {
     const updateValue = this.getStockUpdateValue(stock);
 
     if (updateValue.updates % this.updatesBetweenTendencies === 0) {
       updateValue.tendency = this.generateTendency();
       this.generalTendency = this.generateTendency();
-      LOG(
-        "New tendency for stock " +
-          stock.name +
-          ": " +
-          updateValue.tendency +
-          " general: " +
-          this.generalTendency
-      );
     }
 
     updateValue.updates++;
