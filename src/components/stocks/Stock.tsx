@@ -80,7 +80,7 @@ export default function StockComponent({ stock }: Props) {
       </CardHeader>
       <CardContent
         style={{ width: "calc((100vw - 480px) / 5)" }}
-        className="p-0 h-full w-full pointer-events-none cursor-none"
+        className="p-0 h-full w-full pointer-events-none cursor-none relative"
       >
         <Plotly
           layout={layout}
@@ -89,6 +89,7 @@ export default function StockComponent({ stock }: Props) {
           style={{ width: "100%", height: "100%" }}
           config={{ responsive: true, staticPlot: true, displayModeBar: false }}
         />
+        <div className="absolute bottom-0 w-full h-[50%] bg-gradient-to-b from-transparent to-background/70" />
       </CardContent>
     </Card>
   );

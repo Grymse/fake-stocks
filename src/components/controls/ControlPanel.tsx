@@ -93,7 +93,7 @@ export default function ControlPanel() {
             <Button
               ref={sellButtonRef}
               variant="secondary"
-              className="text-lg bg-green-600 hover:bg-green-700"
+              className="text-lg text-white bg-green-600 hover:bg-green-700"
             >
               <StarIcon className="mr-2 w-5 h-5" />
               Sell

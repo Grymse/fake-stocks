@@ -18,6 +18,9 @@ export default function Graph() {
   if (!isDarkmode) {
     layout.yaxis!.tickfont!.color = "rgb(100 116 139)";
     layout.yaxis!.gridcolor = "rgb(203 213 225)";
+  } else {
+    layout.yaxis!.tickfont!.color = "rgb(209 213 219)";
+    layout.yaxis!.gridcolor = "rgb(75 85 99)";
   }
 
   return (
