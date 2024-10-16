@@ -5,10 +5,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { ChartContainer } from "../ui/chart";
-import { Area, AreaChart, YAxis } from "recharts";
 import { Stock } from "@/types";
 import Percentage from "./Percentage";
+import { Plotly } from "@/lib/plotly";
 
 type Props = { stock: Stock };
 
@@ -19,6 +18,42 @@ export default function StockComponent({ stock }: Props) {
     stock.historical[stock.historical.length - graphLength] ??
     stock.historical[0];
   const percentage = (stock.value / prevPrice - 1) * 100;
+  const data = stock.historical.slice(-graphLength);
+
+  const trace = {
+    x: Array(data.length)
+      .fill(0)
+      .map((_, i) => i),
+    y: data,
+    mode: "lines",
+    line: {
+      color: stock.color,
+      width: 1,
+    },
+    fill: "tozeroy", // Fills the area under the line to the x-axis
+    fillcolor: stock.color + "25", // Fading fill color (adjust the alpha for transparency)
+  };
+
+  // Layout with no labels, titles, or ticks
+  const layout = {
+    xaxis: {
+      visible: false,
+    },
+    yaxis: {
+      range: [Math.min(...data) - 2, Math.max(...data) + 2],
+      visible: false,
+    },
+    margin: {
+      t: 0, // top margin
+      r: 0, // right margin
+      b: 0, // bottom margin
+      l: 0, // left margin
+    },
+    showlegend: false,
+    paper_bgcolor: "rgba(0, 0, 0, 0)",
+    plot_bgcolor: "rgba(0, 0, 0, 0)",
+    autosize: true,
+  };
 
   return (
     <Card
@@ -43,53 +78,17 @@ export default function StockComponent({ stock }: Props) {
           />
         </CardTitle>
       </CardHeader>
-      <CardContent className="p-0">
-        <ChartContainer
-          config={{
-            time: {
-              label: "Time",
-              color: stock.color,
-            },
-          }}
-          className="h-[130px] w-full"
-        >
-          <AreaChart
-            accessibilityLayer
-            data={stock.historical
-              .map((value) => ({
-                time: value,
-              }))
-              .slice(-graphLength)}
-            margin={{
-              left: 0,
-              right: 0,
-              top: 0,
-              bottom: 0,
-            }}
-          >
-            <YAxis domain={["dataMin - 5", "dataMax + 2"]} hide />
-            <defs>
-              <linearGradient
-                id={stock.shortName + "-filler"}
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop offset="5%" stopColor={stock.color} stopOpacity={0.8} />
-                <stop offset="95%" stopColor={stock.color} stopOpacity={0.1} />
-              </linearGradient>
-            </defs>
-            <Area
-              isAnimationActive={false}
-              dataKey="time"
-              type="natural"
-              fill={`url(#${stock.shortName + "-filler"})`}
-              fillOpacity={0.4}
-              stroke={stock.color}
-            />
-          </AreaChart>
-        </ChartContainer>
+      <CardContent
+        style={{ width: "calc((100vw - 480px) / 5)" }}
+        className="p-0 h-full w-full pointer-events-none cursor-none"
+      >
+        <Plotly
+          layout={layout}
+          data={[trace]}
+          useResizeHandler={true}
+          style={{ width: "100%", height: "100%" }}
+          config={{ responsive: true, staticPlot: true, displayModeBar: false }}
+        />
       </CardContent>
     </Card>
   );

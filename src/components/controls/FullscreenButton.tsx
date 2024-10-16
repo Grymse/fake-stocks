@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Fullscreen, Minimize } from "lucide-react";
 import { forwardRef, useEffect, useState } from "react";
 import { CommandTooltip } from "../ui/tooltip";
+import { EnterFullScreenIcon, ExitFullScreenIcon } from "@radix-ui/react-icons";
 
 type Props = React.ComponentProps<typeof Button>;
 
@@ -44,7 +44,11 @@ const FullscreenButton = forwardRef<HTMLButtonElement, Props>((props, ref) => {
         onClick={toggleFullscreen}
         ref={ref}
       >
-        {isFullscreen ? <Minimize size={20} /> : <Fullscreen size={20} />}
+        {isFullscreen ? (
+          <ExitFullScreenIcon className="w-5 h-5" />
+        ) : (
+          <EnterFullScreenIcon className="w-5 h-5" />
+        )}
       </Button>
     </CommandTooltip>
   );

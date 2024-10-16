@@ -1,7 +1,7 @@
 import { Button } from "../../ui/button";
-import { Moon, Sun } from "lucide-react";
 import { SimpleTooltip } from "../../ui/tooltip";
 import { useDarkmode } from "@/hooks/useDarkmode";
+import { MoonIcon, SunIcon } from "@radix-ui/react-icons";
 
 export default function DarkmodeButton() {
   const { setDarkmode, isDarkmode } = useDarkmode();
@@ -16,7 +16,11 @@ export default function DarkmodeButton() {
       asChild
     >
       <Button variant="secondary" size="icon" onClick={toggleDarkmode}>
-        {isDarkmode ? <Sun size={20} /> : <Moon size={20} />}
+        {isDarkmode ? (
+          <SunIcon className="w-5 h-5" />
+        ) : (
+          <MoonIcon className="w-5 h-5" />
+        )}
       </Button>
     </SimpleTooltip>
   );

@@ -15,7 +15,6 @@ import { Button } from "@/components/ui/button";
 import LoadLedgerDialog from "./dialogs/LoadLedgerDialog";
 import SaveLedgerDialog from "./dialogs/SaveLedgerDialog";
 import Statistic from "../ui/statistic";
-import { ArrowLeftRight, Clock, IterationCw } from "lucide-react";
 import StartStopButton from "./buttons/StartStopButton";
 import ResetButton from "./dialogs/ResetDialog";
 import { Label } from "@/components/ui/label";
@@ -29,6 +28,7 @@ import { SimpleTooltip } from "@/components/ui/tooltip";
 import { signinWithGoogle } from "@/lib/firebase";
 import EditStocksDialog from "./dialogs/EditStocks/EditStocksDialog";
 import { displayHourMinutes } from "@/lib/utils";
+import { ClockIcon, ReloadIcon, WidthIcon } from "@radix-ui/react-icons";
 
 type Props = { children: React.ReactNode };
 
@@ -67,15 +67,15 @@ export default function AdminPanel({ children }: Props) {
             <FullscreenButton />
             <DarkmodeButton />
             <Statistic description="Amount of simulation iterations">
-              <IterationCw size={16} />
+              <ReloadIcon className="w-4 h-4" />
               {stocks?.[0]?.historical?.length}
             </Statistic>
             <Statistic description="Duration of current game">
-              <Clock size={16} />
+              <ClockIcon className="w-4 h-4" />
               {displayHourMinutes(stocks?.[0]?.historical?.length ?? 0)}
             </Statistic>
             <Statistic description="Total transactions and amount">
-              <ArrowLeftRight size={16} />
+              <WidthIcon className="w-4 h-4" />
               {transactions.length}
               <span className="mr-1 text-gray-500">pcs</span>${moneyTransferred}
             </Statistic>

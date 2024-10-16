@@ -3,9 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Intensity } from "@/components/ui/intensity";
 import { Stock } from "@/types";
 import { Separator } from "@radix-ui/react-select";
-import { Pencil } from "lucide-react";
 import StockProperty from "./StockProperty";
 import EditStockDialog from "./EditStockDialog";
+import { Pencil2Icon } from "@radix-ui/react-icons";
+import { SimpleTooltip } from "@/components/ui/tooltip";
 
 type Props = {
   stock: Stock;
@@ -20,9 +21,11 @@ export default function StockProperties({ stock, setStock }: Props) {
           {stock.name} ({stock.shortName})
         </CardTitle>
         <EditStockDialog stock={stock} hasNestedButton setStock={setStock}>
-          <Button size="icon" variant="outline">
-            <Pencil size="16" />
-          </Button>
+          <SimpleTooltip asChild message="Edit this stocks properties">
+            <Button size="icon" variant="ghost">
+              <Pencil2Icon className="w-5 h-5" />
+            </Button>
+          </SimpleTooltip>
         </EditStockDialog>
       </CardHeader>
       <CardContent className="flex flex-col gap-4 pointer-events-none">

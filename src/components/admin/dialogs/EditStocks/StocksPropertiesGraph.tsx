@@ -1,8 +1,8 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { lightenColor } from "@/lib/utils";
-import Plot from "react-plotly.js";
 import { Data } from "plotly.js";
 import { Stock } from "@/types";
+import { Plotly } from "@/lib/plotly";
 
 type Props = {
   stocks: Stock[];
@@ -49,7 +49,7 @@ export default function StocksPropertiesGraph({ stocks }: Props) {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle>Overview</CardTitle>
       </CardHeader>
-      <Plot
+      <Plotly
         data={[minValues, defaultValues, maxValues]}
         layout={layout}
         config={config}
