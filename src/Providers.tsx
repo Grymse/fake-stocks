@@ -8,6 +8,7 @@ import AutosaveLedger from "./components/ledger/AutosaveLedger";
 import { useFlags } from "./hooks/useFlags";
 import React from "react";
 import { DarkmodeProvider } from "./contexts/DarkmodeProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 type Props = {
   children: React.ReactNode;
@@ -19,6 +20,7 @@ export default function Providers({ children }: Props) {
   return (
     <>
       <Toaster />
+      <Analytics />
       <KeepScreenAwake />
       <PreventWebsiteExit />
       <DarkmodeProvider>
