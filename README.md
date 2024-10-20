@@ -20,7 +20,6 @@ Adding the following searchqueries to the URL will enable features.
 
 - ReactJS
 - Shadcn UI + Tailwind
-- ReChart
 - Plotly.js
 
 # HOW TO START
