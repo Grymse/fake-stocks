@@ -13,6 +13,7 @@
 # Technologies
 
 - ReactJS
+- Firetore
 - Shadcn UI + Tailwind
 - ReChart
 - Plotly.js
