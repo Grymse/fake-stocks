@@ -10,12 +10,17 @@
 
 ![A preview of the app](public/app-preview.png)
 
+### Flags
+
+Adding the following searchqueries to the URL will enable features.
+- Add `fake=true`, to add fake data and see the interface in action
+- Add `debug=true`, to remove the 'right click' filter and page-exit warnings
+
 # Technologies
 
 - ReactJS
 - Firetore
 - Shadcn UI + Tailwind
-- ReChart
 - Plotly.js
 
 # HOW TO START
